@@ -1,0 +1,179 @@
+
+This tutorial take TEA-seq for example. We load the simulation results saved in "../output/simulation_result/" folder as input. The output is the umap of real data and simulated data.  
+
+load package
+```{r}
+library(SingleCellExperiment)
+library(data.table)
+library(scater)
+library(glue)
+library(scran)
+library(ggplot2)
+library(ggpubr)
+library(umap)
+make_sce <- function(expr, label){
+  sce <- SingleCellExperiment(list(logcounts=expr))
+  sce$celltype <- as.factor(label)
+  return(sce)
+}
+```
+
+
+```{r}
+dataset_name = "TEAseq"
+```
+
+load real and simulated RNA data
+```{r}
+train.sim <- t(fread(glue("../output/simulation_result/{dataset_name}/reference/sim_data_rna.csv")))
+train.rna.sim <- train.sim[2:dim(train.sim)[1],1:dim(train.sim)[2]]
+train.rna.sim <- apply(train.rna.sim,2,as.numeric)
+colnames(train.rna.sim)<-glue("sim_{c(1:dim(train.rna.sim)[2])}")
+    
+train.real <- t(fread(glue("../output/simulation_result/{dataset_name}/reference/real_data_rna.csv")))
+train.rna.real <- train.real[2:dim(train.real)[1],1:dim(train.real)[2]]
+train.rna.real <- apply(train.rna.real,2,as.numeric)
+colnames(train.rna.real)<-glue("sim_{c(1:dim(train.rna.real)[2])}")
+
+train.cty.real <-  t(fread(glue("../output/simulation_result/{dataset_name}/reference/real_label.csv")))[2,]  #label information
+train.cty.real <- train.cty.real[2:length(train.cty.real)]
+train.cty.real[train.cty.real!="B.Naive"] = "other cell types" 
+train.cty.real[train.cty.real=="B.Naive"] = "anchor cell type"
+train.cty.sim <-  t(fread(glue("../output/simulation_result/{dataset_name}/reference/sim_label.csv")))[2,]  #label information
+train.cty.sim <- train.cty.sim[2:length(train.cty.sim)]
+train.cty.sim[train.cty.sim!="B.Naive"] = "other cell types" 
+train.cty.sim[train.cty.sim=="B.Naive"] = "anchor cell type" 
+```
+
+Then, do umap for real and simulated RNA data
+```{r}
+rna.combined <- cbind(train.rna.real, train.rna.sim)
+sce.rna.combined <- make_sce(rna.combined, c(rep("original",dim(train.rna.real)[2]),rep("augment",dim(train.rna.sim)[2])))
+sce.rna.combined <- runUMAP(sce.rna.combined, n_threads=10, n_neighbors = 20, scale=TRUE, ntop=1000)
+umap_both_rna_layout <- sce.rna.combined@int_colData$reducedDims$UMAP
+umap_both_rna_layout <- as.data.frame(umap_both_rna_layout)
+data <- c(rep("2",dim(train.rna.real)[2]),rep("4",dim(train.rna.sim)[2]))
+umap_both_rna_layout1 <- umap_both_rna_layout[1:dim(train.rna.real)[2],]
+umap_both_rna_layout2 <- umap_both_rna_layout[(dim(train.rna.real)[2]+1):(dim(train.rna.real)[2]+dim(train.rna.sim)[2]),]
+```
+
+Next, show 1) umap of overlap real and simulated RNA data; 2) umap for real RNA data; 3) umap of simulated RNA data
+```{r}
+train.cty.sim <- as.factor(train.cty.sim)
+train.cty.real <- as.factor(train.cty.real)
+plot1 <- ggplot(umap_both_rna_layout1,aes(V1,V2,color=train.cty.real)) +
+  geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
+  theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Real RNA")
+plot2 <- ggplot(umap_both_rna_layout2,aes(V1,V2,color=train.cty.sim)) +
+  geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
+  theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Simulated RNA")
+top1<-ggarrange(plot1,plot2,ncol=3,nrow=1)
+top1
+```
+
+
+
+
+
+load real and simulated ADT data
+```{r}
+train.sim <- t(fread(glue("../output/simulation_result/{dataset_name}/reference/sim_data_adt.csv")))
+train.adt.sim <- train.sim[2:dim(train.sim)[1],1:dim(train.sim)[2]]
+train.adt.sim <- apply(train.adt.sim,2,as.numeric)
+colnames(train.adt.sim)<-glue("sim_{c(1:dim(train.adt.sim)[2])}")
+    
+train.real <- t(fread(glue("../output/simulation_result/{dataset_name}/reference/real_data_adt.csv")))
+train.adt.real <- train.real[2:dim(train.real)[1],1:dim(train.real)[2]]
+train.adt.real <- apply(train.adt.real,2,as.numeric)
+colnames(train.adt.real)<-glue("sim_{c(1:dim(train.adt.real)[2])}")
+
+train.cty.real <-  t(fread(glue("../output/simulation_result/{dataset_name}/reference/real_label.csv")))[2,]  #label information
+train.cty.real <- train.cty.real[2:length(train.cty.real)]
+train.cty.real[train.cty.real!="B.Naive"] = "other cell types" 
+train.cty.real[train.cty.real=="B.Naive"] = "anchor cell type"
+train.cty.sim <-  t(fread(glue("../output/simulation_result/{dataset_name}/reference/sim_label.csv")))[2,]  #label information
+train.cty.sim <- train.cty.sim[2:length(train.cty.sim)]
+train.cty.sim[train.cty.sim!="B.Naive"] = "other cell types" 
+train.cty.sim[train.cty.sim=="B.Naive"] = "anchor cell type" 
+```
+
+Then, do umap for real and simulated ADT data
+```{r}
+adt.combined <- cbind(train.adt.real, train.adt.sim)
+sce.adt.combined <- make_sce(adt.combined, c(rep("original",dim(train.adt.real)[2]),rep("augment",dim(train.adt.sim)[2])))
+sce.adt.combined <- runUMAP(sce.adt.combined, n_threads=10, n_neighbors = 20, scale=TRUE, ntop=1000)
+umap_both_adt_layout <- sce.adt.combined@int_colData$reducedDims$UMAP
+umap_both_adt_layout <- as.data.frame(umap_both_adt_layout)
+data <- c(rep("2",dim(train.adt.real)[2]),rep("4",dim(train.adt.sim)[2]))
+umap_both_adt_layout1 <- umap_both_adt_layout[1:dim(train.adt.real)[2],]
+umap_both_adt_layout2 <- umap_both_adt_layout[(dim(train.adt.real)[2]+1):(dim(train.adt.real)[2]+dim(train.adt.sim)[2]),]
+```
+
+Next, show 1) umap of overlap real and simulated ADT data; 2) umap for real ADT data; 3) umap of simulated ADT data
+```{r}
+train.cty.sim <- as.factor(train.cty.sim)
+train.cty.real <- as.factor(train.cty.real)
+plot3 <- ggplot(umap_both_adt_layout1,aes(V1,V2,color=train.cty.real)) +
+  geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
+  theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Real ADT")
+plot4 <- ggplot(umap_both_adt_layout2,aes(V1,V2,color=train.cty.sim)) +
+  geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
+  theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Simulated ADT")
+top2<-ggarrange(plot3,plot4,ncol=3,nrow=1)
+top2
+```
+
+
+
+load real and simulated ATAC data
+```{r}
+train.sim <- t(fread(glue("../output/simulation_result/{dataset_name}/reference/sim_data_atac.csv")))
+train.atac.sim <- train.sim[2:dim(train.sim)[1],1:dim(train.sim)[2]]
+train.atac.sim <- apply(train.atac.sim,2,as.numeric)
+colnames(train.atac.sim)<-glue("sim_{c(1:dim(train.atac.sim)[2])}")
+    
+train.real <- t(fread(glue("../output/simulation_result/{dataset_name}/reference/real_data_atac.csv")))
+train.atac.real <- train.real[2:dim(train.real)[1],1:dim(train.real)[2]]
+train.atac.real <- apply(train.atac.real,2,as.numeric)
+colnames(train.atac.real)<-glue("sim_{c(1:dim(train.atac.real)[2])}")
+
+train.cty.real <-  t(fread(glue("../output/simulation_result/{dataset_name}/reference/real_label.csv")))[2,]  #label information
+train.cty.real <- train.cty.real[2:length(train.cty.real)]
+train.cty.real[train.cty.real!="B.Naive"] = "other cell types" 
+train.cty.real[train.cty.real=="B.Naive"] = "anchor cell type"
+train.cty.sim <-  t(fread(glue("../output/simulation_result/{dataset_name}/reference/sim_label.csv")))[2,]  #label information
+train.cty.sim <- train.cty.sim[2:length(train.cty.sim)]
+train.cty.sim[train.cty.sim!="B.Naive"] = "other cell types" 
+train.cty.sim[train.cty.sim=="B.Naive"] = "anchor cell type" 
+```
+
+Then, do umap for real and simulated ATAC data
+```{r}
+atac.combined <- cbind(train.atac.real, train.atac.sim)
+sce.atac.combined <- make_sce(atac.combined, c(rep("original",dim(train.atac.real)[2]),rep("augment",dim(train.atac.sim)[2])))
+sce.atac.combined <- runUMAP(sce.atac.combined, n_threads=10, n_neighbors = 20, scale=TRUE, ntop=1000)
+umap_both_atac_layout <- sce.atac.combined@int_colData$reducedDims$UMAP
+umap_both_atac_layout <- as.data.frame(umap_both_atac_layout)
+data <- c(rep("2",dim(train.atac.real)[2]),rep("4",dim(train.atac.sim)[2]))
+umap_both_atac_layout1 <- umap_both_atac_layout[1:dim(train.atac.real)[2],]
+umap_both_atac_layout2 <- umap_both_atac_layout[(dim(train.atac.real)[2]+1):(dim(train.atac.real)[2]+dim(train.atac.sim)[2]),]
+```
+
+Next, show 1) umap of overlap real and simulated ATAC data; 2) umap for real ATAC data; 3) umap of simulated ATAC data
+```{r}
+train.cty.sim <- as.factor(train.cty.sim)
+train.cty.real <- as.factor(train.cty.real)
+plot5 <- ggplot(umap_both_atac_layout1,aes(V1,V2,color=train.cty.real)) +
+  geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
+  theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Real ATAC")
+plot6 <- ggplot(umap_both_atac_layout2,aes(V1,V2,color=train.cty.sim)) +
+  geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
+  theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Simulated ATAC")
+top3<-ggarrange(plot5,plot6,ncol=3,nrow=1)
+top3
+```
+
+```{r}
+ggarrange(plot1,plot3,plot5,plot2,plot4,plot6)
+```
+

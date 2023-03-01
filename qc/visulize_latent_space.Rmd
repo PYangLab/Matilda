@@ -1,0 +1,54 @@
+
+This tutorial take TEA-seq for example. We load the latent space results saved in "../output/dim_reduce/" folder as input. The output is the umap of latent space and the clustering metrices ARI, NMI, FM, Jaccard.  
+
+## load package
+```{r}
+library(SingleCellExperiment)
+library(data.table)
+library(scater)
+library(glue)
+library(ggplot2)
+library(ggpubr)
+library(umap)
+library(Seurat)
+make_sce <- function(expr, label){
+  sce <- SingleCellExperiment(list(logcounts=expr))
+  sce$celltype <- as.factor(label)
+  return(sce)
+}
+```
+
+###################umap
+# read simulated data
+```{r}
+test.sim <- t(fread(glue("../output//dim_reduce/TEAseq/reference/latent_space.csv")))
+test.sim <- test.sim[2:dim(test.sim)[1],]
+test.cty.sim <-  t(fread(glue("../output/dim_reduce//TEAseq/reference/latent_space_label.csv")))[2,]
+test.cty.sim <- test.cty.sim[2:length(test.cty.sim)]
+
+colnames(test.sim) <- c(1:dim(test.sim)[2])
+seu_control<- CreateSeuratObject(counts = test.sim)
+seu_control$celltype <- test.cty.sim
+seu_control <- (seu_control) %>% FindVariableFeatures() %>% ScaleData() %>% RunPCA()
+seu_control <- RunUMAP(seu_control,dims = 1:10)
+
+seu_umap_dims <- seu_control[["umap"]]@cell.embeddings
+kmeans_res <- kmeans(seu_umap_dims, centers = length(table(test.cty.sim)))
+graph <- bluster::makeSNNGraph(seu_umap_dims)
+communities <- igraph::cluster_louvain(graph)
+SNN_res <- factor(communities$membership)
+      
+p1 <- DimPlot(seu_control, reduction = 'umap',group.by = 'celltype') + NoLegend()
+
+ari <- mclust::adjustedRandIndex(seu_control$celltype, kmeans_res$cluster) 
+nmi <- aricode::NMI(seu_control$celltype, kmeans_res$cluster) 
+fm <- aricode::AMI(seu_control$celltype, kmeans_res$cluster) 
+jaccard <- aricode::RI(seu_control$celltype, kmeans_res$cluster) 
+
+ari
+nmi
+fm
+jaccard
+p1
+```
+
