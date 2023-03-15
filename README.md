@@ -140,6 +140,16 @@ Other config
 
 Note: after training, the model will be saved in `./Matilda/trained_model/`.
 
+If we want to run Matilda for single-cell RNA data, we can use the following code to train the model:
+```
+cd Matilda
+cd main
+# training the matilda model
+python main_matilda_rna_train.py --rna [trainRNA] --cty [traincty] #[training dataset]
+# Example run
+python main_matilda_rna_train.py --rna ../data/TEAseq/train_rna.h5  --cty ../data/TEAseq/train_cty.csv
+```
+
 ### Perform multiple tasks using trained Matilda model.
 After training the model, we can use `main_matilda_task.py` to do multiple tasks with different augments.
 
