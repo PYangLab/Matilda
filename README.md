@@ -8,13 +8,20 @@ Matilda is a multi-task framework for learning from single-cell multimodal omics
 Matilda is developed using PyTorch 1.9.1 and requires >=1 GPU to run. We recommend using conda enviroment to install and run Matilda. We assume conda is installed. You can use the provided environment or install the environment by yourself accoring to your hardware settings. Note the following installation code snippets were tested on a Ubuntu system (v20.04) with NVIDIA GeForce 3090 GPU. The installation process needs about 15 minutes.
 
 ### Installation using provided environment
-Step 1: Create and activate the conda environment for matilda using our provided file
+
+Step 1:
+Otain Matilda by clonning the github repository:
+```
+git clone https://github.com/liuchunlei0430/Matilda.git
+```
+
+Step 2: Create and activate the conda environment for matilda using our provided file
 ```
 conda env create -f environment_matilda.yaml
 conda activate environment_matilda
 ```
 
-Step 2:
+Step 3:
 The following python packages are required for running Matilda: h5py, numpy, pandas, captum. They can be installed in the conda environment as below:
 ```
 pip install h5py
@@ -26,11 +33,7 @@ pip install scipy
 pip install scanpy
 ```
 
-Step 3:
-Otain Matilda by clonning the github repository:
-```
-git clone https://github.com/liuchunlei0430/Matilda.git
-```
+
 
 ### Installation by youself
 
