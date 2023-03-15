@@ -17,6 +17,7 @@ git clone https://github.com/liuchunlei0430/Matilda.git
 
 Step 2: Create and activate the conda environment for matilda using our provided file
 ```
+cd Matilda
 conda env create -f environment_matilda.yaml
 conda activate environment_matilda
 ```
