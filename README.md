@@ -151,7 +151,7 @@ python main_matilda_rna_train.py --rna ../data/TEAseq/train_rna.h5  --cty ../dat
 ```
 
 ### Perform multiple tasks using trained Matilda model.
-After training the model, we can use `main_matilda_task.py` to do multiple tasks with different augments.
+After training the model, we can use `main_matilda_task.py` to do multiple tasks with different augments. For scRNA-seq data, we can use `main_matilda_rna_task.py`.
 
 ### Argument for performing tasks
 + `--classification`: whether to do cell type classification.
@@ -169,6 +169,7 @@ After training the model, we can use `main_matilda_task.py` to do multiple tasks
 python main_matilda_task.py  --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] --simulation True --simulation_ct 1 --simulation_num 200
 # Example run
 python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200
+#python main_matilda_rna_task.py --rna ../data/TEAseq/train_rna.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200  # for scrna-seq
 ```
 Output: The output will be saved in `./Matilda/output/simulation_result/TEAseq/reference/`. To generate UMAP plots for the simulated data using R, run `./Matilda/qc/visualize_simulated_data.Rmd`. The UMAPs are:
 
@@ -179,6 +180,7 @@ Output: The output will be saved in `./Matilda/output/simulation_result/TEAseq/r
 python main_matilda_task.py  --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] --dim_reduce True
 # Example run
 python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv --dim_reduce True
+#python main_matilda_rna_task.py --rna ../data/TEAseq/train_rna.h5 --cty ../data/TEAseq/train_cty.csv --dim_reduce True  # for scrna-seq
 ```
 Output: The output will be saved in `./Matilda/output/dim_reduce/TEAseq/reference/`. To generate UMAP plots and 4 clustering metrices, i.e., ARI, NMI, FM, Jaccard, for the latent space using R, run `./Matilda/qc/visualize_latent_space.Rmd`. The UMAPs are:
 
