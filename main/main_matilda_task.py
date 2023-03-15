@@ -312,7 +312,7 @@ if args.fs == True:
         
     classify_model = nn.Sequential(*list(model.children()))[0:2]
     
-    if args.fs_method = "Saliency":
+    if args.fs_method == "Saliency":
         deconv = Saliency(classify_model)
     else:
         deconv = IntegratedGradients(classify_model)
