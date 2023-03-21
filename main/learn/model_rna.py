@@ -46,7 +46,7 @@ class Decoder(nn.Module):
     def __init__(self, nfeatures_modality1=10703, hidden_modality1=185, z_dim=128):
         super().__init__()
         self.nfeatures_modality1 = nfeatures_modality1
-        self.decoder1 = nn.Sequential(LinBnDrop(z_dim, nfeatures_modality1, act=nn.ReLU()))
+        self.decoder1 = LinBnDrop(z_dim, nfeatures_modality1, act=nn.ReLU())
 
     def forward(self, x):
         x = self.decoder1(x)
@@ -58,7 +58,7 @@ class CiteAutoencoder(nn.Module):
         """ Autoencoder for 2 modalities data (citeseq data and shareseq data) """
         super().__init__()
         self.encoder = Encoder(nfeatures_rna, hidden_rna, z_dim)
-        self.classify = nn.Sequential(nn.Linear(z_dim, classify_dim))
+        self.classify = nn.Linear(z_dim, classify_dim)
         self.decoder = Decoder(nfeatures_rna, hidden_rna, z_dim)
         
     def forward(self, x):
