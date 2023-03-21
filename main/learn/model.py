@@ -52,8 +52,8 @@ class Decoder(nn.Module):
         super().__init__()
         self.nfeatures_modality1 = nfeatures_modality1
         self.nfeatures_modality2 = nfeatures_modality2
-        self.decoder1 = nn.Sequential(LinBnDrop(z_dim, nfeatures_modality1, act=nn.ReLU()))
-        self.decoder2 = nn.Sequential(LinBnDrop(z_dim, nfeatures_modality2,  act=nn.ReLU()))
+        self.decoder1 = LinBnDrop(z_dim, nfeatures_modality1, act=nn.ReLU())
+        self.decoder2 = LinBnDrop(z_dim, nfeatures_modality2,  act=nn.ReLU())
 
     def forward(self, x):
         x_rna = self.decoder1(x)
@@ -67,7 +67,7 @@ class CiteAutoencoder_CITEseq(nn.Module):
         """ Autoencoder for 2 modalities data (citeseq data and shareseq data) """
         super().__init__()
         self.encoder = Encoder(nfeatures_rna, nfeatures_adt, hidden_rna,  hidden_adt, z_dim)
-        self.classify = nn.Sequential(nn.Linear(z_dim, classify_dim))
+        self.classify = nn.Linear(z_dim, classify_dim)
         self.decoder = Decoder(nfeatures_rna, nfeatures_adt, hidden_rna,  hidden_adt, z_dim)
         
     def forward(self, x):
@@ -83,7 +83,7 @@ class CiteAutoencoder_SHAREseq(nn.Module):
         """ Autoencoder for 2 modalities data (citeseq data and shareseq data) """
         super().__init__()
         self.encoder = Encoder(nfeatures_rna, nfeatures_atac, hidden_rna,  hidden_atac, z_dim)
-        self.classify = nn.Sequential(nn.Linear(z_dim, classify_dim))
+        self.classify = nn.Linear(z_dim, classify_dim)
         self.decoder = Decoder(nfeatures_rna, nfeatures_atac, hidden_rna,  hidden_atac, z_dim)
         
     def forward(self, x):
@@ -103,15 +103,15 @@ class Encoder_TEAseq(nn.Module):
         self.nfeatures_adt = nfeatures_adt
         self.nfeatures_atac = nfeatures_atac
 
-        self.encoder_rna = nn.Sequential(LinBnDrop(nfeatures_rna, hidden_rna, p=0.2, act=nn.ReLU()))
-        self.encoder_adt = nn.Sequential(LinBnDrop(nfeatures_adt, hidden_adt, p=0.2, act=nn.ReLU()))
-        self.encoder_atac = nn.Sequential(LinBnDrop(nfeatures_atac, hidden_atac, p=0.2, act=nn.ReLU()))
+        self.encoder_rna = LinBnDrop(nfeatures_rna, hidden_rna, p=0.2, act=nn.ReLU())
+        self.encoder_adt = LinBnDrop(nfeatures_adt, hidden_adt, p=0.2, act=nn.ReLU())
+        self.encoder_atac = LinBnDrop(nfeatures_atac, hidden_atac, p=0.2, act=nn.ReLU())
         self.encoder = LinBnDrop(hidden_rna + hidden_adt +  hidden_atac, z_dim,  p=0.2, act=nn.ReLU())
         self.weights_rna = nn.Parameter(torch.rand((1,nfeatures_rna)) * 0.001, requires_grad=True)
         self.weights_adt = nn.Parameter(torch.rand((1,nfeatures_adt)) * 0.001, requires_grad=True)
         self.weights_atac = nn.Parameter(torch.rand((1,nfeatures_atac)) * 0.001, requires_grad=True)
-        self.fc_mu = nn.Sequential( LinBnDrop(z_dim,z_dim))
-        self.fc_var = nn.Sequential( LinBnDrop(z_dim,z_dim))
+        self.fc_mu = LinBnDrop(z_dim,z_dim)
+        self.fc_var = LinBnDrop(z_dim,z_dim)
         
     def reparameterize(self, mu, logvar):
         std = torch.exp(0.5 * logvar)
@@ -139,9 +139,9 @@ class Decoder_TEAseq(nn.Module):
         self.nfeatures_rna = nfeatures_rna
         self.nfeatures_adt = nfeatures_adt
         self.nfeatures_atac = nfeatures_atac
-        self.decoder1 = nn.Sequential(LinBnDrop(z_dim, nfeatures_rna,  act=nn.ReLU()))
-        self.decoder2 = nn.Sequential(LinBnDrop(z_dim, nfeatures_adt,  act=nn.ReLU()))
-        self.decoder3 = nn.Sequential(LinBnDrop(z_dim, nfeatures_atac, act=nn.ReLU()))
+        self.decoder1 = LinBnDrop(z_dim, nfeatures_rna,  act=nn.ReLU())
+        self.decoder2 = LinBnDrop(z_dim, nfeatures_adt,  act=nn.ReLU())
+        self.decoder3 = LinBnDrop(z_dim, nfeatures_atac, act=nn.ReLU())
 
     def forward(self, x):
         x_rna = self.decoder1(x)
