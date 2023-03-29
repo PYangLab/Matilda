@@ -12,7 +12,7 @@ Matilda is developed using PyTorch 1.9.1 and requires >=1 GPU to run. We recomme
 Step 1:
 Otain Matilda by clonning the github repository:
 ```
-git clone https://github.com/liuchunlei0430/Matilda.git
+git clone https://github.com/PYangLab/Matilda.git
 ```
 
 Step 2: Create and activate the conda environment for matilda using our provided file
@@ -73,7 +73,7 @@ pip install scanpy
 Step 5:
 Otain Matilda by clonning the github repository:
 ```
-git clone https://github.com/liuchunlei0430/Matilda.git
+git clone https://github.com/PYangLab/Matilda.git
 ```
 
 ## Preparing intput for Matilda
