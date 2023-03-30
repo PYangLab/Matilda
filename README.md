@@ -251,7 +251,7 @@ python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAs
 Output: The output, i.e. feature importance scores, will be saved in `./Matilda/output/markers/TEAseq/query/`. 
 
 
-## Reference
+## References
 
 To cite Matilda:
 
