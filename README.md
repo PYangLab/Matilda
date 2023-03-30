@@ -255,7 +255,7 @@ Output: The output, i.e. feature importance scores, will be saved in `./Matilda/
 
 To cite Matilda:
 
-[1] Chunlei Liu, Hao Huang, Pengyi Yang. Multi-task learning from multimodal single-cell omics with Matilda. Nucleic Acids Research, doi: 10.1093/nar/gkad157, (2023).
+[1] Chunlei Liu, Hao Huang, Pengyi Yang. Multi-task learning from multimodal single-cell omics with Matilda. Nucleic Acids Research, doi: [10.1093/nar/gkad157](https://doi.org/10.1093/nar/gkad157), (2023).
 
 
 Other references:
