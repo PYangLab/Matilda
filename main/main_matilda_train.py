@@ -70,7 +70,47 @@ if args.adt != "NULL" and args.atac != "NULL":
     train_transformed_dataset = MyDataset(train_data, train_label)
     train_dl = DataLoader(train_transformed_dataset, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=False)
 
-
+if args.adt == "NULL" and args.atac != "NULL":
+    mode = "SHAREseq"
+    train_rna_data_path = args.rna
+    train_atac_data_path = args.atac
+    train_label_path = args.cty
+    train_rna_data = read_h5_data(train_rna_data_path)
+    train_atac_data = read_h5_data(train_atac_data_path)
+    train_label = read_fs_label(train_label_path)
+    classify_dim = (max(train_label)+1).cpu().numpy()
+    nfeatures_rna = train_rna_data.shape[1]
+    nfeatures_atac = train_atac_data.shape[1]
+    feature_num = nfeatures_rna + nfeatures_atac
+    train_rna_data = compute_log2(train_rna_data)
+    train_atac_data = compute_log2(train_atac_data)
+    train_rna_data = compute_zscore(train_rna_data)
+    train_atac_data = compute_zscore(train_atac_data)
+    train_data = torch.cat((train_rna_data,train_atac_data),1)
+    train_transformed_dataset = MyDataset(train_data, train_label)
+    train_dl = DataLoader(train_transformed_dataset, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=False)
+    
+if args.adt != "NULL" and args.atac == "NULL":
+    mode = "CITEseq"
+    train_rna_data_path = args.rna
+    train_adt_data_path = args.adt
+    train_label_path = args.cty
+    train_rna_data = read_h5_data(train_rna_data_path)
+    train_adt_data = read_h5_data(train_adt_data_path)
+    train_label = read_fs_label(train_label_path)
+    classify_dim = (max(train_label)+1).cpu().numpy()
+    nfeatures_rna = train_rna_data.shape[1]
+    nfeatures_adt = train_adt_data.shape[1]
+    feature_num = nfeatures_rna + nfeatures_adt
+    train_rna_data = compute_log2(train_rna_data)
+    train_adt_data = compute_log2(train_adt_data)
+    train_rna_data = compute_zscore(train_rna_data)
+    train_adt_data = compute_zscore(train_adt_data)
+    train_data = torch.cat((train_rna_data,train_adt_data),1)
+    train_transformed_dataset = MyDataset(train_data, train_label)
+    train_dl = DataLoader(train_transformed_dataset, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=False)
+	
+	
 test_dl = "NULL"
 
         
