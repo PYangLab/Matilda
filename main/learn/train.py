@@ -12,8 +12,8 @@ def train_model(model, train_dl, test_dl, lr, epochs, classify_dim=17, best_top1
     #####set optimizer and criterin#####
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     optimizer = torch.optim.Adam(model.parameters(), lr=lr) ##
-    criterion = nn.MSELoss().cuda()
-    criterion_smooth_cty = CrossEntropyLabelSmooth().cuda()
+    criterion = nn.MSELoss().to(device)
+    criterion_smooth_cty = CrossEntropyLabelSmooth().to(device)
     
     best_top1_acc=0
     best_each_celltype_top1 = []
