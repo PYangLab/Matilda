@@ -49,6 +49,7 @@ parser.add_argument('--hidden_atac', type=int, default=185, help='the number of 
 args = parser.parse_args()
 setup_seed(args.seed) ### set random seed in order to reproduce the result
 cuda = True if torch.cuda.is_available() else False
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 FloatTensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 LongTensor = torch.cuda.LongTensor if cuda else torch.LongTensor
 
@@ -104,8 +105,8 @@ elif mode == "SHAREseq":
 elif mode == "TEAseq":
     model = CiteAutoencoder_TEAseq(nfeatures_rna, nfeatures_adt, nfeatures_atac, args.hidden_rna, args.hidden_adt, args.hidden_atac, args.z_dim, classify_dim)
 
-#model = nn.DataParallel(model).cuda() #multi gpu
-model = model.cuda() #one gpu
+#model = nn.DataParallel(model).to(device) #multi gpu
+model = model.to(device) #one gpu
 ########train model#########
 
 if args.classification == True:  
@@ -162,7 +163,7 @@ if args.simulation == True:
             reconstructed_data[reconstructed_data<torch.min(real_data)]=torch.min(real_data)
             reconstructed_data[torch.isnan(reconstructed_data)]=torch.max(real_data)
             new_data = torch.cat((new_data,reconstructed_data),0)
-            new_label = torch.cat((new_label,reconstructed_label.cuda()),0)
+            new_label = torch.cat((new_label,reconstructed_label.to(device)),0)
 
     reconstructed_data, reconstructed_label,real_data = get_vae_simulated_data_from_sampling(model, anchor_dl)
     reconstructed_data[reconstructed_data>torch.max(real_data)]=torch.max(real_data)
@@ -179,7 +180,7 @@ if args.simulation == True:
         new_label = reconstructed_label
     else:
         new_data = torch.cat((new_data,reconstructed_data),0)
-        new_label = torch.cat((new_label,reconstructed_label.cuda()),0)
+        new_label = torch.cat((new_label,reconstructed_label.to(device)),0)
 
     index = (label != args.simulation_ct).nonzero(as_tuple=True)[0]
     anchor_data = data[index.tolist(),:]
@@ -187,7 +188,7 @@ if args.simulation == True:
     real_data = data
     real_label = label
     sim_data = torch.cat((anchor_data,new_data),0)
-    sim_label = torch.cat((anchor_label,new_label.cuda()),0)
+    sim_label = torch.cat((anchor_label,new_label.to(device)),0)
     sim_data_rna = sim_data[:, 0:nfeatures_rna]
     real_data_rna = real_data[:, 0:nfeatures_rna]   
     if mode == "CITEseq":
@@ -325,7 +326,7 @@ if args.fs == True:
     
         attribution = torch.zeros(1,feature_num)
         for j in range(train_data_each_celltype_fs.size(0)-1):
-            attribution = attribution.cuda()+  torch.abs(deconv.attribute(train_data_each_celltype_fs[j:j+1,:], target=i))
+            attribution = attribution.to(device)+  torch.abs(deconv.attribute(train_data_each_celltype_fs[j:j+1,:], target=i))
         attribution_mean = torch.mean(attribution,dim=0)
 
         if not os.path.exists(save_fs_eachcell):
