@@ -83,7 +83,46 @@ if args.adt != "NULL" and args.atac != "NULL":
     transformed_dataset = MyDataset(data, label)
     dl = DataLoader(transformed_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0, drop_last=False)
 
-        
+if args.adt == "NULL" and args.atac != "NULL":
+    mode = "SHAREseq"
+    rna_data_path = args.rna
+    atac_data_path = args.atac
+    label_path = args.cty
+    rna_data = read_h5_data(rna_data_path)
+    atac_data = read_h5_data(atac_data_path)
+    label = read_fs_label(label_path)
+    classify_dim = (max(label)+1).cpu().numpy()
+    nfeatures_rna = rna_data.shape[1]
+    nfeatures_atac = atac_data.shape[1]
+    feature_num = nfeatures_rna  + nfeatures_atac
+    rna_data = compute_log2(rna_data)
+    atac_data = compute_log2(atac_data)
+    rna_data = compute_zscore(rna_data)
+    atac_data = compute_zscore(atac_data)
+    data = torch.cat((rna_data,atac_data),1)
+    transformed_dataset = MyDataset(data, label)
+    dl = DataLoader(transformed_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0, drop_last=False)
+    
+if args.adt != "NULL" and args.atac == "NULL":
+    mode = "CITEseq"
+    rna_data_path = args.rna
+    adt_data_path = args.adt
+    label_path = args.cty
+    rna_data = read_h5_data(rna_data_path)
+    adt_data = read_h5_data(adt_data_path)
+    label = read_fs_label(label_path)
+    classify_dim = (max(label)+1).cpu().numpy()
+    nfeatures_rna = rna_data.shape[1]
+    nfeatures_adt = adt_data.shape[1]
+    feature_num = nfeatures_rna + nfeatures_adt
+    rna_data = compute_log2(rna_data)
+    adt_data = compute_log2(adt_data)
+    rna_data = compute_zscore(rna_data)
+    adt_data = compute_zscore(adt_data)
+    data = torch.cat((rna_data,adt_data),1)
+    transformed_dataset = MyDataset(data, label)
+    dl = DataLoader(transformed_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0, drop_last=False)
+    
 print("The dataset is", mode)    
 output_v = []
 model_save_path = "../trained_model/{}/".format(mode)    
