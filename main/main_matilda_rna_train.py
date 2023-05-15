@@ -37,6 +37,7 @@ parser.add_argument('--hidden_rna', type=int, default=185, help='the number of n
 args = parser.parse_args()
 setup_seed(args.seed) ### set random seed in order to reproduce the result
 cuda = True if torch.cuda.is_available() else False
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 FloatTensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 LongTensor = torch.cuda.LongTensor if cuda else torch.LongTensor
 
@@ -67,8 +68,8 @@ save_fs_eachcell = "../output/marker/{}/".format(mode)
 
 model = CiteAutoencoder(nfeatures_rna, args.hidden_rna, args.z_dim, classify_dim)
 
-#model = nn.DataParallel(model).cuda() #multi gpu
-model = model.cuda() #one gpu
+#model = nn.DataParallel(model).to(device) #multi gpu
+model = model.to(device) #one gpu
 ########train model#########
 model, acc1, num1, train_num = train_model(model, train_dl, test_dl, lr=args.lr, epochs=args.epochs, classify_dim = classify_dim, best_top1_acc=0, save_path=model_save_path,feature_num=feature_num)
 ##################prepare to do augmentation##################            
@@ -106,7 +107,7 @@ if args.augmentation == True:
         anchor_data = anchor_data[ds_index,:]
         anchor_label = anchor_label[ds_index]
         new_data = torch.cat((new_data,anchor_data),0)
-        new_label = torch.cat((new_label,anchor_label.cuda()),0)
+        new_label = torch.cat((new_label,anchor_label.to(device)),0)
         j = j+1
 
     ###############augment for minor cell types##################
@@ -132,7 +133,7 @@ if args.augmentation == True:
             reconstructed_data[reconstructed_data<torch.min(real_data)]=torch.min(real_data)
             reconstructed_data[torch.isnan(reconstructed_data)]=torch.max(real_data)
             new_data = torch.cat((new_data,reconstructed_data),0)
-            new_label = torch.cat((new_label,reconstructed_label.cuda()),0)
+            new_label = torch.cat((new_label,reconstructed_label.to(device)),0)
 
         reconstructed_data, reconstructed_label,real_data = get_vae_simulated_data_from_sampling(model, anchor_dl)
         reconstructed_data[reconstructed_data>torch.max(real_data)]=torch.max(real_data)
@@ -145,7 +146,7 @@ if args.augmentation == True:
         reconstructed_data = reconstructed_data[ds_index,:]
         reconstructed_label = reconstructed_label[ds_index]
         new_data = torch.cat((new_data,reconstructed_data),0)
-        new_label = torch.cat((new_label,reconstructed_label.cuda()),0)
+        new_label = torch.cat((new_label,reconstructed_label.to(device)),0)
         j = j+1               
 
 filename = os.path.join('../trained_model/TEAseq/simulation_model_best.pth.tar')
