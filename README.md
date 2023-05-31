@@ -118,6 +118,7 @@ cd Matilda
 cd main
 # training the matilda model
 python main_matilda_train.py --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] #[training dataset]
+# python main_matilda_rna_train.py --rna [trainRNA] --cty [traincty]
 # Example run
 python main_matilda_train.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv
 # python main_matilda_rna_train.py --rna ../data/TEAseq/train_rna.h5 --cty ../data/TEAseq/train_cty.csv # for scRNA-seq
@@ -163,6 +164,7 @@ After training the model, we can use `main_matilda_task.py` to do multiple tasks
 ```
 # using the trained model for data simulation
 python main_matilda_task.py  --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] --simulation True --simulation_ct 1 --simulation_num 200
+# python main_matilda_rna_task.py --rna [trainRNA] --cty  [traincty] --simulation True --simulation_ct 1 --simulation_num 200  # for scRNA-seq
 # Example run
 python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200
 # python main_matilda_rna_task.py --rna ../data/TEAseq/train_rna.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200  # for scRNA-seq
@@ -174,6 +176,7 @@ Output: The output will be saved in `./Matilda/output/simulation_result/TEAseq/r
 ```
 # using the trained model for data dimension reduction and visualisation
 python main_matilda_task.py  --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] --dim_reduce True
+# python main_matilda_rna_task.py --rna [trainRNA] --cty [traincty] --dim_reduce True  # for scRNA-seq
 # Example run
 python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv --dim_reduce True
 # python main_matilda_rna_task.py --rna ../data/TEAseq/train_rna.h5 --cty ../data/TEAseq/train_cty.csv --dim_reduce True  # for scRNA-seq
@@ -185,6 +188,7 @@ Output: The output will be saved in `./Matilda/output/dim_reduce/TEAseq/referenc
 ```
 # using the trained model for feature selection
 python main_matilda_task.py  --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] --fs True
+# python main_matilda_rna_task.py --rna [trainRNA] --cty [traincty]  --fs True  # for scRNA-seq
 # Example run
 python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv --fs True
 # python main_matilda_rna_task.py --rna ../data/TEAseq/train_rna.h5  --cty ../data/TEAseq/train_cty.csv --fs True  # for scRNA-seq
@@ -196,6 +200,7 @@ Output: The output, i.e. feature importance scores, will be saved in `./Matilda/
 ```
 # using the trained model for classifying query data
 python main_matilda_task.py  --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --cty [querycty] --classification True
+# python main_matilda_rna_task.py --rna [queryRNA] --cty [querycty]  --classification True --query True # for scRNA-seq
 # Example run
 python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv --classification True --query True
 # python main_matilda_rna_task.py --rna ../data/TEAseq/test_rna.h5 --cty ../data/TEAseq/test_cty.csv --classification True --query True # for scRNA-seq
@@ -234,6 +239,7 @@ cell type ID:  10                cell type: T.CD8.Naive          prec : tensor(8
 ```
 # using the trained model for dimension reduction and visualising query data
 python main_matilda_task.py --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --cty [querycty] --dim_reduce True
+# python main_matilda_rna_task.py  --rna [queryRNA]  --cty [querycty] --dim_reduce True --query True # for scRNA-seq
 # Example run
 python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv --dim_reduce True --query True
 # python main_matilda_rna_task.py  --rna ../data/TEAseq/test_rna.h5  --cty ../data/TEAseq/test_cty.csv --dim_reduce True --query True # for scRNA-seq
@@ -246,6 +252,7 @@ Output: The output will be saved in `./Matilda/output/dim_reduce/TEAseq/query/`.
 ```
 # using the trained model for feature selection
 python main_matilda_task.py --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --cty [querycty] --fs True
+# python main_matilda_rna_task.py  --rna [queryRNA]  --cty [querycty]  --fs True --query True # for scRNA-seq
 # Example run
 python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv  --fs True --query True
 # python main_matilda_rna_task.py  --rna ../data/TEAseq/test_rna.h5  --cty ../data/TEAseq/test_cty.csv  --fs True --query True # for scRNA-seq
