@@ -111,7 +111,8 @@ Users can prepare the example dataset as input for Matilda or use their own data
 Training and testing on demo dataset will cost no more than 1 minute with GPU.
 
 ## Running Matilda with the example dataset
-Training the Matilda model (see Arguments section for more details). If we use multimodality data, we use `main_matilda_train.py`; if we use scRNA-seq data, we use `main_matilda_rna_train.py`.
+Training the Matilda model (see Arguments section for more details). 
+Matilda is primarily designed for multimodality data analysis but can also handle single-modality data. If you are working with multimodality data, you should use the `main_matilda_train.py` script. However, if your data is specifically scRNA-seq data, it is recommended to use the `main_matilda_rna_train.py` script.
 ```
 cd Matilda
 cd main
