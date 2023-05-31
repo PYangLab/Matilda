@@ -81,6 +81,8 @@ Matilda’s main function takes expression data (e.g., RNA, ADT, ATAC) in `.h5` 
 
 An example for creating .h5 file from expression matrix in the R environment is as below:
 ```
+library(rhdf5)
+library(HDF5Array)
 write_h5 <- function(exprs_list, h5file_list) {  
   for (i in seq_along(exprs_list)) {
     h5createFile(h5file_list[i])
