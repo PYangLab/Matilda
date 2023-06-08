@@ -120,7 +120,9 @@ cd main
 python main_matilda_train.py --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] #[training dataset]
 # python main_matilda_rna_train.py --rna [trainRNA] --cty [traincty]
 # Example run
-python main_matilda_train.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv
+python main_matilda_train.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv #Training TEAseq
+#python main_matilda_train.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5  --cty ../data/TEAseq/train_cty.csv #Training CITEseq
+#python main_matilda_train.py --rna ../data/TEAseq/train_rna.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv #Training RNA+ATAC
 # python main_matilda_rna_train.py --rna ../data/TEAseq/train_rna.h5 --cty ../data/TEAseq/train_cty.csv # for scRNA-seq
 ```
 ### Argument
@@ -166,7 +168,9 @@ After training the model, we can use `main_matilda_task.py` to do multiple tasks
 python main_matilda_task.py  --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] --simulation True --simulation_ct 1 --simulation_num 200
 # python main_matilda_rna_task.py --rna [trainRNA] --cty  [traincty] --simulation True --simulation_ct 1 --simulation_num 200  # for scRNA-seq
 # Example run
-python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200
+python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200 # Simulation for TEAseq
+#python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200  # Simulation for CITEseq
+#python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200  # Simulation for RNA+ATAC
 # python main_matilda_rna_task.py --rna ../data/TEAseq/train_rna.h5 --cty ../data/TEAseq/train_cty.csv --simulation True --simulation_ct 1 --simulation_num 200  # for scRNA-seq
 ```
 Output: The output will be saved in `./Matilda/output/simulation_result/TEAseq/reference/`. To generate UMAP plots for the simulated data using R, run `./Matilda/qc/visualize_simulated_data.Rmd`. The UMAPs are:
