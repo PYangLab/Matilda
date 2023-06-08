@@ -209,8 +209,8 @@ if args.augmentation == True:
         new_label = torch.cat((new_label,reconstructed_label.to(device)),0)
         j = j+1               
 
-filename = os.path.join('../trained_model/TEAseq/simulation_model_best.pth.tar')
-torch.save({'state_dict': model.state_dict()}, filename)
+if not os.path.exists(model_save_path):
+    os.mkdir(model_save_path)
       
 #######load the model trained before augmentation#########
 checkpoint_tar = os.path.join(model_save_path, 'model_best.pth.tar')
