@@ -132,8 +132,10 @@ save_fs_eachcell = "../output/marker/{}/{}/".format(mode,path)
 output_v = []
 
 rna_name  = h5py.File(rna_data_path,"r")['matrix/features'][:]
-adt_name  = h5py.File(adt_data_path,"r")['matrix/features'][:]
-atac_name  = h5py.File(atac_data_path,"r")['matrix/features'][:]
+if args.adt != "NULL":
+    adt_name  = h5py.File(adt_data_path,"r")['matrix/features'][:]
+if args.atac!= "NULL":
+    atac_name  = h5py.File(atac_data_path,"r")['matrix/features'][:]
 
 transform_real_label = real_label(label_path, classify_dim)
 #######build model#########
