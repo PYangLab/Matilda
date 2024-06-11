@@ -235,8 +235,8 @@ if args.simulation == True:
         sim_data_adt = sim_data[:, nfeatures_rna:(nfeatures_rna+nfeatures_adt)]
         real_data_adt = real_data[:, nfeatures_rna:(nfeatures_rna+nfeatures_adt)]
     elif mode == "SHAREseq":
-        sim_data_atac = sim_data[:, (nfeatures_rna+nfeatures_adt):(nfeatures_rna+nfeatures_adt+nfeatures_atac)]
-        real_data_atac = real_data[:, (nfeatures_rna+nfeatures_adt):(nfeatures_rna+nfeatures_adt+nfeatures_atac)]
+        sim_data_atac = sim_data[:, nfeatures_rna:(nfeatures_rna+nfeatures_atac)]
+        real_data_atac = real_data[:, nfeatures_rna:(nfeatures_rna+nfeatures_atac)]
     elif mode == "TEAseq":
         sim_data_adt = sim_data[:, nfeatures_rna:(nfeatures_rna+nfeatures_adt)]
         sim_data_atac = sim_data[:, (nfeatures_rna+nfeatures_adt):(nfeatures_rna+nfeatures_adt+nfeatures_atac)]
