@@ -163,10 +163,10 @@ Next, show 1) umap of overlap real and simulated ATAC data; 2) umap for real ATA
 ```{r}
 train.cty.sim <- as.factor(train.cty.sim)
 train.cty.real <- as.factor(train.cty.real)
-plot5 <- ggplot(umap_both_atac_layout1,aes(V1,V2,color=train.cty.real)) +
+plot5 <- ggplot(umap_both_atac_layout1,aes(UMAP1,UMAP2,color=train.cty.real)) +
   geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
   theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Real ATAC")
-plot6 <- ggplot(umap_both_atac_layout2,aes(V1,V2,color=train.cty.sim)) +
+plot6 <- ggplot(umap_both_atac_layout2,aes(UMAP1,UMAP2,color=train.cty.sim)) +
   geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
   theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Simulated ATAC")
 top3<-ggarrange(plot5,plot6,ncol=3,nrow=1)
