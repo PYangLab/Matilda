@@ -14,7 +14,7 @@ from torch.autograd import Variable
 
 from learn.model import CiteAutoencoder_CITEseq, CiteAutoencoder_SHAREseq, CiteAutoencoder_TEAseq
 from learn.train import train_model
-from util import setup_seed, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2,save_checkpoint
+from util import setup_seed, MyDataset,ToTensor, real_label, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2,save_checkpoint
 
 parser = argparse.ArgumentParser("Matilda")
 parser.add_argument('--seed', type=int, default=1, help='seed')
@@ -233,3 +233,8 @@ if os.path.exists(checkpoint_tar):
     model.load_state_dict(checkpoint['state_dict'], strict=True)
     print("load successfully")
 model,acc2,num1,train_num = train_model(model, train_dl, test_dl, lr=args.lr/10, epochs=int(args.epochs/2),classify_dim=classify_dim,best_top1_acc=0, save_path=model_save_path,feature_num=feature_num)
+
+
+transform_real_label = real_label(args.cty, classify_dim)
+pd.DataFrame(transform_real_label, columns=['CellType']).to_csv("real_cty.csv", index=False, header=False)
+ 
