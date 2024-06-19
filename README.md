@@ -206,14 +206,23 @@ Output: The output, i.e. feature importance scores, will be saved in `./Matilda/
 
 **2) Multi-task on the query data**
 ```
-# using the trained model for classifying query data
-python main_matilda_task.py  --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --cty [querycty] --classification True
-# python main_matilda_rna_task.py --rna [queryRNA] --cty [querycty]  --classification True --query True # for scRNA-seq
+# using the trained model for classifying query data, where the query_cty is optional
+python main_matilda_task.py  --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --query_cty [querycty] --ref_cty [refcty] --classification True
+# python main_matilda_rna_task.py --rna [queryRNA] --query_cty [querycty]  --ref_cty [refcty] --classification True --query True # for scRNA-seq
 # Example run
-python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv --classification True --query True # Classification for TEAseq
-#python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --cty ../data/TEAseq/test_cty.csv --classification True --query True # Classification for CITEseq
-#python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv --classification True --query True # Classification for RNA+ATAC
-# python main_matilda_rna_task.py --rna ../data/TEAseq/test_rna.h5 --cty ../data/TEAseq/test_cty.csv --classification True --query True # for scRNA-seq
+python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --query_cty ../data/TEAseq/test_cty.csv --ref_cty ../data/TEAseq/train_cty.csv --classification True --query True # Classification for TEAseq
+#python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --query_cty ../data/TEAseq/test_cty.csv --ref_cty ../data/TEAseq/train_cty.csv --classification True --query True # Classification for CITEseq
+#python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --atac ../data/TEAseq/test_atac.h5 --query_cty ../data/TEAseq/test_cty.csv --ref_cty ../data/TEAseq/train_cty.csv --classification True --query True # Classification for RNA+ATAC
+# python main_matilda_rna_task.py --rna ../data/TEAseq/test_rna.h5 --query_cty ../data/TEAseq/test_cty.csv --ref_cty ../data/TEAseq/train_cty.csv --classification True --query True # for scRNA-seq
+
+if you don't have the query cell types:
+python main_matilda_task.py  --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --ref_cty [refcty] --classification True
+# python main_matilda_rna_task.py --rna [queryRNA]  --ref_cty [refcty] --classification True --query True # for scRNA-seq
+# Example run
+python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --ref_cty ../data/TEAseq/train_cty.csv --classification True --query True # Classification for TEAseq
+#python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --ref_cty ../data/TEAseq/train_cty.csv --classification True --query True # Classification for CITEseq
+#python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --atac ../data/TEAseq/test_atac.h5  --ref_cty ../data/TEAseq/train_cty.csv --classification True --query True # Classification for RNA+ATAC
+# python main_matilda_rna_task.py --rna ../data/TEAseq/test_rna.h5 --ref_cty ../data/TEAseq/train_cty.csv --classification True --query True # for scRNA-seq
 ```
 
 Output: The output will be saved in `./Matilda/output/classification/TEAseq/query/`.
