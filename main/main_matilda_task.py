@@ -413,12 +413,14 @@ if args.dim_reduce == True:
     b_list = range(0, data.size(0))
     cell_name_real = ['cell_{}'.format(b) for b in b_list]  
     
-    real_label_new = []
-    for j in range(data.size(0)):    
-        real_label_new.append(transform_real_label[label[j]])
+    if args.query_cty!="NULL":
+        real_label_new = []
+        for j in range(data.size(0)):    
+            real_label_new.append(transform_real_label[label[j]])
+            pd.DataFrame(real_label_new, index = cell_name_real, columns = [ "label"]).to_csv('../output/dim_reduce/{}/{}/latent_space_label.csv'.format(mode,path))
             
     pd.DataFrame(simulated_data_ls.cpu().numpy(), index = cell_name_real, columns = feature_index).to_csv( '../output/dim_reduce/{}/{}/latent_space.csv'.format(mode,path))
-    pd.DataFrame(real_label_new, index = cell_name_real, columns = [ "label"]).to_csv('../output/dim_reduce/{}/{}/latent_space_label.csv'.format(mode,path))
+    
     print("finish dimension reduction")
 
 if args.fs == True:
