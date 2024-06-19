@@ -181,7 +181,7 @@ if args.classification == True:
             print('cell ID: ',j, '\t', '\t',  'predicted cell type:', classified_label[j], '\t', '\t', 'probability:', round(float(prob[j]),2), file = save_path1)
 
 
-if (args.simulation == True) and (args.simulation_ct!=-1):
+if (args.simulation == True) and (args.simulation_ct!="-1"):
     print("simulate celltype:", args.simulation_ct) #transform_real_label[args.simulation_ct]
     checkpoint_tar = os.path.join(model_save_path, 'model_best.pth.tar')
     if os.path.exists(checkpoint_tar):
@@ -310,7 +310,7 @@ if (args.simulation == True) and (args.simulation_ct!=-1):
 
     print("finish simulation")
 
-if (args.simulation == True) and (args.simulation_ct==-1):
+if (args.simulation == True) and (args.simulation_ct=="-1"):
     print("simulate all cells")
     checkpoint_tar = os.path.join(model_save_path, 'model_best.pth.tar')
     if os.path.exists(checkpoint_tar):
