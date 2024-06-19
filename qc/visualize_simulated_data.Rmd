@@ -61,10 +61,10 @@ Next, show 1) umap of overlap real and simulated RNA data; 2) umap for real RNA 
 ```{r}
 train.cty.sim <- as.factor(train.cty.sim)
 train.cty.real <- as.factor(train.cty.real)
-plot1 <- ggplot(umap_both_rna_layout1,aes(V1,V2,color=train.cty.real)) +
+plot1 <- ggplot(umap_both_rna_layout1,aes(UMAP1,UMAP2,color=train.cty.real)) +
   geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
   theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Real RNA")
-plot2 <- ggplot(umap_both_rna_layout2,aes(V1,V2,color=train.cty.sim)) +
+plot2 <- ggplot(umap_both_rna_layout2,aes(UMAP1,UMAP2,color=train.cty.sim)) +
   geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
   theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Simulated RNA")
 top1<-ggarrange(plot1,plot2,ncol=3,nrow=1)
@@ -113,10 +113,10 @@ Next, show 1) umap of overlap real and simulated ADT data; 2) umap for real ADT 
 ```{r}
 train.cty.sim <- as.factor(train.cty.sim)
 train.cty.real <- as.factor(train.cty.real)
-plot3 <- ggplot(umap_both_adt_layout1,aes(V1,V2,color=train.cty.real)) +
+plot3 <- ggplot(umap_both_adt_layout1,aes(UMAP1,UMAP2,color=train.cty.real)) +
   geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
   theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Real ADT")
-plot4 <- ggplot(umap_both_adt_layout2,aes(V1,V2,color=train.cty.sim)) +
+plot4 <- ggplot(umap_both_adt_layout2,aes(UMAP1,UMAP2,color=train.cty.sim)) +
   geom_point(size = 0.8)+ labs(x = "", y = "", title = "") + theme_classic()  + 
   theme(aspect.ratio = 1)+ theme(panel.grid =element_blank()) +theme(axis.text = element_blank()) +  theme(axis.ticks = element_blank()) +  theme(plot.title = element_text(hjust = 0.5,size=12),panel.spacing = unit(0, "lines")) + ggtitle("Simulated ADT")
 top2<-ggarrange(plot3,plot4,ncol=3,nrow=1)
