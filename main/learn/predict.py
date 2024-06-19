@@ -21,7 +21,7 @@ def test_model(model, dl, real_label, classify_dim=17, save_path = ""):
         each_celltype_num.append(0)
         best_each_celltype_top1.append(0)
 
-    model = model.eval()
+    model.eval()
     classified_label = []
     groundtruth_label = []
     prob = []
@@ -39,7 +39,11 @@ def test_model(model, dl, real_label, classify_dim=17, save_path = ""):
             
             for j in range(x_prime.size(0)):
                 classified_label.append(real_label[a.indices[j]])
-                groundtruth_label.append(real_label[test_label[j]])
+
+                if (torch.max(test_label)!=0):
+                    groundtruth_label.append(real_label[test_label[j]])
+                else:
+                    groundtruth_label.append(-1)
                 prob.append(a.values[j])
                
 
@@ -60,4 +64,3 @@ def test_model(model, dl, real_label, classify_dim=17, save_path = ""):
         print('cell type ID: ',j, '\t', '\t', 'cell type:', real_label[j], '\t', '\t', 'prec :', each_celltype_top1[j].avg, 'number:', each_celltype_num[j], file = save_path)
         
     return model,best_each_celltype_top1,each_celltype_num, classified_label, groundtruth_label,prob
-
