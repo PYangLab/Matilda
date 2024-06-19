@@ -257,13 +257,13 @@ cell type ID:  10                cell type: T.CD8.Naive          prec : tensor(8
 
 ```
 # using the trained model for dimension reduction and visualising query data
-python main_matilda_task.py --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --cty [querycty] --dim_reduce True
-# python main_matilda_rna_task.py  --rna [queryRNA]  --cty [querycty] --dim_reduce True --query True # for scRNA-seq
+python main_matilda_task.py --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --query_cty [querycty] --ref_cty [refcty] --dim_reduce True
+# python main_matilda_rna_task.py  --rna [queryRNA]  --query_cty [querycty] --ref_cty [refcty] --dim_reduce True --query True # for scRNA-seq
 # Example run
-python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv --dim_reduce True --query True  #Dimension reduction for TEAseq
-#python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --cty ../data/TEAseq/test_cty.csv --dim_reduce True --query True  #Dimension reduction for CITEseq
-#python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv --dim_reduce True --query True  #Dimension reduction for RNA+ATAC
-# python main_matilda_rna_task.py  --rna ../data/TEAseq/test_rna.h5  --cty ../data/TEAseq/test_cty.csv --dim_reduce True --query True # for scRNA-seq
+python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --query_cty ../data/TEAseq/test_cty.csv --ref_cty ../data/TEAseq/train_cty.csv --dim_reduce True --query True  #Dimension reduction for TEAseq
+#python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --query_cty ../data/TEAseq/test_cty.csv --ref_cty ../data/TEAseq/train_cty.csv --dim_reduce True --query True  #Dimension reduction for CITEseq
+#python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --atac ../data/TEAseq/test_atac.h5 --query_cty ../data/TEAseq/test_cty.csv --ref_cty ../data/TEAseq/train_cty.csv --dim_reduce True --query True  #Dimension reduction for RNA+ATAC
+# python main_matilda_rna_task.py  --rna ../data/TEAseq/test_rna.h5  --query_cty ../data/TEAseq/test_cty.csv --ref_cty ../data/TEAseq/train_cty.csv --dim_reduce True --query True # for scRNA-seq
 ```
 
 Output: The output will be saved in `./Matilda/output/dim_reduce/TEAseq/query/`. To generate UMAP plots and 4 clustering metrices, i.e., ARI, NMI, FM, Jaccard, for the latent space using R, run `./Matilda/qc/visualize_latent_space.Rmd`. The UMAPs are:
@@ -272,13 +272,13 @@ Output: The output will be saved in `./Matilda/output/dim_reduce/TEAseq/query/`.
 
 ```
 # using the trained model for feature selection
-python main_matilda_task.py --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --cty [querycty] --fs True
-# python main_matilda_rna_task.py  --rna [queryRNA]  --cty [querycty]  --fs True --query True # for scRNA-seq
+python main_matilda_task.py --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --query_cty [querycty] --fs True
+# python main_matilda_rna_task.py  --rna [queryRNA]  --query_cty [querycty]  --fs True --query True # for scRNA-seq
 # Example run
-python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv  --fs True --query True #Feature selection for TEAseq
-#python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5  --cty ../data/TEAseq/test_cty.csv  --fs True --query True #Feature selection for CITEseq
-#python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --atac ../data/TEAseq/test_atac.h5 --cty ../data/TEAseq/test_cty.csv  --fs True --query True #Feature selection for RNA+ATAC
-# python main_matilda_rna_task.py  --rna ../data/TEAseq/test_rna.h5  --cty ../data/TEAseq/test_cty.csv  --fs True --query True # for scRNA-seq
+python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5 --query_cty ../data/TEAseq/test_cty.csv  --fs True --query True #Feature selection for TEAseq
+#python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5  --query_cty ../data/TEAseq/test_cty.csv  --fs True --query True #Feature selection for CITEseq
+#python main_matilda_task.py  --rna ../data/TEAseq/test_rna.h5 --atac ../data/TEAseq/test_atac.h5 --query_cty ../data/TEAseq/test_cty.csv  --fs True --query True #Feature selection for RNA+ATAC
+# python main_matilda_rna_task.py  --rna ../data/TEAseq/test_rna.h5  --query_cty ../data/TEAseq/test_cty.csv  --fs True --query True # for scRNA-seq
 ```
 
 Output: The output, i.e. feature importance scores, will be saved in `./Matilda/output/markers/TEAseq/query/`. 
