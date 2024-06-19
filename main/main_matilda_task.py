@@ -15,7 +15,7 @@ from torch.autograd import Variable
 from learn.model import CiteAutoencoder_CITEseq, CiteAutoencoder_SHAREseq, CiteAutoencoder_TEAseq
 from learn.train import train_model
 from learn.predict import test_model
-from util import setup_seed, real_label, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2
+from util import setup_seed, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2
 import h5py,scipy
 
 parser = argparse.ArgumentParser("Matilda")
@@ -34,7 +34,6 @@ parser.add_argument('--rna', metavar='DIR', default='NULL', help='path to train 
 parser.add_argument('--adt', metavar='DIR', default='NULL', help='path to train adt data')
 parser.add_argument('--atac', metavar='DIR', default='NULL', help='path to train atac data')
 parser.add_argument('--query_cty', metavar='DIR', default='NULL', help='path to train cell type label')
-parser.add_argument('--ref_cty', metavar='DIR', default='NULL', help='path to train cell type label')
 
 ##############  for training #################
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
@@ -71,8 +70,6 @@ if args.adt != "NULL" and args.atac != "NULL":
         label = torch.zeros(rna_data.shape[0]).to(device)
     else:
         label = read_fs_label(label_path)
-    ref_label = read_fs_label(args.ref_cty)
-    classify_dim = (max(ref_label)+1).cpu().numpy()
     nfeatures_rna = rna_data.shape[1]
     nfeatures_adt = adt_data.shape[1]
     nfeatures_atac = atac_data.shape[1]
@@ -98,8 +95,6 @@ if args.adt == "NULL" and args.atac != "NULL":
         label = torch.zeros(rna_data.shape[0]).to(device)
     else:
         label = read_fs_label(label_path)
-    ref_label = read_fs_label(args.ref_cty)
-    classify_dim = (max(ref_label)+1).cpu().numpy()
     nfeatures_rna = rna_data.shape[1]
     nfeatures_atac = atac_data.shape[1]
     feature_num = nfeatures_rna  + nfeatures_atac
@@ -122,8 +117,6 @@ if args.adt != "NULL" and args.atac == "NULL":
         label = torch.zeros(rna_data.shape[0]).to(device)
     else:
         label = read_fs_label(label_path)
-    ref_label = read_fs_label(args.ref_cty)
-    classify_dim = (max(ref_label)+1).cpu().numpy()
     nfeatures_rna = rna_data.shape[1]
     nfeatures_adt = adt_data.shape[1]
     feature_num = nfeatures_rna + nfeatures_adt
@@ -149,7 +142,10 @@ if args.adt != "NULL":
 if args.atac!= "NULL":
     atac_name  = h5py.File(atac_data_path,"r")['matrix/features'][:]
 
-transform_real_label = real_label(args.ref_cty, classify_dim)
+#transform_real_label = real_label(args.ref_cty, classify_dim)
+real_cty_df = pd.read_csv("real_cty.csv", header=None)
+transform_real_label = real_cty_df[0].tolist()
+classify_dim = len(transform_real_label)
 #######build model#########
 if mode == "CITEseq":
     model = CiteAutoencoder_CITEseq(nfeatures_rna, nfeatures_adt, args.hidden_rna, args.hidden_adt, args.z_dim, classify_dim)
