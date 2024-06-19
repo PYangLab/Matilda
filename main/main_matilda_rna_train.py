@@ -151,12 +151,16 @@ if args.augmentation == True:
 filename = os.path.join('../trained_model/TEAseq/simulation_model_best.pth.tar')
 torch.save({'state_dict': model.state_dict()}, filename)
       
-#######load the model trained before augmentation#########
-checkpoint_tar = os.path.join(model_save_path, 'model_best.pth.tar')
-if os.path.exists(checkpoint_tar):
-    checkpoint = torch.load(checkpoint_tar)
-    model.load_state_dict(checkpoint['state_dict'], strict=True)
-    print("load successfully")
+#######load the model #########
+if mode == "CITEseq":
+    model = CiteAutoencoder_CITEseq(nfeatures_rna, nfeatures_adt, args.hidden_rna, args.hidden_adt, args.z_dim, classify_dim)
+elif mode == "SHAREseq":
+    model = CiteAutoencoder_SHAREseq(nfeatures_rna, nfeatures_atac, args.hidden_rna, args.hidden_atac, args.z_dim, classify_dim)
+elif mode == "TEAseq":
+    model = CiteAutoencoder_TEAseq(nfeatures_rna, nfeatures_adt, nfeatures_atac, args.hidden_rna, args.hidden_adt, args.hidden_atac, args.z_dim, classify_dim)
+
+#model = nn.DataParallel(model).to(device) #multi gpu
+model = model.to(device) #one gpu
 
 ############process new data after augmentation###########
 train_transformed_dataset = MyDataset(new_data, new_label)
