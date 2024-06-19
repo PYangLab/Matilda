@@ -33,7 +33,7 @@ parser.add_argument('--simulation_num', type=int, default= 100, help='save simul
 parser.add_argument('--rna', metavar='DIR', default='NULL', help='path to train rna data')
 parser.add_argument('--adt', metavar='DIR', default='NULL', help='path to train adt data')
 parser.add_argument('--atac', metavar='DIR', default='NULL', help='path to train atac data')
-parser.add_argument('--query_cty', metavar='DIR', default='NULL', help='path to train cell type label')
+parser.add_argument('--cty', metavar='DIR', default='NULL', help='path to train cell type label')
 
 ##############  for training #################
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
@@ -62,7 +62,7 @@ if args.adt != "NULL" and args.atac != "NULL":
     rna_data_path = args.rna
     adt_data_path = args.adt
     atac_data_path = args.atac
-    label_path = args.query_cty
+    label_path = args.cty
     rna_data = read_h5_data(rna_data_path)
     adt_data = read_h5_data(adt_data_path)
     atac_data = read_h5_data(atac_data_path)
@@ -88,7 +88,7 @@ if args.adt == "NULL" and args.atac != "NULL":
     mode = "SHAREseq"
     rna_data_path = args.rna
     atac_data_path = args.atac
-    label_path = args.query_cty
+    label_path = args.cty
     rna_data = read_h5_data(rna_data_path)
     atac_data = read_h5_data(atac_data_path)
     if label_path == "NULL":
@@ -110,7 +110,7 @@ if args.adt != "NULL" and args.atac == "NULL":
     mode = "CITEseq"
     rna_data_path = args.rna
     adt_data_path = args.adt
-    label_path = args.query_cty
+    label_path = args.cty
     rna_data = read_h5_data(rna_data_path)
     adt_data = read_h5_data(adt_data_path)
     if label_path == "NULL":
@@ -171,7 +171,7 @@ if args.classification == True:
     
     model, acc1, num1,classified_label, groundtruth_label,prob = test_model(model, dl, transform_real_label, classify_dim = classify_dim, save_path = save_path)
     for j in range(data.shape[0]):
-        if args.query_cty!="NULL":
+        if args.cty!="NULL":
             print('cell ID: ',j, '\t', '\t', 'real cell type:', groundtruth_label[j], '\t', '\t', 'predicted cell type:', classified_label[j], '\t', '\t', 'probability:', round(float(prob[j]),2), file = save_path1)
         else:
             print('cell ID: ',j, '\t', '\t',  'predicted cell type:', classified_label[j], '\t', '\t', 'probability:', round(float(prob[j]),2), file = save_path1)
@@ -409,7 +409,7 @@ if args.dim_reduce == True:
     b_list = range(0, data.size(0))
     cell_name_real = ['cell_{}'.format(b) for b in b_list]  
     
-    if args.query_cty!="NULL":
+    if args.cty!="NULL":
         real_label_new = []
         for j in range(data.size(0)):    
             real_label_new.append(transform_real_label[label[j]])
