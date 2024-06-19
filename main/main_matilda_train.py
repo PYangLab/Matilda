@@ -1,4 +1,5 @@
 import os
+import parser
 import argparse
 
 import pandas as pd
@@ -208,21 +209,20 @@ if args.augmentation == True:
         new_label = torch.cat((new_label,reconstructed_label.to(device)),0)
         j = j+1               
 
-if not os.path.exists(model_save_path):
-    os.mkdir(model_save_path)
+filename = os.path.join('../trained_model/TEAseq/simulation_model_best.pth.tar')
+torch.save({'state_dict': model.state_dict()}, filename)
       
 #######load the model#########
-#######load the model #########
+#######build model#########
 if mode == "CITEseq":
-    model = CiteAutoencoder_CITEseq(nfeatures_rna, nfeatures_adt, args.hidden_rna, args.hidden_adt, args.z_dim, classify_dim)
+	model = CiteAutoencoder_CITEseq(nfeatures_rna, nfeatures_adt, args.hidden_rna, args.hidden_adt, args.z_dim, classify_dim)
 elif mode == "SHAREseq":
-    model = CiteAutoencoder_SHAREseq(nfeatures_rna, nfeatures_atac, args.hidden_rna, args.hidden_atac, args.z_dim, classify_dim)
+	model = CiteAutoencoder_SHAREseq(nfeatures_rna, nfeatures_atac, args.hidden_rna, args.hidden_atac, args.z_dim, classify_dim)
 elif mode == "TEAseq":
-    model = CiteAutoencoder_TEAseq(nfeatures_rna, nfeatures_adt, nfeatures_atac, args.hidden_rna, args.hidden_adt, args.hidden_atac, args.z_dim, classify_dim)
+	model = CiteAutoencoder_TEAseq(nfeatures_rna, nfeatures_adt, nfeatures_atac, args.hidden_rna, args.hidden_adt, args.hidden_atac, args.z_dim, classify_dim)
 
 #model = nn.DataParallel(model).to(device) #multi gpu
 model = model.to(device) #one gpu
-
 
 ############process new data after augmentation###########
 train_transformed_dataset = MyDataset(new_data, new_label)
@@ -236,9 +236,3 @@ if os.path.exists(checkpoint_tar):
     model.load_state_dict(checkpoint['state_dict'], strict=True)
     print("load successfully")
 model,acc2,num1,train_num = train_model(model, train_dl, test_dl, lr=args.lr/10, epochs=int(args.epochs/2),classify_dim=classify_dim,best_top1_acc=0, save_path=model_save_path,feature_num=feature_num)
-
-
-
-    
-            
-
