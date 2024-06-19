@@ -147,6 +147,7 @@ elif mode == "TEAseq":
 
 #model = nn.DataParallel(model).to(device) #multi gpu
 model = model.to(device) #one gpu
+model.eval()
 ########train model#########
 
 if args.classification == True:  
