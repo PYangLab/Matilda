@@ -157,7 +157,7 @@ After training the model, we can use `main_matilda_task.py` to do multiple tasks
 + `--fs`: whether to do cell type feature selection.
 + `--dim_reduce`: whether to do dimension reduction.
 + `--simulation`: whether to do simulation. 
-+ `--simulation_ct`: an string cell type name for which cell type to simulate. Only be activated when `simulation = True`.
++ `--simulation_ct`: an cell type name for which cell type to simulate. Simulate all cell types with the same number as input if it is set to -1. Only be activated when `simulation = True`.
 + `--simulation_num`: the number of cells to simulate for the specified cell type. Only be activated when `simulation = True`.
 
 
@@ -166,7 +166,9 @@ After training the model, we can use `main_matilda_task.py` to do multiple tasks
 ```
 # using the trained model for data simulation
 python main_matilda_task.py  --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] --simulation True --simulation_ct "B.Naive" --simulation_num 200
+# python main_matilda_task.py  --rna [trainRNA] --adt [trainADT] --atac [trainATAC] --cty [traincty] --simulation True --simulation_ct -1 # simulate all cell types
 # python main_matilda_rna_task.py --rna [trainRNA] --cty  [traincty] --simulation True --simulation_ct [celltype] --simulation_num 200  # for scRNA-seq
+# python main_matilda_rna_task.py --rna [trainRNA] --cty  [traincty] --simulation True --simulation_ct -1  # simulate all cell types
 # Example run
 python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --atac ../data/TEAseq/train_atac.h5 --cty ../data/TEAseq/train_cty.csv  --simulation True --simulation_ct "B.Naive" --simulation_num 200 # Simulation for TEAseq
 #python main_matilda_task.py --rna ../data/TEAseq/train_rna.h5 --adt ../data/TEAseq/train_adt.h5 --cty ../data/TEAseq/train_cty.csv  --simulation True --simulation_ct "B.Naive" --simulation_num 200  # Simulation for CITEseq
