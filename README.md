@@ -216,7 +216,7 @@ python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAse
 # python main_matilda_rna_task.py --rna ../data/TEAseq/test_rna.h5 --cty ../data/TEAseq/test_cty.csv  --classification True --query True # for scRNA-seq
 
 if you don't have the query cell types:
-python main_matilda_task.py  --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --ref_cty [refcty] --classification True
+python main_matilda_task.py  --rna [queryRNA] --adt [queryADT] --atac [queryATAC] --classification True
 # python main_matilda_rna_task.py --rna [queryRNA]  --ref_cty [refcty] --classification True --query True # for scRNA-seq
 # Example run
 python main_matilda_task.py --rna ../data/TEAseq/test_rna.h5 --adt ../data/TEAseq/test_adt.h5 --atac ../data/TEAseq/test_atac.h5  --classification True --query True # Classification for TEAseq
