@@ -26,6 +26,7 @@ Please checkout the documentations and tutorials at https://matil.readthedocs.io
 
 ## Citation
 If you use matilda in your research, please consider citing
+```
 @article{liu2023multi,
   title={Multi-task learning from multimodal single-cell omics with Matilda},
   author={Liu, Chunlei and Huang, Hao and Yang, Pengyi},
@@ -36,6 +37,7 @@ If you use matilda in your research, please consider citing
   year={2023},
   publisher={Oxford University Press}
 }
+```
 
 ## License
 
