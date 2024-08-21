@@ -7,11 +7,24 @@ Matilda is a multi-task framework for learning from single-cell multimodal omics
 For more details, please check out our [publication](https://academic.oup.com/nar/article/51/8/e45/7076464).
 
 
+## Directory structure
+
+```
+.
+├── main                      # Main Python package
+├── data                      # Data files
+├── qc                        # Method evaluation 
+├── img                       # Main figure
+├── environment_matilda.yaml  # Reproducible Python environment via conda
+├── LICENSE
+└── README.md
+```
+
 # Usage
 
 Please checkout the documentations and tutorials at https://matil.readthedocs.io/en/latest/.
 
 
-##License
+## License
 
 This project is covered under the Apache 2.0 License.
