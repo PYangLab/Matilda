@@ -26,7 +26,7 @@ Please checkout the documentations and tutorials at https://matil.readthedocs.io
 
 # Contact
 
-If you found a bug, please use the issue [tracker]{https://github.com/PYangLab/Matilda/issues}.
+If you found a bug, please use the issue [tracker](https://github.com/PYangLab/Matilda/issues).
 
 # Citation
 If you use matilda in your research, please consider citing
