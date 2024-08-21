@@ -7,7 +7,7 @@ Matilda is a multi-task framework for learning from single-cell multimodal omics
 For more details, please check out our [publication](https://academic.oup.com/nar/article/51/8/e45/7076464).
 
 
-## Directory structure
+# Directory structure
 
 ```
 .
@@ -24,7 +24,11 @@ For more details, please check out our [publication](https://academic.oup.com/na
 
 Please checkout the documentations and tutorials at https://matil.readthedocs.io/en/latest/.
 
-## Citation
+# Contact
+
+If you found a bug, please use the issue [tracker]{https://github.com/PYangLab/Matilda/issues}.
+
+# Citation
 If you use matilda in your research, please consider citing
 ```
 @article{liu2023multi,
