@@ -20,11 +20,24 @@ For more details, please check out our [publication](https://academic.oup.com/na
 └── README.md
 ```
 
-# Usage
+# Getting started
 
 Please checkout the documentations and tutorials at https://matil.readthedocs.io/en/latest/.
 
+## Citation
+If you use matilda in your research, please consider citing
+@article{liu2023multi,
+  title={Multi-task learning from multimodal single-cell omics with Matilda},
+  author={Liu, Chunlei and Huang, Hao and Yang, Pengyi},
+  journal={Nucleic acids research},
+  volume={51},
+  number={8},
+  pages={e45--e45},
+  year={2023},
+  publisher={Oxford University Press}
+}
 
 ## License
 
 This project is covered under the Apache 2.0 License.
+
