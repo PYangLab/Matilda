@@ -4,7 +4,7 @@ Matilda is a multi-task framework for learning from single-cell multimodal omics
 
 <img width=100% src="https://github.com/liuchunlei0430/Matilda/blob/main/img/main.jpg"/>
 
-For more details, please check out our [publication]([http://your-publication-link.com](https://academic.oup.com/nar/article/51/8/e45/7076464).
+For more details, please check out our [publication](https://academic.oup.com/nar/article/51/8/e45/7076464).
 
 
 # Usage
