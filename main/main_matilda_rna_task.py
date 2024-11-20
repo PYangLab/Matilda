@@ -274,6 +274,7 @@ if args.fs == True:
     for i in range(nfeatures_rna):
         a = str(rna_name[i],encoding="utf-8")
         rna_name_new.append(a)
+        features = rna_name_new
         
     checkpoint_tar = os.path.join(model_save_path, 'model_best.pth.tar')
     if os.path.exists(checkpoint_tar):
