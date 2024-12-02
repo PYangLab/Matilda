@@ -148,7 +148,7 @@ if args.augmentation == True:
         new_label = torch.cat((new_label,reconstructed_label.to(device)),0)
         j = j+1               
 
-filename = os.path.join('../trained_model/TEAseq/simulation_model_best.pth.tar')
+filename = os.path.join('../trained_model/RNAseq/simulation_model_best.pth.tar')
 torch.save({'state_dict': model.state_dict()}, filename)
       
 #######load the model #########
