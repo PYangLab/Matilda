@@ -1,5 +1,11 @@
 # Matilda: Multi-task learning from single-cell multimodal omics
 
+
+<br />
+
+<img src="https://github.com/PYangLab/Matilda/figure/logo.png" align="right" width="200" />
+
+
 Matilda is a multi-task framework for learning from single-cell multimodal omics data. Matilda leverages the information from the multi-modality of such data and trains a neural network model to simultaneously learn multiple tasks including data simulation, dimension reduction, visualization, classification, and feature selection.
 
 <img width=100% src="https://github.com/liuchunlei0430/Matilda/blob/main/img/main.jpg"/>
