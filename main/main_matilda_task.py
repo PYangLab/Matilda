@@ -53,7 +53,6 @@ FloatTensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 LongTensor = torch.cuda.LongTensor if cuda else torch.LongTensor
 
 def align_to_train(query_data, query_names, train_names):
-    """按 train 顺序重排；train 有 query 没有 → 整列填 0；query 有 train 没有 → 丢弃。"""
     name_to_col = {name: i for i, name in enumerate(query_names)}
     aligned = torch.zeros(query_data.shape[0], len(train_names), dtype=query_data.dtype, device=query_data.device)
     for j, name in enumerate(train_names):
