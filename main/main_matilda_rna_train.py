@@ -170,7 +170,17 @@ if os.path.exists(checkpoint_tar):
     print("load successfully")
 model,acc2,num1,train_num = train_model(model, train_dl, test_dl, lr=args.lr/10, epochs=int(args.epochs/2),classify_dim=classify_dim,best_top1_acc=0, save_path=model_save_path,feature_num=feature_num)
 
+import h5py
+if not os.path.exists(model_save_path):
+    os.makedirs(model_save_path)
+  
+def _save_feature_names(h5_path, out_csv):
+    feats = h5py.File(h5_path, "r")["matrix/features"][:]
+    feats = [f.decode("utf-8") if isinstance(f, (bytes, bytearray)) else str(f) for f in feats]
+    pd.Series(feats).to_csv(out_csv, index=False, header=False)
 
+_save_feature_names(train_rna_data_path, os.path.join(model_save_path, "train_feature_rna.csv"))
+print("save reference feature name to", model_save_path)
 
     
             
