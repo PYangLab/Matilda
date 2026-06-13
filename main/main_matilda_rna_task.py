@@ -18,6 +18,14 @@ from learn.predict import test_model
 from util import setup_seed, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2
 import h5py,scipy
 
+def align_to_train(query_data, query_names, train_names):
+    name_to_col = {name: i for i, name in enumerate(query_names)}
+    aligned = torch.zeros(query_data.shape[0], len(train_names),dtype=query_data.dtype, device=query_data.device)
+    for j, name in enumerate(train_names):
+        if name in name_to_col:
+            aligned[:, j] = query_data[:, name_to_col[name]]
+        return aligned  
+      
 parser = argparse.ArgumentParser("Matilda")
 parser.add_argument('--seed', type=int, default=1, help='seed')
 parser.add_argument('--classification', type=bool, default= False, help='if augmentation or not')
@@ -83,6 +91,20 @@ rna_name  = h5py.File(rna_data_path,"r")['matrix/features'][:]
 real_cty_df = pd.read_csv("real_cty.csv", header=None)
 transform_real_label = real_cty_df[0].tolist()
 classify_dim = len(transform_real_label)
+
+rna_feat_csv = os.path.join(model_save_path, "train_feature_rna.csv")
+if args.query and os.path.exists(rna_feat_csv):
+    train_rna_name = pd.read_csv(rna_feat_csv, header=None)[0].astype(str).tolist()
+    query_rna_name = [str(x, encoding="utf-8") for x in rna_name]
+    rna_data = align_to_train(rna_data, query_rna_name, train_rna_name)
+    rna_name = np.array([s.encode("utf-8") for s in train_rna_name], dtype=object)
+    nfeatures_rna = len(train_rna_name)
+    feature_num = nfeatures_rna
+    data = rna_data
+    transformed_dataset = MyDataset(data, label)
+    dl = DataLoader(transformed_dataset, batch_size=args.batch_size, shuffle=False,num_workers=0, drop_last=False)
+
+
 #######build model#########
 model = CiteAutoencoder(nfeatures_rna, args.hidden_rna, args.z_dim, classify_dim)
 
