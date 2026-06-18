@@ -61,7 +61,7 @@ if args.train_adt != "NULL" and args.train_atac != "NULL":
     train_label = read_fs_label(train_label_path)
     ########## common features ########
     rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
-	adt_tr, adt_q, adt_common = intersect_feature_index(args.train_adt, args.query_adt)
+    adt_tr, adt_q, adt_common = intersect_feature_index(args.train_adt, args.query_adt)
     atac_tr, atac_q, atac_common = intersect_feature_index(args.train_atac, args.query_atac)
     train_rna_data = train_rna_data[:, rna_tr]
     train_adt_data = train_adt_data[:, adt_tr]
@@ -118,7 +118,7 @@ if args.train_adt != "NULL" and args.train_atac == "NULL":
     train_label = read_fs_label(train_label_path)
     ########## common features ########
     rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
-	adt_tr, adt_q, adt_common = intersect_feature_index(args.train_adt, args.query_adt)
+    adt_tr, adt_q, adt_common = intersect_feature_index(args.train_adt, args.query_adt)
     train_rna_data = train_rna_data[:, rna_tr]
     train_adt_data = train_adt_data[:, adt_tr]
     ###################################
