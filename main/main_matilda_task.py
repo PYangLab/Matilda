@@ -15,7 +15,7 @@ from torch.autograd import Variable
 from learn.model import CiteAutoencoder_CITEseq, CiteAutoencoder_SHAREseq, CiteAutoencoder_TEAseq
 from learn.train import train_model
 from learn.predict import test_model
-from util import setup_seed, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2
+from util import setup_seed, intersect_feature_index, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2
 import h5py,scipy
       
 parser = argparse.ArgumentParser("Matilda")
