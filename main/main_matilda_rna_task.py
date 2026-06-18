@@ -15,7 +15,7 @@ from torch.autograd import Variable
 from learn.model_rna import CiteAutoencoder
 from learn.train import train_model
 from learn.predict import test_model
-from util import setup_seed, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2
+from util import setup_seed, intersect_feature_index, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2
 import h5py,scipy
 
 def align_to_train(query_data, query_names, train_names):
@@ -38,8 +38,10 @@ parser.add_argument('--simulation_ct', type=str, default= "CD16 Mono", help='sav
 parser.add_argument('--simulation_num', type=int, default= 100, help='save simulation result')
 
 ############# for data build ##############
-parser.add_argument('--rna', metavar='DIR', default='NULL', help='path to train rna data')
-parser.add_argument('--cty', metavar='DIR', default='NULL', help='path to train cell type label')
+parser.add_argument('--train_rna', metavar='DIR', default='NULL', help='path to train rna data')
+parser.add_argument('--train_cty', metavar='DIR', default='NULL', help='path to train cell type label')
+parser.add_argument('--query_rna', metavar='DIR', default='NULL', help='path to train rna data')
+parser.add_argument('--query_cty', metavar='DIR', default='NULL', help='path to train cell type label')
 
 ##############  for training #################
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
@@ -65,6 +67,10 @@ mode = "rna_only"
 rna_data_path = args.rna
 label_path = args.cty
 rna_data = read_h5_data(rna_data_path)
+########## common features ########
+rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
+rna_data = rna_data[:, rna_tr]
+###################################
 if label_path == "NULL":
     label = torch.zeros(rna_data.shape[0]).to(device)
 else:
