@@ -263,18 +263,3 @@ model,acc2,num1,train_num = train_model(model, train_dl, test_dl, lr=args.lr/10,
 transform_real_label = real_label(args.train_cty, classify_dim)
 pd.DataFrame(transform_real_label, columns=['CellType']).to_csv("real_cty.csv", index=False, header=False)
  
-import h5py
-if not os.path.exists(model_save_path):
-  os.makedirs(model_save_path)
-
-def _save_feature_names(h5_path, out_csv):
-  feats = h5py.File(h5_path, "r")['matrix/features'][:]
-  feats = [f.decode("utf-8") if isinstance(f, (bytes, bytearray)) else str(f) for f in feats]
-  pd.Series(feats).to_csv(out_csv, index=False, header=False)
-
-_save_feature_names(train_rna_data_path, os.path.join(model_save_path, "train_feature_rna.csv"))
-if mode in ("CITEseq", "TEAseq"):
-  _save_feature_names(train_adt_data_path, os.path.join(model_save_path, "train_feature_adt.csv"))
-if mode in ("SHAREseq", "TEAseq"):
-  _save_feature_names(train_atac_data_path, os.path.join(model_save_path, "train_feature_atac.csv"))
-print("save reference feature name to", model_save_path)
