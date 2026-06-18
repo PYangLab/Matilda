@@ -45,7 +45,7 @@ def intersect_feature_index(train_path, query_path):
                query_idx.append(query_pos[f])
                common.append(f)
                seen.add(f)
-          return train_idx, query_idx, common
+     return train_idx, query_idx, common
        
 def real_label(label_path,classify_dim):
     output_v = []
