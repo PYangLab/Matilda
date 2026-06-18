@@ -21,7 +21,7 @@ import h5py,scipy
 parser = argparse.ArgumentParser("Matilda")
 parser.add_argument('--seed', type=int, default=1, help='seed')
 parser.add_argument('--classification', type=bool, default= False, help='if augmentation or not')
-parser.add_argument('--query', type=bool, default= False, help='if the data is query of reference')
+parser.add_argument('--query', type=bool, default= False, help='if the test data comes from query of reference')
 parser.add_argument('--fs', type=bool, default= False, help='if doing feature selection or not')
 parser.add_argument('--fs_method', type=str, default= "IntegratedGradient", help='choose the feature selection method')
 parser.add_argument('--dim_reduce', type=bool, default= False, help='save latent space')
@@ -30,11 +30,15 @@ parser.add_argument('--simulation_ct', type=str, default= "CD16 Mono", help='sav
 parser.add_argument('--simulation_num', type=int, default= 100, help='save simulation result')
 
 ############# for data build ##############
-parser.add_argument('--rna', metavar='DIR', default='NULL', help='path to train rna data')
-parser.add_argument('--adt', metavar='DIR', default='NULL', help='path to train adt data')
-parser.add_argument('--atac', metavar='DIR', default='NULL', help='path to train atac data')
-parser.add_argument('--cty', metavar='DIR', default='NULL', help='path to train cell type label')
+parser.add_argument('--train_rna', metavar='DIR', default='NULL', help='path to train rna data')
+parser.add_argument('--train_adt', metavar='DIR', default='NULL', help='path to train adt data')
+parser.add_argument('--train_atac', metavar='DIR', default='NULL', help='path to train atac data')
+parser.add_argument('--train_cty', metavar='DIR', default='NULL', help='path to train cell type label')
 
+parser.add_argument('--query_rna', metavar='DIR', default='NULL', help='path to query rna data')
+parser.add_argument('--query_adt', metavar='DIR', default='NULL', help='path to query adt data')
+parser.add_argument('--query_atac', metavar='DIR', default='NULL', help='path to query atac data')
+parser.add_argument('--query_cty', metavar='DIR', default='NULL', help='path to query cell type label')
 ##############  for training #################
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
 
@@ -58,15 +62,23 @@ if args.query:
 else:
     path = "reference"
     
-if args.adt != "NULL" and args.atac != "NULL":
+if args.query_adt != "NULL" and args.query_atac != "NULL":
     mode = "TEAseq"
-    rna_data_path = args.rna
-    adt_data_path = args.adt
-    atac_data_path = args.atac
-    label_path = args.cty
+    rna_data_path = args.query_rna
+    adt_data_path = args.query_adt
+    atac_data_path = args.query_atac
+    label_path = args.query_cty
     rna_data = read_h5_data(rna_data_path)
     adt_data = read_h5_data(adt_data_path)
     atac_data = read_h5_data(atac_data_path)
+    ########## common features ########
+    rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
+    adt_tr, adt_q, adt_common = intersect_feature_index(args.train_adt, args.query_adt)
+    atac_tr, atac_q, atac_common = intersect_feature_index(args.train_atac, args.query_atac)
+    rna_data = rna_data[:, rna_tr]
+    adt_data = adt_data[:, adt_tr]
+    atac_data = atac_data[:, atac_tr]
+    ###################################
     if label_path == "NULL":
         label = torch.zeros(rna_data.shape[0]).to(device)
     else:
@@ -85,13 +97,19 @@ if args.adt != "NULL" and args.atac != "NULL":
     transformed_dataset = MyDataset(data, label)
     dl = DataLoader(transformed_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0, drop_last=False)
 
-if args.adt == "NULL" and args.atac != "NULL":
+if args.query_adt == "NULL" and args.query_atac != "NULL":
     mode = "SHAREseq"
-    rna_data_path = args.rna
-    atac_data_path = args.atac
-    label_path = args.cty
+    rna_data_path = args.query_rna
+    atac_data_path = args.query_atac
+    label_path = args.query_cty
     rna_data = read_h5_data(rna_data_path)
     atac_data = read_h5_data(atac_data_path)
+    ########## common features ########
+    rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
+    atac_tr, atac_q, atac_common = intersect_feature_index(args.train_atac, args.query_atac)
+    rna_data = rna_data[:, rna_tr]
+    atac_data = atac_data[:, atac_tr]
+    ###################################
     if label_path == "NULL":
         label = torch.zeros(rna_data.shape[0]).to(device)
     else:
@@ -107,13 +125,19 @@ if args.adt == "NULL" and args.atac != "NULL":
     transformed_dataset = MyDataset(data, label)
     dl = DataLoader(transformed_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0, drop_last=False)
     
-if args.adt != "NULL" and args.atac == "NULL":
+if args.query_adt != "NULL" and args.query_atac == "NULL":
     mode = "CITEseq"
-    rna_data_path = args.rna
-    adt_data_path = args.adt
-    label_path = args.cty
+    rna_data_path = args.query_rna
+    adt_data_path = args.query_adt
+    label_path = args.query_cty
     rna_data = read_h5_data(rna_data_path)
     adt_data = read_h5_data(adt_data_path)
+    ########## common features ########
+    rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
+    adt_tr, adt_q, adt_common = intersect_feature_index(args.train_adt, args.query_adt)
+    rna_data = rna_data[:, rna_tr]
+    adt_data = adt_data[:, adt_tr]
+    ###################################
     if label_path == "NULL":
         label = torch.zeros(rna_data.shape[0]).to(device)
     else:
@@ -163,7 +187,7 @@ if args.classification == True:
     
     model, acc1, num1,classified_label, groundtruth_label,prob = test_model(model, dl, transform_real_label, classify_dim = classify_dim, save_path = save_path)
     for j in range(data.shape[0]):
-        if args.cty!="NULL":
+        if args.query_cty!="NULL":
             print('cell ID: ',j, '\t', '\t', 'real cell type:', groundtruth_label[j], '\t', '\t', 'predicted cell type:', classified_label[j], '\t', '\t', 'probability:', round(float(prob[j]),2), file = save_path1)
         else:
             print('cell ID: ',j, '\t', '\t',  'predicted cell type:', classified_label[j], '\t', '\t', 'probability:', round(float(prob[j]),2), file = save_path1)
@@ -401,7 +425,7 @@ if args.dim_reduce == True:
     b_list = range(0, data.size(0))
     cell_name_real = ['cell_{}'.format(b) for b in b_list]  
     
-    if args.cty!="NULL":
+    if args.query_cty!="NULL":
         real_label_new = []
         for j in range(data.size(0)):    
             real_label_new.append(transform_real_label[label[j]])
