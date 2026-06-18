@@ -14,16 +14,18 @@ from torch.autograd import Variable
 
 from learn.model_rna import CiteAutoencoder
 from learn.train import train_model
-from util import setup_seed, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2,save_checkpoint
+from util import setup_seed, intersect_feature_index, MyDataset,ToTensor, read_h5_data, read_fs_label, get_vae_simulated_data_from_sampling, get_encodings, compute_zscore, compute_log2,save_checkpoint
 
 parser = argparse.ArgumentParser("Matilda")
 parser.add_argument('--seed', type=int, default=1, help='seed')
 parser.add_argument('--augmentation', type=bool, default= True, help='if augmentation or not')
 
 ############# for data build ##############
-parser.add_argument('--rna', metavar='DIR', default='NULL', help='path to train rna data')
-parser.add_argument('--cty', metavar='DIR', default='NULL', help='path to train cell type label')
+parser.add_argument('--train_rna', metavar='DIR', default='NULL', help='path to train rna data')
+parser.add_argument('--train_cty', metavar='DIR', default='NULL', help='path to train cell type label')
 
+parser.add_argument('--query_rna', metavar='DIR', default='NULL', help='path to train rna data')
+parser.add_argument('--query_cty', metavar='DIR', default='NULL', help='path to train cell type label')
 ##############  for training #################
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
 parser.add_argument('--epochs', type=int, default=30, help='num of training epochs')
@@ -42,10 +44,14 @@ LongTensor = torch.cuda.LongTensor if cuda else torch.LongTensor
 
 
 mode = "rna_only"
-train_rna_data_path = args.rna
-train_label_path = args.cty
+train_rna_data_path = args.train_rna
+train_label_path = args.train_cty
 train_rna_data = read_h5_data(train_rna_data_path)
 train_label = read_fs_label(train_label_path)
+########## common features ########
+rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
+train_rna_data = train_rna_data[:, rna_tr]
+###################################
 classify_dim = (max(train_label)+1).cpu().numpy()
 nfeatures_rna = train_rna_data.shape[1]
 feature_num = nfeatures_rna
