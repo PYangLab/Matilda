@@ -52,13 +52,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 FloatTensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 LongTensor = torch.cuda.LongTensor if cuda else torch.LongTensor
 
-def align_to_train(query_data, query_names, train_names):
-    name_to_col = {name: i for i, name in enumerate(query_names)}
-    aligned = torch.zeros(query_data.shape[0], len(train_names), dtype=query_data.dtype, device=query_data.device)
-    for j, name in enumerate(train_names):
-        if name in name_to_col:
-            aligned[:, j] = query_data[:, name_to_col[name]]
-        return aligned
       
 if args.query:
     path = "query"
@@ -141,45 +134,6 @@ output_v = []
 model_save_path = "../trained_model/{}/".format(mode)    
 save_fs_eachcell = "../output/marker/{}/{}/".format(mode,path)   
 
-
-output_v = []
-
-rna_name  = h5py.File(rna_data_path,"r")['matrix/features'][:]
-if args.adt != "NULL":
-    adt_name  = h5py.File(adt_data_path,"r")['matrix/features'][:]
-if args.atac!= "NULL":
-    atac_name  = h5py.File(atac_data_path,"r")['matrix/features'][:]
-
-rna_feat_csv = os.path.join(model_save_path, "train_feature_rna.csv")
-if args.query and os.path.exists(rna_feat_csv):
-    train_rna_name = pd.read_csv(rna_feat_csv, header=None)[0].astype(str).tolist()
-    query_rna_name = [str(x, encoding="utf-8") for x in rna_name]
-    rna_data = align_to_train(rna_data, query_rna_name, train_rna_name)
-    rna_name = np.array([s.encode("utf-8") for s in train_rna_name], dtype=object)
-    nfeatures_rna = len(train_rna_name)
-    aligned = [rna_data]
-    
-    if args.adt != "NULL":
-        train_adt_name = pd.read_csv(os.path.join(model_save_path, "train_feature_adt.csv"), header=None)[0].astype(str).tolist()
-        query_adt_name = [str(x, encoding="utf-8") for x in adt_name]
-        adt_data = align_to_train(adt_data, query_adt_name, train_adt_name)
-        adt_name = np.array([s.encode("utf-8") for s in train_adt_name], dtype=object)
-        nfeatures_adt = len(train_adt_name)
-        aligned.append(adt_data) 
-        
-    if args.atac != "NULL":
-        train_atac_name = pd.read_csv(os.path.join(model_save_path, "train_feature_atac.csv"), header=None)[0].astype(str).tolist()
-        query_atac_name = [str(x, encoding="utf-8") for x in atac_name]
-        atac_data = align_to_train(atac_data, query_atac_name, train_atac_name)
-        atac_name = np.array([s.encode("utf-8") for s in train_atac_name], dtype=object)
-        nfeatures_atac = len(train_atac_name)
-        aligned.append(atac_data)
-        
-    data = torch.cat(aligned, 1)            # 顺序 rna→adt→atac，与训练 cat 顺序一致
-    feature_num = data.shape[1]
-    transformed_dataset = MyDataset(data, label)
-    dl = DataLoader(transformed_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0, drop_last=False)
-      
 #transform_real_label = real_label(args.ref_cty, classify_dim)
 real_cty_df = pd.read_csv("real_cty.csv", header=None)
 transform_real_label = real_cty_df[0].tolist()
