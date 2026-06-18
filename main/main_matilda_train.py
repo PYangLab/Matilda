@@ -21,10 +21,15 @@ parser.add_argument('--seed', type=int, default=1, help='seed')
 parser.add_argument('--augmentation', type=bool, default= True, help='if augmentation or not')
 
 ############# for data build ##############
-parser.add_argument('--rna', metavar='DIR', default='NULL', help='path to train rna data')
-parser.add_argument('--adt', metavar='DIR', default='NULL', help='path to train adt data')
-parser.add_argument('--atac', metavar='DIR', default='NULL', help='path to train atac data')
-parser.add_argument('--cty', metavar='DIR', default='NULL', help='path to train cell type label')
+parser.add_argument('--train_rna', metavar='DIR', default='NULL', help='path to train rna data')
+parser.add_argument('--train_adt', metavar='DIR', default='NULL', help='path to train adt data')
+parser.add_argument('--train_atac', metavar='DIR', default='NULL', help='path to train atac data')
+parser.add_argument('--train_cty', metavar='DIR', default='NULL', help='path to train cell type label')
+
+parser.add_argument('--query_rna', metavar='DIR', default='NULL', help='path to query rna data')
+parser.add_argument('--query_adt', metavar='DIR', default='NULL', help='path to query adt data')
+parser.add_argument('--query_atac', metavar='DIR', default='NULL', help='path to query atac data')
+parser.add_argument('--query_cty', metavar='DIR', default='NULL', help='path to query cell type label')
 
 ##############  for training #################
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
@@ -44,16 +49,24 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 FloatTensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 LongTensor = torch.cuda.LongTensor if cuda else torch.LongTensor
 
-if args.adt != "NULL" and args.atac != "NULL":
+if args.train_adt != "NULL" and args.train_atac != "NULL":
     mode = "TEAseq"
-    train_rna_data_path = args.rna
-    train_adt_data_path = args.adt
-    train_atac_data_path = args.atac
-    train_label_path = args.cty
+    train_rna_data_path = args.train_rna
+    train_adt_data_path = args.train_adt
+    train_atac_data_path = args.train_atac
+    train_label_path = args.train_cty
     train_rna_data = read_h5_data(train_rna_data_path)
     train_adt_data = read_h5_data(train_adt_data_path)
     train_atac_data = read_h5_data(train_atac_data_path)
     train_label = read_fs_label(train_label_path)
+    ########## common features ########
+    rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
+	adt_tr, adt_q, adt_common = intersect_feature_index(args.train_adt, args.query_adt)
+    atac_tr, atac_q, atac_common = intersect_feature_index(args.train_atac, args.query_atac)
+    train_rna_data = train_rna_data[:, rna_tr]
+    train_adt_data = train_adt_data[:, adt_tr]
+    train_atac_data = train_atac_data[:, atac_tr]
+    ###################################
     classify_dim = (max(train_label)+1).cpu().numpy()
     nfeatures_rna = train_rna_data.shape[1]
     nfeatures_adt = train_adt_data.shape[1]
@@ -69,14 +82,20 @@ if args.adt != "NULL" and args.atac != "NULL":
     train_transformed_dataset = MyDataset(train_data, train_label)
     train_dl = DataLoader(train_transformed_dataset, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=False)
 
-if args.adt == "NULL" and args.atac != "NULL":
+if args.train_adt == "NULL" and args.train_atac != "NULL":
     mode = "SHAREseq"
-    train_rna_data_path = args.rna
-    train_atac_data_path = args.atac
-    train_label_path = args.cty
+    train_rna_data_path = args.train_rna
+    train_atac_data_path = args.train_atac
+    train_label_path = args.train_cty
     train_rna_data = read_h5_data(train_rna_data_path)
     train_atac_data = read_h5_data(train_atac_data_path)
     train_label = read_fs_label(train_label_path)
+	########## common features ########
+    rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
+    atac_tr, atac_q, atac_common = intersect_feature_index(args.train_atac, args.query_atac)
+    train_rna_data = train_rna_data[:, rna_tr]
+    train_atac_data = train_atac_data[:, atac_tr]
+    ###################################
     classify_dim = (max(train_label)+1).cpu().numpy()
     nfeatures_rna = train_rna_data.shape[1]
     nfeatures_atac = train_atac_data.shape[1]
@@ -89,14 +108,20 @@ if args.adt == "NULL" and args.atac != "NULL":
     train_transformed_dataset = MyDataset(train_data, train_label)
     train_dl = DataLoader(train_transformed_dataset, batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=False)
     
-if args.adt != "NULL" and args.atac == "NULL":
+if args.train_adt != "NULL" and args.train_atac == "NULL":
     mode = "CITEseq"
-    train_rna_data_path = args.rna
-    train_adt_data_path = args.adt
-    train_label_path = args.cty
+    train_rna_data_path = args.train_rna
+    train_adt_data_path = args.train_adt
+    train_label_path = args.train_cty
     train_rna_data = read_h5_data(train_rna_data_path)
     train_adt_data = read_h5_data(train_adt_data_path)
     train_label = read_fs_label(train_label_path)
+    ########## common features ########
+    rna_tr, rna_q, rna_common = intersect_feature_index(args.train_rna, args.query_rna)
+	adt_tr, adt_q, adt_common = intersect_feature_index(args.train_adt, args.query_adt)
+    train_rna_data = train_rna_data[:, rna_tr]
+    train_adt_data = train_adt_data[:, adt_tr]
+    ###################################
     classify_dim = (max(train_label)+1).cpu().numpy()
     nfeatures_rna = train_rna_data.shape[1]
     nfeatures_adt = train_adt_data.shape[1]
@@ -235,7 +260,7 @@ if os.path.exists(checkpoint_tar):
 model,acc2,num1,train_num = train_model(model, train_dl, test_dl, lr=args.lr/10, epochs=int(args.epochs/2),classify_dim=classify_dim,best_top1_acc=0, save_path=model_save_path,feature_num=feature_num)
 
 
-transform_real_label = real_label(args.cty, classify_dim)
+transform_real_label = real_label(args.train_cty, classify_dim)
 pd.DataFrame(transform_real_label, columns=['CellType']).to_csv("real_cty.csv", index=False, header=False)
  
 import h5py
