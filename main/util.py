@@ -25,6 +25,28 @@ def setup_seed(seed):
      torch.backends.cudnn.benchmark = False
      os.environ['PYTHONHASHSEED']=str(seed)
 
+def read_h5_feature_names(h5_path):
+     feats = h5py.File(h5_path, "r")['matrix/features'][:]
+     return [f.decode("utf-8") if isinstance(f, (bytes, bytearray)) else str(f) for f in feats]
+
+def intersect_feature_index(train_path, query_path):
+     train_feats = read_h5_feature_names(train_path)
+     query_feats = read_h5_feature_names(query_path)
+     
+     query_pos = {}
+     for i, f in enumerate(query_feats):
+          query_pos.setdefault(f, i)          
+     
+     train_idx, query_idx, common = [], [], []
+     seen = set()
+     for i, f in enumerate(train_feats): 
+          if f in query_pos and f not in seen:
+               train_idx.append(i)
+               query_idx.append(query_pos[f])
+               common.append(f)
+               seen.add(f)
+          return train_idx, query_idx, common
+       
 def real_label(label_path,classify_dim):
     output_v = []
     label = pd.read_csv(label_path,header=None,index_col=False)  #
