@@ -1,0 +1,2765 @@
+/* ============================================================
+   Matilda docs: design system
+   Palette: slate-900 ink + blue #0046ad / #00aeef accent + pure white.
+   Type:    Inter body + Newsreader display + JetBrains Mono code.
+   Motion:  smooth ease-out, no hard offset shadows.
+   Rule:    zero gradient functions, always. Solid colors only.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=optional');
+
+/* ---------- 1. Tokens (light) ---------- */
+
+:root {
+  /* Neutrals */
+  --slate-0:   #ffffff;
+  --slate-50:  #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+
+  /* Brand: blue accent (b/w/grey base + #0046ad / #00aeef), solid only */
+  --brand-50:  #eef3fb;
+  --brand-100: #dce8f6;
+  --brand-200: #bcd5ef;
+  --brand-300: #8fb8e4;
+  --brand-400: #3f86cf;
+  --brand-500: #1565c0;
+  --brand-600: #0046ad;   /* primary accent (deep blue) */
+  --brand-700: #003a8f;
+  --brand-800: #5b21b6;
+
+  /* Functional */
+  --rose:    #f43f5e;
+  --amber:   #f59e0b;
+  --cyan:    #06b6d4;
+
+  /* Semantic: Swiss-White v0.5 */
+  --bg:            #ffffff;   /* PURE white */
+  --bg-elevated:   #f8fafc;   /* slate-50: features section */
+  --bg-card:       #ffffff;   /* cards on white */
+  --bg-subtle:     #f1f5f9;   /* slate-100: code fill */
+  --border:        #e2e8f0;   /* slate-200: hairlines */
+  --border-strong: #cbd5e1;   /* slate-300: table rules, button outlines */
+  --text:          #0f172a;   /* slate-900: primary ink */
+  --text-muted:    #334155;   /* slate-700: secondary */
+  --text-faint:    #64748b;   /* slate-500: meta, anchors */
+
+  /* Swiss spatial system */
+  --grid-max:      1200px;
+  --grid-gutter:   24px;
+  --space-unit:    8px;
+  --section-gap:   96px;
+  --reading-max:   42.5rem; /* 680px */
+
+  /* Elevation: soft for smooth hover */
+  --shadow-xs:  0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm:  0 2px 4px rgba(15, 23, 42, 0.05),
+                0 1px 2px rgba(15, 23, 42, 0.03);
+  --shadow-md:  0 4px 12px rgba(15, 23, 42, 0.06),
+                0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg:  0 12px 28px rgba(15, 23, 42, 0.10),
+                0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-violet: 0 12px 28px rgba(15, 23, 42, 0.12),
+                   0 4px 8px rgba(15, 23, 42, 0.06);
+
+  /* Motion: smooth defaults, no overshoot for hover */
+  --ease:        cubic-bezier(0.4, 0, 0.2, 1);    /* material standard */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);   /* expressive ease-out */
+  --ease-soft:   cubic-bezier(0.22, 1, 0.36, 1);  /* lush ease-out */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:    160ms;
+  --dur-base:    220ms;
+  --dur-slow:    320ms;
+
+  /* Layout */
+  --content-max: 64rem;
+  --reading-max: 44rem;
+}
+
+/* ---------- 1.1 Tokens (dark) ---------- */
+
+[data-md-color-scheme="slate"] {
+  --bg:            #0a0a14;
+  --bg-elevated:   #111122;
+  --bg-card:       #14142b;
+  --bg-subtle:     #1a1a30;
+  --border:        #27273a;
+  --border-strong: #3a3a52;
+  --text:          #f8fafc;
+  --text-muted:    #cbd5e1;
+  --text-faint:    #94a3b8;
+
+  --brand-600:    #00aeef;   /* dark-mode accent: brighter cyan-blue for contrast */
+  --brand-700:    #38bdf8;
+
+  --shadow-xs:    0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-sm:    0 2px 4px rgba(0, 0, 0, 0.45),
+                  0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md:    0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg:    0 12px 28px rgba(0, 0, 0, 0.55);
+  --shadow-violet:0 12px 28px rgba(167, 139, 250, 0.25);
+}
+
+/* ---------- 1.2 Material's tokens ---------- */
+
+:root {
+  --md-primary-fg-color:        var(--slate-900);
+  --md-primary-fg-color--light: var(--slate-700);
+  --md-primary-fg-color--dark:  #000000;
+  --md-accent-fg-color:         var(--brand-600);
+  --md-typeset-a-color:         var(--brand-600);
+  --md-default-bg-color:        var(--bg);
+}
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:        #f8fafc;
+  --md-primary-fg-color--light: #cbd5e1;
+  --md-primary-fg-color--dark:  #ffffff;
+  --md-accent-fg-color:         var(--brand-600);
+  --md-typeset-a-color:         var(--brand-600);
+  --md-default-bg-color:        var(--bg);
+}
+
+/* Material sets --md-accent-fg-color on <body> (data-md-color-accent) from the theme
+   `accent` in mkdocs.yml, which beats our :root value and tints code-block scrollbars +
+   hover/focus states. Re-assert the exact brand blue at that level. */
+[data-md-color-accent] { --md-accent-fg-color: var(--brand-600); }
+/* and keep code-block scrollbars grey (not the accent) on hover, like everywhere */
+.md-typeset pre > code,
+.md-typeset pre > code:hover,
+.md-typeset [class*="highlight"] pre,
+.md-typeset [class*="highlight"] pre:hover {
+  scrollbar-color: var(--border-strong) transparent !important;
+}
+
+body, .md-main, .md-container { background: var(--bg); }
+
+/* ---------- 2. Typography ---------- */
+
+body, .md-typeset {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.md-typeset {
+  font-size: 15px;        /* documentation scale (was ~20px); body reads at 15/1.65 */
+  line-height: 1.65;
+  color: var(--text);
+}
+.md-typeset p {
+  color: var(--text);
+  max-width: var(--reading-max);
+  margin: 0 0 1.1em;
+}
+
+/* serif for headings, sans for body */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: 'Newsreader', 'Charter', 'Iowan Old Style', Georgia, serif;
+  font-variation-settings: "opsz" 36;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+.md-header__title {
+  font-family: 'Newsreader', 'Charter', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.md-typeset h1 {
+  font-size: 34px;             /* content/doc h1 (hero H1 is separate, .lp-hero-text) */
+  line-height: 1.15;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 48;
+  margin: 0.2rem 0 1.4rem;
+  color: var(--text);
+  text-wrap: balance;
+  max-width: 32ch;
+}
+
+.md-typeset h2 {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  font-variation-settings: "opsz" 32;
+  margin-top: 2.4rem;
+  margin-bottom: 0.6rem;
+  text-wrap: balance;
+}
+
+.md-typeset h3 {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  font-variation-settings: "opsz" 24;
+  margin-top: 1.8rem;
+}
+
+.md-typeset h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.md-typeset strong { font-weight: 600; color: var(--text); }
+.md-typeset em { font-style: italic; }
+
+.md-typeset code, .md-typeset pre, .md-typeset kbd {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-feature-settings: "calt", "liga";
+}
+/* Code BLOCKS on markdown pages were ~18.5px (Material's 0.84rem at our 22px root),
+   bigger than the 15px body. Pin to the site's 13px code size (= notebook code).
+   Inline code keeps its own 0.86em rule. */
+.md-typeset .highlight pre,
+.md-typeset .highlight pre > code,
+.md-typeset pre > code {
+  font-size: 13px;
+}
+
+/* Section intro paragraph: short scannable lead */
+.md-typeset .section-intro {
+  font-size: 17px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  max-width: 42rem;
+}
+
+@media (max-width: 768px) {
+  .md-typeset h1 { font-size: 28px; }
+  .md-typeset h2 { font-size: 21px; }
+}
+
+/* ---------- 3. Hero ---------- */
+
+.hero-tagline {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.35rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  margin: -0.2rem 0 1.5rem;
+  max-width: 38rem;
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 1.5rem 0 1.5rem;
+  align-items: center;
+}
+.hero-cta .md-button {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  padding: 0.75rem 1.4rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  transform: translate3d(0, 0, 0);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+  border: 1px solid transparent;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+}
+.hero-cta .md-button:hover {
+  transform: translate3d(0, -1px, 0);
+}
+.hero-cta .md-button--primary {
+  background: var(--slate-900);
+  color: #ffffff !important;
+  border-color: var(--slate-900);
+  box-shadow: var(--shadow-sm);
+}
+.hero-cta .md-button--primary:hover {
+  background: var(--brand-600);
+  border-color: var(--brand-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-violet);
+}
+[data-md-color-scheme="slate"] .hero-cta .md-button--primary {
+  background: #ffffff;
+  color: var(--slate-900) !important;
+  border-color: #ffffff;
+}
+[data-md-color-scheme="slate"] .hero-cta .md-button--primary:hover {
+  background: var(--brand-600);
+  color: #ffffff !important;
+  border-color: var(--brand-600);
+}
+
+.hero-cta .md-button:not(.md-button--primary) {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.hero-cta .md-button:not(.md-button--primary):hover {
+  border-color: var(--slate-900);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-xs);
+}
+[data-md-color-scheme="slate"] .hero-cta .md-button:not(.md-button--primary):hover {
+  border-color: #ffffff;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 2rem;
+  align-items: center;
+}
+.hero-badges img { height: 22px; }
+
+/* Hero illustration on the right: sits in the top-right corner of the
+   content area, positioned to clear all hero content and never overlap prose */
+.hero-illustration {
+  position: absolute;
+  top: 2rem;
+  right: 0;
+  width: 360px;
+  height: 360px;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-illustration svg { width: 100%; height: 100%; display: block; }
+
+/* All content above z-index 0: illustration sits behind */
+.md-content, .md-content__inner { position: relative; z-index: 1; }
+.md-typeset > *:not(.hero-illustration) { position: relative; z-index: 2; }
+/* re-assert absolute on the illustration (specificity over .md-typeset > *) */
+.md-typeset > .hero-illustration,
+.hero-illustration {
+  position: absolute !important;
+  z-index: 0 !important;
+}
+
+/* Constrain hero text width so it never collides with illustration */
+.md-typeset > h1:first-of-type,
+.md-typeset > p.hero-tagline,
+.md-typeset > p.hero-cta {
+  max-width: calc(100% - 380px);
+}
+.md-typeset > p.hero-badges {
+  max-width: calc(100% - 280px);
+}
+
+@media (max-width: 1200px) {
+  .hero-illustration { width: 300px; height: 300px; top: 1.5rem; }
+  .md-typeset > h1:first-of-type,
+  .md-typeset > p.hero-tagline,
+  .md-typeset > p.hero-cta {
+    max-width: calc(100% - 320px);
+  }
+}
+@media (max-width: 1024px) {
+  .hero-illustration { width: 240px; height: 240px; opacity: 0.7; }
+  .md-typeset > h1:first-of-type,
+  .md-typeset > p.hero-tagline,
+  .md-typeset > p.hero-cta {
+    max-width: calc(100% - 260px);
+  }
+}
+@media (max-width: 768px) {
+  .hero-illustration { display: none; }
+  .md-typeset > h1:first-of-type,
+  .md-typeset > p.hero-tagline,
+  .md-typeset > p.hero-cta,
+  .md-typeset > p.hero-badges {
+    max-width: 100%;
+  }
+}
+
+/* ---------- 3.5 Quick-jump toolbar (HF course reference) ---------- */
+
+.md-typeset .quick-jump {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 1.5rem 0 1rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.86rem;
+}
+.md-typeset .quick-jump > p:first-child,
+.md-typeset .quick-jump > strong:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0.8rem 0 0;
+}
+.md-typeset .quick-jump strong {
+  color: var(--text-faint);
+  font-weight: 600;
+  margin: 0 0.8rem 0 0;
+}
+.md-typeset .quick-jump .qj-link,
+.md-typeset .quick-jump a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.7rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.86rem;
+  color: var(--text) !important;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-bottom: 1px solid var(--border) !important;
+  border-radius: 0.35rem;
+  text-decoration: none !important;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+}
+.md-typeset .quick-jump .qj-link:hover,
+.md-typeset .quick-jump a:hover {
+  border-color: var(--brand-600) !important;
+  color: var(--brand-600) !important;
+  background: var(--brand-50);
+}
+[data-md-color-scheme="slate"] .md-typeset .quick-jump .qj-link:hover {
+  background: rgba(0, 174, 239, 0.12);
+}
+
+/* ---------- 3.6 Install command banner (RAPIDS docs reference) ---------- */
+.md-typeset .install-cmd {
+  margin: 1.2rem 0 1rem;
+  position: relative;
+}
+.md-typeset .install-cmd .highlight {
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--slate-900);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.md-typeset .install-cmd pre,
+.md-typeset .install-cmd pre > code {
+  background: var(--slate-900) !important;
+  color: #e2e8f0 !important;
+}
+.md-typeset .install-cmd pre > code::before {
+  content: "$ ";
+  color: var(--brand-400);
+  font-weight: 500;
+}
+.md-typeset .install-cmd .highlight::before {
+  content: "INSTALL";
+  position: absolute;
+  top: 0.55rem;
+  right: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.4);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ---------- 4. Trust row ---------- */
+
+.trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: 2.5rem 0 2rem;
+  padding: 1.3rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.trust-row .trust-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-right: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.trust-row .trust-label::after {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--border-strong);
+  margin-left: 14px;
+}
+.trust-row .trust-name {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.9rem 0.3rem 0;
+  margin-right: 0.3rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text-muted) !important;
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: 1px solid transparent !important;
+  letter-spacing: -0.01em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.trust-row .trust-name:hover {
+  color: var(--brand-600) !important;
+  border-bottom-color: transparent !important;
+}
+
+@media (max-width: 768px) {
+  .trust-row { gap: 0.4rem; }
+  .trust-row .trust-label { margin-right: 0.5rem; }
+  .trust-row .trust-label::after { display: none; }
+  .trust-row .trust-name { font-size: 0.86rem; }
+}
+
+/* ---------- 5. Section-alt block ---------- */
+
+.section-alt {
+  background: var(--bg-elevated);
+  margin: 3.5rem 0;
+  padding: 3rem 2.5rem 3.5rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0.8rem;
+  position: relative;
+}
+.section-alt h2:first-child { margin-top: 0; }
+
+[data-md-color-scheme="slate"] .section-alt {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: var(--border);
+}
+
+@media (max-width: 960px) {
+  .section-alt { margin: 3rem 0; padding: 2.2rem 1.4rem; }
+}
+
+/* ---------- 6. Section dividers ---------- */
+
+.md-typeset hr {
+  height: 1px;
+  border: none;
+  background: var(--border);
+  margin: 3rem 0 1rem;
+}
+
+/* ============================================================
+   LANDING
+   2-col hero + diagram card · 4-across FEATURES · TUTORIALS · footer
+   ============================================================ */
+
+.md-typeset .lp { margin: 0; }
+
+/* §-eyebrow: violet, optional leading icon */
+.md-typeset .lp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-600);
+  margin: 0 0 12px;
+}
+.md-typeset .lp-eyebrow .twemoji {
+  width: 14px; height: 14px;
+}
+.md-typeset .lp-eyebrow .twemoji svg { fill: currentColor; }
+
+/* ━━━━━━━━ HERO ━━━━━━━━ */
+.md-typeset .lp-hero {
+  display: grid;
+  grid-template-columns: 5fr 6fr;        /* text | diagram card */
+  gap: 48px;
+  align-items: center;
+  padding: 4px 0 12px;
+}
+.md-typeset .lp-hero-text { min-width: 0; }
+html body .md-typeset .lp .lp-hero-text > h1 {
+  font-family: 'Newsreader', 'Charter', Georgia, serif !important;
+  font-variation-settings: "opsz" 60 !important;
+  font-size: 34px !important;
+  line-height: 1.08 !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 0 12px !important;
+  color: var(--text) !important;
+  max-width: 24ch !important;
+  text-wrap: balance;
+}
+.md-typeset .lp-hero-text .lp-sub {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+  max-width: 56ch;
+}
+.md-typeset .lp-hero-text .highlight {
+  margin: 0 0 16px;
+  max-width: 28rem;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: none;
+}
+.md-typeset .lp-hero-text .highlight pre,
+.md-typeset .lp-hero-text .highlight pre > code {
+  background: transparent !important;
+  font-size: 14px;
+  padding: 10px 14px !important;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Get Started: plain ink button, no arrow, no violet effects */
+html body .md-typeset .lp .lp-cta {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+  border: 1.5px solid var(--text) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
+  padding: 11px 22px !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  display: inline-flex; align-items: center;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  transition: opacity 150ms cubic-bezier(0.4,0,0.2,1);
+}
+html body .md-typeset .lp .lp-cta:hover {
+  background: var(--text) !important;
+  border-color: var(--text) !important;
+  color: var(--bg) !important;
+  opacity: 0.86;
+}
+
+/* Diagram card: borderless, animation floats on the page */
+.md-typeset .lp-hero-card {
+  position: relative;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 8px 0;
+  overflow: visible;
+}
+.md-typeset .lp-hero-card::before { content: none; }
+.md-typeset .lp-card-tools {
+  position: absolute;
+  top: 14px; right: 14px;
+  display: flex; gap: 6px;
+  z-index: 2;
+}
+.md-typeset .lp-card-tools .lp-tool {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-faint);
+  background: var(--bg);
+  cursor: pointer;
+  transition: color 160ms, border-color 160ms;
+}
+.md-typeset .lp-card-tools .lp-tool:hover {
+  color: var(--brand-600);
+  border-color: var(--brand-600);
+}
+.md-typeset .lp-card-tools .twemoji { width: 15px; height: 15px; }
+.md-typeset .lp-hero-art { display: flex; justify-content: center; color: var(--text); }
+.md-typeset .lp-hero-art svg { width: 100%; max-width: 460px; height: auto; }
+
+/* ━━━━━━━━ Home: strip top chrome (tags chip + view/edit icons), pull content up ━━━━━━━━ */
+body.has-section-numbers .md-content__button,   /* eye / pencil page-action icons */
+body.has-section-numbers .md-tags,              /* tags block */
+body.has-section-numbers .md-typeset .md-tags { display: none !important; }
+body.has-section-numbers .md-content__inner::before { display: none; height: 0; }
+body.has-section-numbers .md-content__inner { padding-top: 0.25rem; }
+body.has-section-numbers .md-main__inner { margin-top: 0.4rem; }   /* default 1.5rem */
+body.has-section-numbers .md-typeset .lp-hero { padding-top: 4px; }
+
+/* ━━━━━━━━ Home: fill the viewport as one no-scroll screen ━━━━━━━━ */
+/* the 24px content-inner bottom margin pushed the page past 100vh (caused a scroll) */
+body.has-section-numbers .md-content__inner { margin-bottom: 0 !important; }
+/* stretch the landing to the full height under the header and distribute its three
+   blocks (hero / cards / features band) so there is no empty band and no scroll */
+body.has-section-numbers .md-typeset .lp {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 134px);   /* header height + content offset above .lp (slimmed header) */
+  box-sizing: border-box;
+}
+/* on a tall screen, scale the content up so the page fills with substance instead
+   of large gaps (gated by min-height so shorter screens stay compact, no scroll) */
+@media (min-height: 950px) {
+  html body.has-section-numbers .md-typeset .lp .lp-hero-text > h1 { font-size: 40px !important; }
+  body.has-section-numbers .md-typeset .lp-hero-text .lp-sub { font-size: 16px; }
+  body.has-section-numbers .md-typeset .lp-grid-4 { gap: 24px; }
+  body.has-section-numbers .md-typeset .lp-card { padding: 24px; }
+  body.has-section-numbers .md-typeset .lp-card .lp-card-title { font-size: 21px !important; }
+  body.has-section-numbers .md-typeset .lp-card .lp-card-desc { font-size: 14px; }
+  body.has-section-numbers .md-typeset .lp-section--band { padding: 30px 0 32px; }
+}
+/* at >=100em the header collapses to one compact row (~40px shorter), so the
+   landing starts higher, give .lp that height back so the band still hits the bottom */
+@media (min-width: 100em) {
+  body.has-section-numbers .md-typeset .lp { min-height: calc(100vh - 113px); }
+}
+/* Footer removed site-wide: no prev/next nav, no social row, no meta bar.
+   (Both the home "Open source on GitHub" bar and Material's social meta dropped.) */
+.md-footer { display: none; }
+
+/* ━━━━━━━━ Task-flow showcase (6 downstream tasks) ━━━━━━━━ */
+.md-typeset .taskflow {
+  color: var(--text);
+  display: flex;
+  flex-direction: row;          /* switcher beside the animation, not stacked above it */
+  align-items: flex-start;
+  gap: 18px;
+}
+.md-typeset .taskflow .tf-main {
+  flex: 1 1 auto;
+  min-width: 0;                 /* let the SVG shrink instead of overflowing the row */
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* On phones the task-flow card stacks to one column so the animation keeps
+   usable width. */
+@media screen and (max-width: 480px) {
+  .md-typeset .taskflow { flex-direction: column; gap: 12px; }
+}
+.md-typeset .taskflow .tf-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 28px;
+}
+.md-typeset .taskflow .tf-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  border: 1.5px solid var(--text);
+  border-radius: 5px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  flex-shrink: 0;
+}
+.md-typeset .taskflow .tf-title {
+  font-family: 'Newsreader', 'Charter', Georgia, serif;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--text);
+  position: relative;
+  top: 2px;          /* serif optical-centring: Newsreader ink sits ~2px above the
+                        line-box centre, so the title looked higher than the number
+                        box. Nudge down to centre the cap-body with the box */
+}
+/* In-figure annotation labels use Inter (sans, legible at small sizes) */
+.md-typeset .taskflow .tf-stage svg text {
+  font-family: 'Inter', sans-serif;
+}
+.md-typeset .taskflow .tf-stage svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.md-typeset .taskflow .tf-dots {
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+}
+.md-typeset .taskflow .tf-dots span {
+  position: relative;            /* anchor the enlarged ::before hit area */
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  cursor: pointer;               /* clickable: jump to that scene */
+  transition: background 250ms cubic-bezier(0.4,0,0.2,1),
+              transform 250ms cubic-bezier(0.4,0,0.2,1);
+}
+/* invisible padding so the tiny 7px dot is easy to click/tap */
+.md-typeset .taskflow .tf-dots span::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+.md-typeset .taskflow .tf-dots span:not(.is-active):hover {
+  background: var(--text-muted);
+  transform: scale(1.3);
+}
+.md-typeset .taskflow .tf-dots span.is-active {
+  background: var(--text);   /* current scene = solid near-black dot, clearly
+                                visible (was --accent, which read as near-white) */
+  transform: scale(1.35);
+}
+
+/* ━━━━━━━━ Animated signal-flow diagram (looping) ━━━━━━━━ */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Wires: flowing dashes (signal current), diagonal/vertical lines */
+  .md-typeset .lp-anim .m3-wire line {
+    stroke-dasharray: 5 5;
+    animation: m3-flow 0.7s linear infinite;
+  }
+  @keyframes m3-flow { to { stroke-dashoffset: -10; } }
+
+  /* Activation cascade: each node group flashes violet as the wave passes.
+     4.5s loop, staggered by depth. */
+  .md-typeset .lp-anim .m3-node {
+    animation: m3-activate 4.5s ease-in-out infinite;
+  }
+  .md-typeset .lp-anim .m3-in  { animation-delay: 0s; }
+  .md-typeset .lp-anim .m3-enc { animation-delay: 0.7s; }
+  .md-typeset .lp-anim .m3-z   { animation-delay: 1.4s; }
+  .md-typeset .lp-anim .m3-dec { animation-delay: 2.1s; }
+  .md-typeset .lp-anim .m3-out { animation-delay: 2.8s; }
+  @keyframes m3-activate {
+    0%, 100%   { stroke: var(--text); stroke-width: 1.2; }
+    6%         { stroke: var(--brand-600); stroke-width: 2.2; }
+    14%        { stroke: var(--text); stroke-width: 1.2; }
+  }
+
+  /* z core: continuous gentle heartbeat */
+  .md-typeset .lp-anim .m3-z {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: m3-activate 4.5s ease-in-out infinite, m3-zbeat 2.25s ease-in-out infinite;
+  }
+  @keyframes m3-zbeat {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.1); }
+  }
+
+  /* Traveling signal packets down the central spine (y 44 → 294) */
+  .md-typeset .lp-anim .m3-packet {
+    animation: m3-travel 4.5s linear infinite;
+  }
+  .md-typeset .lp-anim .m3-packet-2 { animation-delay: 2.25s; }
+  @keyframes m3-travel {
+    0%   { opacity: 0; transform: translateY(0); }
+    6%   { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(250px); }
+  }
+}
+
+/* Dark mode: diagram uses currentColor (= --text), already flips.
+   z letter stays violet in both modes. */
+
+/* ━━━━━━━━ SECTIONS (FEATURES / TUTORIALS) ━━━━━━━━ */
+.md-typeset .lp-section {
+  padding: 16px 0 0;
+}
+.md-typeset .lp-section + .lp-section { padding-top: 10px; }
+/* pull section headings (e.g. "Which tool do I need?") up: drop the large default h2 top-margin */
+.md-typeset .lp-section > h2 { margin-top: 0.35em; }
+
+/* Features band: solid grey spanning the full viewport width (no gradient).
+   box-shadow paints a solid block 100vmax to each side; clip-path lets it show
+   horizontally while clipping top/bottom to the section box. body has
+   overflow-x:hidden so the over-wide shadow never creates a scrollbar. */
+.md-typeset .lp-section--band {
+  position: relative;
+  margin-top: 16px;
+  padding: 24px 0 26px;
+  background: var(--bg-elevated);
+  box-shadow: 0 0 0 100vmax var(--bg-elevated);
+  clip-path: inset(0 -100vmax);
+}
+.md-typeset .lp-section--band + .lp-section,
+.md-typeset .lp-section + .lp-section--band { padding-top: 16px; }
+
+/* 4-across grid */
+.md-typeset .lp-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 4px 0 0;
+}
+
+/* Cards */
+.md-typeset .lp-card {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  background: var(--bg-card);
+  transition: border-color 200ms cubic-bezier(0.4,0,0.2,1),
+              background-color 200ms cubic-bezier(0.4,0,0.2,1);
+}
+.md-typeset .lp-card:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-elevated);
+}
+.md-typeset .lp-card h3,
+.md-typeset .lp-card .lp-card-title {
+  display: block;
+  font-family: 'Newsreader', 'Charter', Georgia, serif !important;
+  font-variation-settings: "opsz" 24;
+  font-size: 19px !important;
+  font-weight: 500;
+  margin: 0 0 8px !important;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.md-typeset .lp-card p,
+.md-typeset .lp-card .lp-card-desc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin: 0;
+  display: block;
+}
+
+/* Tutorial link cards: the whole card is a single clickable link (no inner underline) */
+.md-typeset a.lp-card-link,
+.md-typeset .lp-card-link a.lp-card-cover {
+  text-decoration: none !important;
+  color: inherit !important;
+  border-bottom: none !important;  /* override Material link underline */
+  display: block;
+}
+/* cover link makes the whole last card clickable */
+.md-typeset .lp-card-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+/* bottom-right arrow CTA: slides on hover */
+.md-typeset .lp-card .lp-card-arrow {
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--brand-600);
+  transition: transform 200ms cubic-bezier(0.4,0,0.2,1);
+}
+.md-typeset .lp-card:hover .lp-card-arrow { transform: translateX(4px); }
+/* "More tutorials" link: sits above the card row, right-aligned (outside cards) */
+.md-typeset .lp-tut-head {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 10px;
+}
+.md-typeset .lp-tut-head .lp-more-tut {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text) !important;
+}
+/* Thick-stroke arrow glyph (replaces the thin Unicode "→") */
+.md-typeset .lp-tut-head .lp-more-tut .lp-more-arrow {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  stroke: currentColor;
+}
+
+/* ━━━━━━━━ FEATURES: 3 text columns split by vertical rules ━━━━━━━━ */
+.md-typeset .lp-feature-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin: 4px 0 0;
+}
+.md-typeset .lp-feat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 2px 34px;
+}
+.md-typeset .lp-feat:first-child { padding-left: 4px; }
+.md-typeset .lp-feat:last-child  { padding-right: 4px; }
+/* thin vertical divider between columns (inset top/bottom) */
+.md-typeset .lp-feat + .lp-feat { border-left: 1px solid var(--border); }
+.md-typeset .lp-feat-icon {
+  display: inline-flex;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.md-typeset .lp-feat-icon svg { width: 26px; height: 26px; display: block; }
+.md-typeset .lp-feat .lp-feat-title {
+  font-family: 'Newsreader', 'Charter', Georgia, serif !important;
+  font-variation-settings: "opsz" 24;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.md-typeset .lp-feat .lp-feat-desc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* ━━━━━━━━ FOOTER BAR ━━━━━━━━ */
+.md-typeset .lp-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin: 28px 0 0;
+  padding: 16px 28px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+}
+.md-typeset .lp-footer-bar .lp-footer-left {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--text);
+}
+.md-typeset .lp-footer-bar .lp-footer-left .twemoji { width: 18px; height: 18px; }
+.md-typeset .lp-footer-bar .lp-footer-mid {
+  color: var(--text-muted);
+  flex: 1;
+  text-align: center;
+  min-width: 200px;
+}
+.md-typeset .lp-footer-bar .lp-footer-right {
+  color: var(--brand-600) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+/* ━━━━━━━━ Responsive ━━━━━━━━ */
+@media (max-width: 1024px) {
+  .md-typeset .lp-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  /* stack features vertically; swap vertical dividers for horizontal ones */
+  .md-typeset .lp-feature-row { grid-template-columns: 1fr; }
+  .md-typeset .lp-feat { padding: 22px 4px; }
+  .md-typeset .lp-feat:first-child { padding-top: 4px; }
+  .md-typeset .lp-feat + .lp-feat { border-left: none; border-top: 1px solid var(--border); }
+}
+@media (max-width: 860px) {
+  .md-typeset .lp-hero { grid-template-columns: 1fr; gap: 32px; }
+  html body .md-typeset .lp .lp-hero-text > h1 { font-size: 32px !important; max-width: none !important; }
+  .md-typeset .lp-hero-card { order: 2; }
+}
+@media (max-width: 560px) {
+  .md-typeset .lp-grid-4 { grid-template-columns: 1fr; }
+  .md-typeset .lp-feature-row { grid-template-columns: 1fr; }
+  .md-typeset .lp-footer-bar { flex-direction: column; text-align: center; }
+}
+
+/* ---------- 7. Cards (smooth, no jank) ---------- */
+
+.md-typeset .grid { margin: 2rem 0; }
+.md-typeset .grid.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.md-typeset .grid.cards > ul {
+  display: contents;
+  list-style: none;
+  padding: 0;
+}
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid.cards > ol > li,
+.md-typeset .grid > .card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  padding: 1.5rem 1.5rem 1.3rem;
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  /* GPU layer + smooth multi-property transition */
+  transform: translate3d(0, 0, 0);
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+/* Swiss-precise card hover: border color shift only, no transform, no shadow */
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid.cards > ol > li:hover,
+.md-typeset .grid > .card:hover {
+  transform: translate3d(0, 0, 0);
+  border-color: var(--brand-600);
+  box-shadow: none;
+}
+.md-typeset .grid.cards > ul > li > *,
+.md-typeset .grid.cards > ol > li > *,
+.md-typeset .grid > .card > * {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.md-typeset .grid.cards > ul > li:hover > *,
+.md-typeset .grid.cards > ol > li:hover > *,
+.md-typeset .grid > .card:hover > * {
+  transform: scale(1.005);  /* mechanical-precise micro scale */
+}
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--brand-600);
+  box-shadow: none;
+}
+
+.md-typeset .grid.cards .twemoji {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: 0.6rem;
+  color: var(--brand-600);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.md-typeset .grid.cards > ul > li:hover .twemoji {
+  transform: scale(1.08);
+}
+
+.md-typeset .grid.cards strong {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--text);
+}
+
+.md-typeset .grid.cards a:last-child {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: var(--brand-600);
+  font-size: 0.84rem;
+  margin-top: 0.6rem;
+  display: inline-block;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.md-typeset .grid.cards > ul > li:hover a:last-child {
+  transform: translateX(3px);
+}
+
+/* Card "pin" badge for recommended starting point (CellRank reference) */
+.md-typeset .grid.cards .card-pin {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-600);
+  background: var(--brand-50);
+  border: 1px solid var(--brand-200);
+  border-radius: 99px;
+  vertical-align: 2px;
+}
+[data-md-color-scheme="slate"] .md-typeset .grid.cards .card-pin {
+  background: rgba(167, 139, 250, 0.15);
+  border-color: var(--brand-700);
+}
+
+/* scvi-tools-style card meta chips (PyTorch-tutorial reference) */
+.md-typeset .grid.cards .card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.65rem 0 0.2rem;
+  line-height: 1.5;
+}
+.md-typeset .grid.cards .chip,
+.md-typeset .chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.5rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+/* "easy" uses the brand blue: DESIGN_SYSTEM §1.3 forbids green; amber/rose below
+   are the sanctioned semantic exceptions, blue is the one accent. */
+.md-typeset .chip.chip-easy {
+  background: var(--brand-50);
+  border-color: var(--brand-200);
+  color: var(--brand-600);
+}
+.md-typeset .chip.chip-med {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--amber);
+}
+.md-typeset .chip.chip-hard {
+  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(244, 63, 94, 0.3);
+  color: var(--rose);
+}
+[data-md-color-scheme="slate"] .md-typeset .chip {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* "Choose this if..." routing callout (scikit-learn user-guide reference) */
+.md-typeset .choose-m3 {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand-600);
+  border-radius: 0.5rem;
+  padding: 1.1rem 1.4rem 1rem;
+  margin: 1.2rem 0 2rem;
+  box-shadow: var(--shadow-xs);
+  max-width: 44rem;
+}
+.md-typeset .choose-m3 > p:first-child {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--text);
+  margin: 0 0 0.5rem;
+}
+.md-typeset .choose-m3 ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+.md-typeset .choose-m3 li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+.md-typeset .choose-m3 li .twemoji {
+  flex-shrink: 0;
+  color: var(--brand-600);
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+}
+
+/* Feature grid (info-density) */
+.md-typeset .grid:not(.cards) {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.4rem 2rem;
+  margin: 1.5rem 0 0;
+}
+.md-typeset .grid:not(.cards) dt {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.02rem;
+  margin-bottom: 0.25rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  padding-left: 2rem;
+  position: relative;
+}
+.md-typeset .grid:not(.cards) .feat-icon {
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--brand-50);
+  border-radius: 0.35rem;
+  color: var(--brand-600);
+  vertical-align: 0;
+  margin-right: 0;
+}
+[data-md-color-scheme="slate"] .md-typeset .grid:not(.cards) .feat-icon {
+  background: rgba(167, 139, 250, 0.12);
+}
+.md-typeset .grid:not(.cards) .feat-icon svg {
+  fill: currentColor;
+  height: 0.95rem;
+  width: 0.95rem;
+}
+.md-typeset .grid:not(.cards) dd {
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-size: 0.9rem;
+  margin-left: 2rem;
+  margin-top: 0;
+}
+
+@media (max-width: 640px) {
+  .md-typeset .grid:not(.cards) { grid-template-columns: 1fr; }
+}
+
+/* ---------- 7.5 DeepMind News-style list (.dm-list) ---------- */
+/* Reusable list pattern: title + meta + thumbnail in a row.
+   No card border, hairline divider between items, hover lifts title. */
+
+.md-typeset .dm-list {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem 0 2rem;
+  border-top: 1px solid var(--border);
+}
+.md-typeset .dm-list .dm-item {
+  display: grid;
+  grid-template-columns: 1fr 7rem;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none !important;
+  color: inherit !important;
+  border-bottom-color: var(--border) !important;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.md-typeset .dm-list .dm-item:hover {
+  opacity: 1;
+}
+.md-typeset .dm-list .dm-item:hover .dm-title {
+  color: var(--brand-600);
+}
+.md-typeset .dm-list .dm-item:hover .dm-thumb img,
+.md-typeset .dm-list .dm-item:hover .dm-thumb {
+  transform: scale(1.02);
+}
+.md-typeset .dm-list .dm-title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0 0 0.4rem;
+  display: block;
+  text-wrap: balance;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.md-typeset .dm-list .dm-meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.5rem;
+}
+.md-typeset .dm-list .dm-meta > * + *::before {
+  content: "·";
+  margin-right: 0.5rem;
+  color: var(--text-faint);
+}
+.md-typeset .dm-list .dm-meta .dm-cta {
+  font-weight: 600;
+  color: var(--brand-600);
+}
+.md-typeset .dm-list .dm-meta .dm-cta::after {
+  content: " ›";
+  display: inline-block;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.md-typeset .dm-list .dm-item:hover .dm-meta .dm-cta::after {
+  transform: translateX(2px);
+}
+.md-typeset .dm-list .dm-thumb {
+  width: 7rem;
+  height: 7rem;
+  background: var(--bg-elevated);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform var(--dur-base) var(--ease-out);
+  border: 1px solid var(--border);
+}
+.md-typeset .dm-list .dm-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.md-typeset .dm-list .dm-thumb svg {
+  width: 60%;
+  height: 60%;
+  color: var(--brand-600);
+}
+
+@media (max-width: 640px) {
+  .md-typeset .dm-list .dm-item {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  .md-typeset .dm-list .dm-thumb {
+    width: 100%;
+    height: 8rem;
+    order: -1;
+  }
+  .md-typeset .dm-list .dm-title { font-size: 1.15rem; }
+}
+
+/* ---------- 8. Code blocks ---------- */
+
+.md-typeset .highlight {
+  border-radius: 0.6rem;
+  position: relative;
+  margin: 1.2rem 0;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+.md-typeset pre { margin: 0; }
+.md-typeset pre > code {
+  border-radius: 0.6rem;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  padding: 1rem 1.2rem !important;
+}
+.md-typeset code:not(pre code) {
+  background: var(--bg-subtle);
+  color: var(--text);
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.35rem;
+  font-size: 0.86em;
+  font-weight: 500;
+}
+
+/* ───────── API reference formatting ─────────
+   Code inside a heading IS the signature: render it as clean monospace at the
+   heading's size (no inline-code pill), and separate each method with a divider. */
+.md-typeset h1 code:not(pre code),
+.md-typeset h2 code:not(pre code),
+.md-typeset h3 code:not(pre code),
+.md-typeset h4 code:not(pre code) {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.92em;
+  font-weight: inherit;
+  color: inherit;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  letter-spacing: -0.01em;
+}
+/* method signatures (h3/h4 led by code): accent name + top divider per method */
+.md-typeset h3:has(> code),
+.md-typeset h4:has(> code) {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 1.6rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.md-typeset h3:has(> code) > code,
+.md-typeset h4:has(> code) > code { color: var(--brand-600); }
+
+/* ───────── Restrained syntax highlighting: b/w/grey + blue only ─────────
+   Default Pygments uses green keywords (#008000) + red strings/numbers (#ba2121).
+   Recolour the loud tokens: keywords/operators → blue, strings → muted slate,
+   comments → faint grey, numbers → ink. [class*="highlight"] covers BOTH `.highlight`
+   (markdown pages) and `.highlight-ipynb` (mkdocs-jupyter notebook cells). */
+.md-typeset [class*="highlight"] .k,  .md-typeset [class*="highlight"] .kc,
+.md-typeset [class*="highlight"] .kd, .md-typeset [class*="highlight"] .kn,
+.md-typeset [class*="highlight"] .kp, .md-typeset [class*="highlight"] .kr,
+.md-typeset [class*="highlight"] .kt, .md-typeset [class*="highlight"] .ow,
+.md-typeset [class*="highlight"] .bp {
+  color: var(--brand-600);
+}
+.md-typeset [class*="highlight"] .s,  .md-typeset [class*="highlight"] .sa,
+.md-typeset [class*="highlight"] .sb, .md-typeset [class*="highlight"] .sc,
+.md-typeset [class*="highlight"] .dl, .md-typeset [class*="highlight"] .sd,
+.md-typeset [class*="highlight"] .s2, .md-typeset [class*="highlight"] .se,
+.md-typeset [class*="highlight"] .sh, .md-typeset [class*="highlight"] .si,
+.md-typeset [class*="highlight"] .sx, .md-typeset [class*="highlight"] .sr,
+.md-typeset [class*="highlight"] .s1, .md-typeset [class*="highlight"] .ss {
+  color: var(--text-muted);
+}
+.md-typeset [class*="highlight"] .c,  .md-typeset [class*="highlight"] .ch,
+.md-typeset [class*="highlight"] .cm, .md-typeset [class*="highlight"] .cp,
+.md-typeset [class*="highlight"] .cpf, .md-typeset [class*="highlight"] .c1,
+.md-typeset [class*="highlight"] .cs {
+  color: var(--text-faint); font-style: italic;
+}
+.md-typeset [class*="highlight"] .m,  .md-typeset [class*="highlight"] .mb,
+.md-typeset [class*="highlight"] .mf, .md-typeset [class*="highlight"] .mh,
+.md-typeset [class*="highlight"] .mi, .md-typeset [class*="highlight"] .mo,
+.md-typeset [class*="highlight"] .il { color: var(--text); }
+
+/* Swiss-minimal filename label: inline mono prefix, no dark strip */
+.md-typeset .highlight .filename {
+  background: transparent;
+  color: var(--text-faint);
+  border-radius: 0;
+  padding: 0 0 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  display: block;
+  border: none;
+}
+.md-typeset .highlight .filename::before {
+  content: "// ";
+  color: var(--text-faint);
+  opacity: 0.7;
+}
+[data-md-color-scheme="slate"] .md-typeset .highlight .filename {
+  background: transparent;
+  color: var(--text-faint);
+}
+.md-typeset .highlight:has(.filename) > pre { border-radius: 0; }
+.md-typeset .highlight:has(.filename) > pre > code {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.md-typeset .highlight .hll {
+  background: var(--brand-50);
+  box-shadow: inset 3px 0 0 var(--brand-600);
+  display: block;
+}
+[data-md-color-scheme="slate"] .md-typeset .highlight .hll {
+  background: rgba(0, 174, 239, 0.15);
+}
+
+.md-typeset .md-clipboard {
+  color: var(--text-faint);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.md-typeset .md-clipboard:hover { color: var(--brand-600); }
+
+/* ---------- 9. Tables ---------- */
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-xs);
+  font-size: 14px;          /* was 0.92rem (~20px) */
+}
+.md-typeset table:not([class]) th {
+  background: var(--bg-subtle);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding: 0.55rem 0.9rem;
+  text-align: left;
+}
+.md-typeset table:not([class]) td {
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+.md-typeset table:not([class]) tr:last-child td { border-bottom: none; }
+.md-typeset table:not([class]) tr {
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.md-typeset table:not([class]) tr:hover { background: var(--bg-subtle); }
+
+/* ---------- 10. Admonitions ---------- */
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 0.5rem;
+  /* Force grey on all four sides (!important beats Material's per-type colour,
+     e.g. the green `tip` box border); only the LEFT edge carries the accent. */
+  border: 1px solid var(--border) !important;
+  border-left-width: 3px !important;
+  font-size: 14px;            /* was 0.88rem (~19px), bigger than body; tighten */
+  box-shadow: var(--shadow-xs);
+  background: var(--bg-card);
+}
+.md-typeset .admonition-title,
+.md-typeset summary {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  background: var(--bg-subtle) !important;   /* neutral bar: kill Material's per-type colour tints (green tip, etc.) */
+}
+/* Admonition icon: neutral grey, never Material's per-type colour (e.g. the green flame) */
+.md-typeset .admonition-title::before,
+.md-typeset summary::before { background-color: var(--text-muted) !important; }
+/* Left accent: blue for info types (b/w/grey + blue palette), amber/red kept only
+   for genuine warning/danger semantics. */
+.md-typeset .admonition.abstract,
+.md-typeset .admonition.tip,
+.md-typeset .admonition.note,
+.md-typeset .admonition.info,
+.md-typeset .admonition.question,
+.md-typeset details.question     { border-left-color: var(--brand-600) !important; }
+.md-typeset .admonition.warning  { border-left-color: var(--amber) !important; }
+.md-typeset .admonition.danger,
+.md-typeset .admonition.failure  { border-left-color: var(--rose, #e11d48) !important; }
+
+/* FAQ "question" admonitions: a light-blue icon (#00AEEF) instead of Material's
+   default green. mkdocs-jupyter renders notebook admonitions OUTSIDE .md-typeset,
+   so the green leaked there even though .md-typeset icons are forced grey; this
+   covers both normal pages and rendered notebooks. */
+.md-typeset .admonition.question > .admonition-title::before,
+.md-typeset details.question > summary::before,
+.jupyter-wrapper .admonition.question .admonition-title::before,
+.jupyter-wrapper details.question summary::before {
+  background-color: #00AEEF !important;
+}
+.jupyter-wrapper .admonition.question,
+.jupyter-wrapper details.question { border-left-color: #00AEEF !important; }
+/* Collapsible fold arrow: neutral grey, never Material's per-type colour (the
+   question/help fold arrow defaults to green #64dd17). */
+.md-typeset details > summary::after,
+.jupyter-wrapper details > summary::after { background-color: var(--text-muted) !important; }
+/* <details>/<summary> focus ring: the browser paints it in the OS accent colour
+   (green on many macOS setups) and it wraps the WHOLE question box. Kill it on BOTH
+   the <summary> and the <details> (clicking can focus / focus-within either), in
+   every focus state, so NO green outline or halo ever appears. A mouse click leaves
+   no halo at all; keyboard users still get a subtle on-brand blue ring. */
+.md-typeset details,
+.md-typeset details > summary,
+.md-typeset details:focus,
+.md-typeset details:focus-within,
+.md-typeset details > summary:focus,
+.md-typeset details > summary:active,
+.jupyter-wrapper details,
+.jupyter-wrapper details > summary,
+.jupyter-wrapper details:focus,
+.jupyter-wrapper details:focus-within,
+.jupyter-wrapper details > summary:focus,
+.jupyter-wrapper details > summary:active {
+  outline: none !important;
+}
+/* mouse-click focus → no coloured halo, just the normal subtle box shadow */
+.md-typeset details > summary:focus:not(:focus-visible),
+.jupyter-wrapper details > summary:focus:not(:focus-visible) {
+  box-shadow: none !important;
+}
+/* the open question box itself never carries a coloured focus halo */
+.md-typeset details:focus-within,
+.jupyter-wrapper details:focus-within {
+  box-shadow: var(--shadow-xs) !important;
+}
+/* keyboard focus only → subtle on-brand blue ring (accessibility, never green) */
+.md-typeset details > summary:focus-visible,
+.jupyter-wrapper details > summary:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 70, 173, 0.35) !important;
+}
+
+/* ---------- 11. Header + top tabs ---------- */
+
+.md-header {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  box-shadow: none;
+  border-bottom: 1px solid transparent;
+  color: var(--text);
+  transition: border-color var(--dur-base) var(--ease-out);
+}
+[data-md-color-scheme="slate"] .md-header {
+  background: rgba(10, 10, 20, 0.88);
+}
+.md-header[data-md-state="shadow"] {
+  border-bottom-color: var(--border);
+}
+/* Header shows the logo only: the site name lives in the page hero, so the
+   wordmark text next to the logo is hidden for a cleaner, roomier bar. */
+.md-header__title { display: none; }
+
+/* ---------- Custom mRNA-helix logo (replaces material/dna icon) ---------- */
+.md-header .md-logo img,
+.md-header .md-logo svg {
+  height: 56px;          /* horizontal helix: grows wide, not tall, fits the
+                            header's vertical headroom without raising its height,
+                            and the ~500px gap to the centred nav leaves room */
+  width: auto;
+}
+/* Black line-art logo → invert to white in dark mode so it stays visible */
+[data-md-color-scheme="slate"] .md-header .md-logo img {
+  filter: invert(1);
+}
+
+.md-tabs {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+  color: var(--text);
+}
+[data-md-color-scheme="slate"] .md-tabs { background: var(--bg); }
+/* Swiss 2px ink-underline tabs */
+.md-tabs__list {
+  gap: 4px;
+  padding: 0;
+}
+.md-tabs__item { height: auto; }
+.md-tabs__link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0;
+  color: var(--text-muted) !important;
+  opacity: 1;
+  padding: 9px 12px;
+  margin: 0;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  transition: color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-bottom-color 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.md-tabs__link:hover {
+  color: var(--text) !important;
+  background: transparent;
+  border-bottom-color: var(--border-strong);
+}
+.md-tabs__link--active {
+  color: var(--text) !important;
+  background: transparent;
+  font-weight: 600;
+  border-bottom-color: var(--text);
+}
+.md-tabs__link--active::after { content: none; }
+
+/* ---------- 11.5 Single-row header (desktop): one flex row, no overlap ---------- */
+/* On wide screens (≥100em) the whole header is one flex row:
+     logo · title ·· nav tabs ·· search · GitHub · ☾/☀
+   We flatten the .md-header__inner <nav> with display:contents so its children
+   join the .md-tabs <nav> as direct flex items of .md-header, place each with
+   `order`, and absolutely-centre the tabs at the true header midpoint.
+   The breakpoint is raised to 100em (from Material's 76.25em) so the title, tab
+   labels and the full repo name have room; between 76.25em and 100em we fall back
+   to Material's default two-row header (tabs on their own row) instead of
+   overlapping. Below 76.25em → the drawer. */
+@media screen and (min-width: 100em) {
+  .md-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 4.4rem;
+    padding: 0 0.9rem;
+  }
+  .md-header__inner { display: contents; }
+
+  /* Placement: logo + title hug the left (nudged in), the nav is absolutely
+     centered in the header (true viewport centre, independent of side widths),
+     and the controls (search · GitHub · ☾) are pushed to the far right. */
+  .md-header .md-logo           { order: 0; flex: 0 0 auto; margin-left: 0.85rem; }
+  .md-header .md-header__title  { order: 1; flex: 0 0 auto; margin: 0 6px 0 8px; }
+  .md-header .md-tabs           {
+    order: 2;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 100%;
+    width: max-content;            /* hug the links so the centred box stays narrow */
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+  .md-header .md-search         { order: 3; flex: 0 0 auto; margin-left: auto; }
+  /* Repo keeps its full natural width ("PYangLab/Matilda"); the 100em breakpoint
+     guarantees the inline row has room for it. The ellipsis rule below is a
+     harmless safety net. */
+  .md-header .md-header__source { order: 4; flex: 0 0 auto; width: auto; margin: 0 2px; }
+  .md-header .md-header__source .md-source__repository {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .md-header .md-header__option { order: 5; flex: 0 0 auto; }
+
+  /* Drop the mobile-only icon buttons (hamburger + search-open) on desktop.
+     IMPORTANT: scope the search rule to the *toggle button* only. There are
+     three label[for="__search"] in the DOM: the open button, the click-away
+     .md-search__overlay (unchecks #__search so the dropdown closes), and the
+     magnifier .md-search__icon inside the field. Hiding all three left the
+     overlay dead, so clicking away never closed the "Type to start searching"
+     dropdown. Keep the overlay + magnifier alive. */
+  .md-header label[for="__drawer"],
+  .md-header label.md-header__button[for="__search"] { display: none; }
+
+  /* Tabs sit inline: kill the band, the sticky offset, and the underline */
+  .md-tabs {
+    position: static;
+    height: auto;
+    overflow: visible;
+    background: transparent !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+  }
+  .md-tabs .md-grid {
+    max-width: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
+  .md-tabs__list {
+    margin: 0;
+    gap: 2px;
+    white-space: nowrap;
+  }
+  .md-tabs__link {
+    padding: 6px 12px;
+    margin: 0;
+    border-bottom: none;            /* no underline bar when inline */
+  }
+  .md-tabs__link:hover { border-bottom: none; color: var(--text) !important; }
+  .md-tabs__link--active { border-bottom: none; color: var(--text) !important; font-weight: 600; }
+}
+
+/* ---------- 12. Sidebar + TOC ---------- */
+
+.md-nav__link {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;        /* sidebar nav: was 0.84rem (~18.5px), too big vs body */
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.md-nav__link:hover { color: var(--text); }
+.md-nav__item--active > .md-nav__link {
+  color: var(--brand-600) !important;
+  font-weight: 600;
+}
+.md-nav__title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 11px;        /* section/TOC labels (was 0.72rem ~15.8px) */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ===== Left nav = a floating panel (few items → a compact card, not a full rail).
+   Roles are visually distinct so the title and the active item never collide:
+     • BOLD dark  = section title (a <label>, not a link)
+     • regular    = the page options (<a> links)
+     • raised white chip + soft shadow = the SELECTED page          */
+.md-sidebar--primary .md-nav--primary > .md-nav__list {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 0.6rem 0.9rem;   /* taller, roomier panel */
+  box-shadow: var(--shadow-md);
+  margin-right: 0.4rem;
+}
+/* section title: bold, dark, a header (kill the blue+bold that mimicked items) */
+.md-sidebar--primary label.md-nav__link {
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.6rem 0.45rem;
+  margin: 0 0 0.5rem;   /* more distance between the title row and the first option */
+  cursor: default;
+}
+/* page options: regular weight, pill on hover/active */
+.md-sidebar--primary a.md-nav__link {
+  font-weight: 400 !important;
+  color: var(--text-muted) !important;
+  font-size: 13.5px;
+  padding: 0.32rem 0.6rem;
+  margin: 1px 0.3rem !important;   /* symmetric inset so the pill never bleeds onto the panel edge */
+  border-radius: 7px;
+  transition: background var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out);
+}
+.md-sidebar--primary a.md-nav__link:hover {
+  background: rgba(15, 23, 42, 0.05);
+  color: var(--text) !important;
+}
+[data-md-color-scheme="slate"] .md-sidebar--primary a.md-nav__link:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+/* the SELECTED page: a raised white chip; the shadow signals "you are here" */
+.md-sidebar--primary .md-nav__item--active > a.md-nav__link,
+.md-sidebar--primary a.md-nav__link--active {
+  background: var(--bg-subtle) !important;   /* grey selection, not white */
+  color: var(--text) !important;
+  font-weight: 500 !important;
+  /* soft, EVEN shadow: enough blur (>offset) that the top edge is as soft as the
+     bottom, so the pill reads as evenly floating instead of "cut off" at the top. */
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+}
+[data-md-color-scheme="slate"] .md-sidebar--primary .md-nav__item--active > a.md-nav__link,
+[data-md-color-scheme="slate"] .md-sidebar--primary a.md-nav__link--active {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.36);
+}
+/* flatten Material's nested indentation so options align cleanly under the title */
+.md-sidebar--primary .md-nav__list .md-nav__list { padding-left: 0; margin: 0; }
+.md-sidebar--primary .md-nav__item { padding: 0; margin: 0; }
+/* Material sets overflow:hidden on nav lists (for its drawer slide animation); on our
+   always-expanded desktop sections that clips the first item's chip shadow at the top.
+   Let it render fully: the floating panel itself provides the visual containment. */
+.md-sidebar--primary .md-nav--primary .md-nav__list { overflow: visible; }
+/* Material indents nested section navs with a negative left margin; zero it so the
+   active pill respects the panel's padding instead of bleeding onto the left border. */
+.md-sidebar--primary .md-nav--primary .md-nav { margin-left: 0 !important; }
+
+.md-sidebar--secondary .md-nav__link {
+  font-size: 13px;        /* TOC links a touch smaller than the left nav */
+  border-left: 2px solid transparent;
+  padding-left: 0.6rem;
+  margin-left: 0;
+  transition: color var(--dur-fast) var(--ease-out),
+              border-left-color var(--dur-fast) var(--ease-out);
+}
+/* item padding (not link margin) widens the gap reliably: vertical margins between
+   block siblings collapse, padding doesn't; the link box stays text-height so the
+   sliding indicator bar still matches the active item. */
+.md-sidebar--secondary .md-nav--secondary .md-nav__item { padding: 0.3rem 0; }
+.md-sidebar--secondary .md-nav__link--active {
+  color: var(--brand-600) !important;
+  font-weight: 600;
+  /* static bar removed: a single sliding `.toc-indicator` (animations.js) marks
+     the active item and animates smoothly between sections. */
+}
+.md-sidebar--secondary .md-nav--secondary > .md-nav__list { position: relative; }
+.md-sidebar--secondary .toc-indicator {
+  position: absolute;
+  left: 0; top: 0;
+  width: 2px;
+  background: var(--brand-600);
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .md-sidebar--secondary .toc-indicator { transition: opacity 0.2s ease; }
+}
+.md-sidebar--secondary .md-nav__link--passed {
+  color: var(--text-faint) !important;
+}
+.md-sidebar--secondary .md-nav__title {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.5rem;
+}
+
+/* Removed the redundant mono "ON THIS PAGE" label: Material's Inter
+   "Table of contents" title above the list is the single, on-brand header. */
+.md-sidebar--secondary .md-nav__list::before { content: none; }
+
+.md-nav__link:focus-visible,
+.md-tabs__link:focus-visible {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 2px;
+}
+
+/* ---------- 12.5 Step flow (squidpy / snakemake-style) ---------- */
+
+.md-typeset .step-flow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+  position: relative;
+}
+.md-typeset .step-flow .step {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 1rem 1.1rem 0.9rem;
+  position: relative;
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out);
+}
+.md-typeset .step-flow .step:hover {
+  border-color: var(--brand-600);
+  box-shadow: var(--shadow-sm);
+}
+.md-typeset .step-flow .step-num {
+  display: block;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--brand-600);
+  margin-bottom: 0.3rem;
+}
+.md-typeset .step-flow .step strong {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--text);
+}
+.md-typeset .step-flow .step p {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  margin: 0 0 0.6rem;
+}
+.md-typeset .step-flow .step code {
+  display: inline-block;
+  background: var(--bg-subtle);
+  font-size: 0.76rem;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--border);
+}
+/* Arrow between steps */
+.md-typeset .step-flow .step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-faint);
+  font-size: 1.1rem;
+  z-index: 1;
+  font-weight: 400;
+  pointer-events: none;
+}
+@media (max-width: 768px) {
+  .md-typeset .step-flow { grid-template-columns: 1fr; }
+  .md-typeset .step-flow .step:not(:last-child)::after {
+    content: "↓";
+    right: 50%;
+    top: auto;
+    bottom: -1.5rem;
+    transform: translateX(50%);
+  }
+}
+
+/* ---------- 13. Paper figure ---------- */
+
+.fig-paper {
+  margin: 1.5rem auto 2rem;
+  padding: 0;
+  text-align: center;
+  max-width: 60rem;
+}
+.fig-paper .fig-paper-link {
+  display: inline-block;
+  background: var(--bg-card);
+  border: 1px solid var(--border) !important;
+  border-radius: 0.6rem;
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out);
+}
+.fig-paper .fig-paper-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--brand-600) !important;
+  box-shadow: var(--shadow-md);
+}
+.fig-paper img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.4rem;
+}
+.fig-paper figcaption {
+  margin-top: 1rem;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  text-align: left;
+  padding: 0 0.5rem;
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fig-paper figcaption strong {
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+}
+.fig-paper figcaption a {
+  font-weight: 600;
+  color: var(--brand-600);
+}
+[data-md-color-scheme="slate"] .fig-paper .fig-paper-link { background: #ffffff; }
+
+/* ---------- 14. Citation tabs ---------- */
+
+.md-typeset .tabbed-set {
+  margin: 1.2rem 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-xs);
+}
+.md-typeset .tabbed-set > label {
+  padding: 0.7rem 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  border-color: transparent;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.md-typeset .tabbed-set > input:checked + label {
+  color: var(--brand-600);
+  border-bottom-color: var(--brand-600) !important;
+}
+.md-typeset .tabbed-content {
+  padding: 0.5rem 1.1rem 1rem;
+}
+
+/* Citation meta strip (DOI · preprint · license) */
+.citation-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin: 1.2rem 0 1.5rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.86rem;
+}
+.citation-meta .cite-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-right: 0.4rem;
+}
+.citation-meta .cite-doi,
+.citation-meta .cite-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.84rem;
+  color: var(--text);
+}
+.citation-meta a.cite-doi {
+  color: var(--brand-600) !important;
+  border-bottom: 1px solid transparent !important;
+  text-decoration: none;
+  transition: border-bottom-color var(--dur-fast) var(--ease-out);
+}
+.citation-meta a.cite-doi:hover {
+  border-bottom-color: var(--brand-600) !important;
+}
+.citation-meta .cite-sep {
+  color: var(--border-strong);
+}
+
+/* ---------- 15. Mermaid ---------- */
+
+.md-typeset .mermaid {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  box-shadow: var(--shadow-xs);
+}
+.md-typeset .mermaid svg { max-width: 100%; height: auto; }
+.md-typeset .mermaid svg .nodeLabel,
+.md-typeset .mermaid svg .edgeLabel {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-weight: 500;
+}
+
+/* ---------- 16. Links ---------- */
+
+.md-typeset a:not(.md-button):not(.md-tabs__link):not(.md-nav__link):not(.headerlink) {
+  color: var(--brand-600);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.md-typeset a:not(.md-button):not(.md-tabs__link):not(.md-nav__link):not(.headerlink):hover {
+  border-bottom-color: var(--brand-600);
+}
+
+/* ---------- 16.4 Headerlink anchors visible on hover (fastai reference) ---------- */
+
+.md-typeset .headerlink {
+  color: var(--text-faint) !important;
+  opacity: 0;
+  margin-left: 0.4rem;
+  font-weight: 400;
+  border-bottom: none !important;
+  transition: opacity var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.md-typeset h1:hover .headerlink,
+.md-typeset h2:hover .headerlink,
+.md-typeset h3:hover .headerlink,
+.md-typeset h4:hover .headerlink {
+  opacity: 1;
+}
+.md-typeset .headerlink:hover {
+  color: var(--brand-600) !important;
+}
+
+/* Scroll progress bar at very top (Bioconductor-style) */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--brand-600);
+  width: 0;
+  z-index: 9999;
+  pointer-events: none;
+  transition: width 80ms linear, opacity 200ms var(--ease-out);
+  opacity: 0;
+}
+.scroll-progress.is-scrolling { opacity: 1; }
+
+/* Back-to-top button (visible after scroll, added by JS) */
+.back-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--slate-900);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity var(--dur-base) var(--ease-out),
+              transform var(--dur-base) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+  border: none;
+  font-size: 1.1rem;
+}
+.back-to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.back-to-top:hover {
+  background: var(--brand-600);
+}
+[data-md-color-scheme="slate"] .back-to-top {
+  background: #ffffff;
+  color: var(--slate-900);
+}
+[data-md-color-scheme="slate"] .back-to-top:hover {
+  background: var(--brand-600);
+  color: #ffffff;
+}
+
+/* ---------- 16.5 Abbreviation tooltips (anndata reference) ---------- */
+
+.md-typeset abbr {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--brand-600);
+  cursor: help;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.md-typeset abbr:hover {
+  color: var(--brand-600);
+}
+
+/* ---------- 17. Tag chips ---------- */
+
+.md-typeset .md-tag {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 0.7rem;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  color: var(--text-muted);
+  transition: border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.md-typeset .md-tag:hover {
+  border-color: var(--brand-600);
+  color: var(--brand-600);
+}
+
+/* ---------- 18. Scroll fade-up ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .anim-pending {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 350ms var(--ease-out), transform 350ms var(--ease-out);
+    will-change: opacity, transform;
+  }
+  .anim-pending.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .md-typeset .grid.cards > ul > li.anim-pending:nth-child(1) { transition-delay:  30ms; }
+  .md-typeset .grid.cards > ul > li.anim-pending:nth-child(2) { transition-delay:  70ms; }
+  .md-typeset .grid.cards > ul > li.anim-pending:nth-child(3) { transition-delay: 110ms; }
+  .md-typeset .grid.cards > ul > li.anim-pending:nth-child(4) { transition-delay: 150ms; }
+  .md-typeset .grid.cards > ul > li.anim-pending:nth-child(5) { transition-delay: 190ms; }
+  .md-typeset .grid.cards > ul > li.anim-pending:nth-child(6) { transition-delay: 230ms; }
+}
+
+/* ---------- 19. Notebook outputs ---------- */
+
+.jp-Notebook .jp-Cell { padding: 0.25rem 0; }
+.jp-Notebook .jp-InputArea-editor,
+.jp-Notebook .jp-OutputArea-output pre {
+  border-radius: 0.5rem;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+/* mkdocs-jupyter renders notebook MARKDOWN outside .md-typeset, so the theme's per-element
+   sizes don't reach it: fenced code blocks inside markdown cells came out ~16.8px
+   (vs 13px on regular pages), and admonitions/tables drifted too. Re-apply the
+   regular tutorial sizes inside the notebook wrapper so every tutorial matches. */
+.jupyter-wrapper .jp-RenderedMarkdown pre,
+.jupyter-wrapper .jp-RenderedMarkdown pre code,
+.jupyter-wrapper .jp-RenderedHTMLCommon pre,
+.jupyter-wrapper .jp-RenderedHTMLCommon pre code { font-size: 13px; }
+.jupyter-wrapper .admonition,
+.jupyter-wrapper details,
+.jupyter-wrapper .admonition-title,
+.jupyter-wrapper summary { font-size: 14px; }
+.jupyter-wrapper .jp-RenderedMarkdown table { font-size: 14px; }
+/* Outputs scroll horizontally like the code box. Jupyter's own CSS sets
+   white-space:pre-wrap (equal specificity, loaded after this file), so long
+   stdout/stderr lines wrapped and the block looked clipped, like a screenshot.
+   !important + a broad selector forces long lines to scroll, matching the input. */
+.jp-OutputArea-output pre,
+.jupyter-wrapper .jp-RenderedText pre,
+.jp-Notebook .jp-OutputArea-output pre {
+  white-space: pre !important;
+  overflow-x: auto !important;
+}
+/* stderr / stream output: Jupyter paints a pink (#ffdddd) backing, and that
+   pink also showed through the transparent scrollbar track as a "red line".
+   Neutralise it so warnings read on the same calm slate as normal output. */
+.jp-OutputArea-output[data-mime-type="application/vnd.jupyter.stderr"],
+.jupyter-wrapper .jp-OutputArea-output[data-mime-type="application/vnd.jupyter.stderr"] {
+  background: transparent !important;
+}
+.jp-OutputArea-output img {
+  max-width: 100%;
+  border-radius: 0.4rem;
+  box-shadow: var(--shadow-xs);
+  background: #ffffff;
+  padding: 0.4rem;
+}
+/* Drop the Jupyter "In [1]:" / "Out:" prompt gutter entirely: frees the full
+   width for the code/output (the cell layout reflows once the prompt is gone). */
+.jp-Notebook .jp-InputPrompt,
+.jp-Notebook .jp-OutputPrompt {
+  display: none !important;
+}
+.jp-Notebook .jp-OutputArea-output table.dataframe {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Notebook badge row */
+.nb-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.4rem;
+  align-items: center;
+}
+.nb-badges a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted) !important;
+  text-decoration: none !important;
+  border-radius: 0.4rem;
+  border-bottom: 1px solid var(--border) !important;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+}
+.nb-badges a:hover {
+  border-color: var(--brand-600) !important;
+  color: var(--brand-600) !important;
+  background: var(--brand-50);
+}
+[data-md-color-scheme="slate"] .nb-badges a:hover {
+  background: rgba(0, 174, 239, 0.1);
+}
+.nb-badges img { height: 14px; }
+.nb-badges svg { width: 13px; height: 13px; flex: 0 0 auto; }
+
+/* "You will learn" callout */
+.you-will-learn {
+  background: var(--brand-50);
+  border: 1px solid var(--brand-200);
+  border-left: 3px solid var(--brand-600);
+  padding: 1rem 1.3rem;
+  margin: 1.2rem 0 1.8rem;
+  font-size: 14px;          /* was 0.92rem (~20px), bigger than body; match admonition body */
+  border-radius: 0.5rem;
+}
+[data-md-color-scheme="slate"] .you-will-learn {
+  background: rgba(0, 174, 239, 0.08);
+  border-color: var(--border-strong);
+  border-left-color: var(--brand-600);
+}
+.you-will-learn::before {
+  content: "You will learn";
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-600);
+  margin-bottom: 0.5rem;
+}
+.you-will-learn ul { margin: 0; padding-left: 1.2rem; }
+.you-will-learn li { margin-bottom: 0.25rem; color: var(--text); }
+
+/* ---------- 20. Footer ---------- */
+
+.hero-footer {
+  text-align: center;
+  color: var(--text-muted);
+  margin-top: 3rem;
+  font-size: 0.92rem;
+  font-family: 'Inter', sans-serif;
+}
+.hero-footer a {
+  font-weight: 600;
+  color: var(--brand-600) !important;
+}
+.md-footer {
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.md-footer-meta { background: transparent; }
+
+/* ---------- 21. Blockquote ---------- */
+
+.md-typeset blockquote {
+  border-left: 3px solid var(--brand-600);
+  background: var(--bg-subtle);
+  color: var(--text);
+  padding: 0.7rem 1.1rem;
+  border-radius: 0 0.4rem 0.4rem 0;
+}
+
+/* ---------- 22. Search ---------- */
+
+.md-search__form {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  transition: border-color var(--dur-fast) var(--ease-out);
+  height: 2rem;
+}
+.md-search__form:hover { border-color: var(--border-strong); }
+.md-search.md-search--active .md-search__form,
+.md-search__form:focus-within {
+  border-color: var(--text);   /* black active border, not violet */
+}
+/* The focused input draws a violet :focus-visible halo by default: make it black */
+.md-search__input:focus-visible {
+  outline-color: var(--text) !important;
+}
+.md-search__input {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;            /* match the nav links (Home / Get started / …) */
+  color: var(--text);
+}
+.md-search__input::placeholder { color: var(--text-faint); font-size: 14px; }
+
+/* Narrower search box on desktop (the single-row header is tight on space).
+   Use .md-header specificity to beat Material's default .md-search__inner width. */
+@media screen and (min-width: 76.25em) {
+  .md-header .md-search__inner { width: 8rem; }
+  .md-header .md-search.md-search--active .md-search__inner,
+  .md-header .md-search__inner:focus-within { width: 17rem; }
+  /* The centred nav (.md-tabs) is position:absolute with z-index:3, so it
+     paints ON TOP of the (opaque white) search form (z-index:2): when the box
+     expands leftward over "Tutorials"/"API" the nav text showed through.
+     Lift the whole search subtree above the tabs so the opaque field covers
+     them. Collapsed, the search sits far right and never overlaps the nav. */
+  .md-header .md-search { z-index: 4; }
+  .md-search__form { height: 1.9rem; }
+  .md-search__input { padding-left: 1.9rem; font-size: 14px; }
+  /* magnifier icon (restored) sits left, sized to the smaller field */
+  .md-search__icon[for="__search"] { width: 1.1rem; height: 1.1rem; }
+}
+
+/* ---------- 23. Focus + selection + scrollbar + print ---------- */
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 2px;
+}
+.md-button:focus-visible { outline-offset: 3px; }
+
+::selection {
+  background: var(--brand-600);
+  color: #ffffff;
+}
+
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner { background: transparent !important; }
+/* Force a grey thumb in EVERY state. While actively dragging, Chrome on macOS
+   tints the thumb with the OS accent colour (red on some machines), hence
+   "sometimes grey, sometimes red". !important on :hover/:active overrides it. */
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active,
+::-webkit-scrollbar-thumb:window-inactive {
+  background: var(--border-strong) !important;
+  border-radius: 5px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-faint) !important; }
+
+@media print {
+  .md-header, .md-tabs, .md-sidebar, .md-footer,
+  .hero-cta, .hero-badges, .nb-badges, .hero-illustration { display: none !important; }
+  body { background: white; color: black; }
+  .md-typeset h1, .md-typeset h2 { color: black; }
+}
+
+/* ---------- 24. Misc ---------- */
+
+html { scroll-behavior: smooth; }
+/* clip (NOT hidden): still contains the features band's 100vmax over-wide
+   box-shadow so no horizontal scrollbar appears, but does NOT create a scroll
+   container, so the sticky left nav + right TOC keep working when scrolling. */
+html, body { overflow-x: clip; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .md-typeset .grid.cards { grid-template-columns: 1fr; }
+}
+
+/* Ecosystem tool-card eyebrow (INTEGRATE / BENCHMARK / …): the one blue accent */
+.lp-card .lp-card-kicker{
+  display:block;
+  font-size:.62rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--brand-600);
+  margin-bottom:.35rem;
+}
+
+/* Landing-page section headings (e.g. "Which tool do I need?") are decorative:
+   drop the permalink pilcrow so the hero/landing stays clean. */
+.lp .md-typeset .headerlink { display: none; }
+.lp .md-typeset h2 { font-family: 'Newsreader', 'Charter', Georgia, serif; font-weight: 600; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   DESIGN POLISH: frontend-design pass
+   Craft layered on the existing system. Palette-locked (ink / blue / grey, no
+   violet/green), subtle by intent (refined-minimal), reduced-motion-safe.
+   brand-600 = #0046ad (light) / #00aeef (dark); shadows use ink rgba.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Text selection in the brand accent (signature micro-detail) */
+::selection { background: rgba(0, 70, 173, 0.18); }
+[data-md-color-scheme="slate"] ::selection { background: rgba(0, 174, 239, 0.30); }
+
+/* Link cards lift on hover (depth + clear affordance) */
+.md-typeset .lp-card {
+  transition: border-color 220ms cubic-bezier(0.4,0,0.2,1),
+              background-color 220ms cubic-bezier(0.4,0,0.2,1),
+              transform 220ms cubic-bezier(0.4,0,0.2,1),
+              box-shadow 220ms cubic-bezier(0.4,0,0.2,1);
+}
+.md-typeset .lp-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px -18px rgba(15, 23, 42, 0.30);
+}
+[data-md-color-scheme="slate"] .md-typeset .lp-card:hover {
+  box-shadow: 0 18px 42px -16px rgba(0, 0, 0, 0.62);
+}
+
+/* Content pages get a gentle entrance on load (home keeps its bespoke reveals) */
+@media (prefers-reduced-motion: no-preference) {
+  body:not(.has-section-numbers) .md-content__inner {
+    animation: mto-rise-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  @keyframes mto-rise-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .lp-card:hover { transform: none; }
+}
+
+/* Top-nav tabs: a 2px underline that grows from the centre (replaces the
+     border-color fade). The CURRENT section's tab stays underlined: Material marks
+     the <li> as .md-tabs__item--active (not the link), shown with an ink underline
+     + ink label (black/white/grey only, no accent colour). */
+.md-tabs__link { border-bottom-color: transparent !important; }
+.md-tabs__link::after,
+.md-tabs__item--active .md-tabs__link::after {   /* re-enable ::after on hover + active */
+  content: "";
+  position: absolute;
+  left: 12px; right: 12px; bottom: -1px;
+  height: 2px;
+  background: var(--text);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 240ms cubic-bezier(0.4, 0, 0.2, 1), background-color 240ms ease;
+}
+.md-tabs__link:hover::after                  { transform: scaleX(1); background: var(--border-strong); }
+.md-tabs__item--active .md-tabs__link::after { transform: scaleX(1); background: var(--text); }
+.md-tabs__item--active .md-tabs__link        { color: var(--text) !important; font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .md-tabs__link::after { transition: none; }
+}
+
+/* Visible, on-brand focus rings (keyboard a11y + a crafted detail) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+.md-tabs__link:focus-visible,
+.md-nav__link:focus-visible,
+.md-typeset .lp-card-cover:focus-visible,
+.md-typeset .lp-cta:focus-visible {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Search results: compact + scannable. The result title was rendering in the
+     large page-title serif, which pushed real info off-screen. Pin everything to
+     small sans so many results stay visible at once. */
+.md-search-result__title {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+  margin: 0 !important;
+}
+.md-search-result__teaser {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  color: var(--text-muted) !important;
+}
+.md-search-result__meta {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+}
+.md-search-result mark { color: var(--brand-600); background: transparent; font-weight: 600; }
+
+/* Glossary A–Z jump bar (monochrome, matches the restrained nav language) */
+.md-typeset .g-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin: 0 0 1.6rem;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-subtle);
+}
+.md-typeset .g-nav a,
+.md-typeset .g-nav .g-nav-off {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px; height: 27px;
+  border-radius: 7px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+.md-typeset .g-nav a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 160ms, background-color 160ms, box-shadow 160ms;
+}
+.md-typeset .g-nav a:hover {
+  color: var(--text);
+  background: var(--bg);
+  box-shadow: var(--chip-shadow);
+}
+.md-typeset .g-nav .g-nav-off { color: var(--text-faint); }
+.g-anchor { scroll-margin-top: 130px; }   /* land below the sticky header */
+
+/* The "Open in Colab" button styling now ships INLINE in overrides/main.html (so a stale
+   cached extra.css can't revert its positioning). Intentionally not defined here. */

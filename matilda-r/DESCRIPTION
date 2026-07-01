@@ -1,0 +1,43 @@
+Package: matilda
+Type: Package
+Title: Multi-Task Learning from Single-Cell Multimodal Omics
+Version: 0.99.0
+Authors@R: c(
+    person("Chunlei", "Liu", role = "aut", email = "chunlei@cmri.com"),
+    person("Pengyi", "Yang", role = "aut"),
+    person("Sichang", "Ding", role = "cre", email = "usyddsc@gmail.com"))
+Description: R interface to Matilda, a multi-task framework for single-cell
+    multimodal omics (RNA, ADT, ATAC). Trains a multimodal variational
+    autoencoder plus classifier and runs cell-type classification, dimension
+    reduction, feature selection and data simulation. The original PyTorch
+    implementation is wrapped via 'reticulate' inside a 'basilisk'-managed
+    environment and operates on SingleCellExperiment and MultiAssayExperiment
+    objects, writing results back into the object.
+License: Apache License (>= 2)
+Encoding: UTF-8
+Imports:
+    methods,
+    basilisk,
+    reticulate,
+    rhdf5,
+    HDF5Array,
+    S4Vectors,
+    SummarizedExperiment,
+    SingleCellExperiment,
+    MultiAssayExperiment,
+    utils,
+    stats
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    Seurat,
+    scater,
+    uwot,
+    ggplot2
+SystemRequirements: Python (>= 3.7)
+biocViews: SingleCell, Classification, DimensionReduction, FeatureExtraction,
+    NeuralNetwork, Software
+Config/testthat/edition: 3
+StagedInstall: no
+RoxygenNote: 7.3.3

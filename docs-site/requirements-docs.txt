@@ -1,0 +1,5 @@
+# Build / preview the Matilda (Python + R) documentation site.
+# Usage: pip install -r requirements-docs.txt && mkdocs serve
+mkdocs-material
+mkdocs-jupyter
+pymdown-extensions

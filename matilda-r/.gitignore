@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+/*.tar.gz
+/*.Rcheck/
+
+# basilisk / reticulate caches
+__pycache__/
+*.pyc
+
+# rendered tutorial scratch
+inst/tutorials/*_files/
+inst/tutorials/*_cache/

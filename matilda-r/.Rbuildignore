@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.github$
+^\.DS_Store$
+^.*/\.DS_Store$
+^inst/python/matilda/.*/__pycache__$
+^inst/python/matilda/__pycache__$

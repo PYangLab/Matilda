@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Matilda run artifacts (written relative to CWD by the path-based API)
+trained_model/
+output/
+
+# Docs build output
+docs-site/site/
+docs-site/.cache/
+
+# Local promote tool (not shipped)
+/promote_to_pyanglab.sh
+
+# OS / editors
+.DS_Store
+.ipynb_checkpoints/

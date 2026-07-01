@@ -1,0 +1,44 @@
+# matilda-sc packaging.
+# Distribution name: matilda-sc   |   import name: matilda
+# Model code is UNCHANGED from the published engine; this round modernizes only
+# the call side (importability, I/O, return objects).
+
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "matilda-sc"
+version = "0.2.0"
+description = "Multi-task framework for single-cell multimodal data (classification, dimension reduction, feature selection, simulation, augmentation) across RNA / ADT / ATAC."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.8"
+authors = [{ name = "Chunlei Liu", email = "chunlei@cmri.com" }]
+maintainers = [{ name = "Sichang Ding", email = "usyddsc@gmail.com" }]
+keywords = ["single-cell", "multimodal", "deep-learning", "CITE-seq", "TEA-seq", "scRNA-seq", "ATAC"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "torch",
+    # captum is pinned to match the R package's bundled (basilisk) stack: its Integrated
+    # Gradients output drives the feature-selection / marker scores, and it changes across
+    # captum versions — so R and Python only give the same markers on the same captum.
+    # (captum is pure-Python, so this pin installs on any Python / torch.)
+    "captum==0.7.0",
+    "h5py",
+    "numpy",
+    "pandas",
+    "scipy",
+    "tqdm",
+    "anndata",   # AnnData is the object-API I/O type; keeps plain `pip install matilda-sc` fully working
+]
+
+[project.urls]
+Homepage = "https://github.com/PYangLab/Matilda"
+
+[tool.setuptools.packages.find]
+where = ["src"]

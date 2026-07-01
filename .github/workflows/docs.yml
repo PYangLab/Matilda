@@ -1,0 +1,29 @@
+name: Deploy docs
+
+# Builds the MkDocs site in docs-site/ and publishes it to the repo's gh-pages
+# branch. Serves at https://pyanglab.github.io/Matilda/.
+# After the first run, enable Pages (Settings -> Pages -> Source: gh-pages branch).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs-site/**'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r docs-site/requirements-docs.txt
+      - name: Build and deploy
+        working-directory: docs-site
+        run: mkdocs gh-deploy --force --no-history

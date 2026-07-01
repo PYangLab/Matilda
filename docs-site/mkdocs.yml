@@ -1,0 +1,172 @@
+site_name: Matilda
+site_description: "Matilda, multi-task learning for single-cell multimodal omics (RNA + ADT + ATAC): classification, dimension reduction, feature selection, simulation. One model, in Python and R."
+site_author: PYangLab
+site_url: https://pyanglab.github.io/Matilda/
+repo_url: https://github.com/PYangLab/Matilda
+repo_name: PYangLab/Matilda
+
+docs_dir: docs
+
+# Keep the abbreviations snippet include out of the published site (auto-appended, not a page).
+exclude_docs: |
+  includes/abbreviations.md
+
+theme:
+  name: material
+  language: en
+  custom_dir: overrides
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  features:
+    # Navigation
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - navigation.path
+    - navigation.tracking
+    - navigation.instant
+    - navigation.instant.progress
+    # TOC
+    - toc.follow
+    # Search
+    - search.highlight
+    # Code
+    - content.code.copy
+    - content.code.annotate
+    - content.code.select
+    # Tabs
+    - content.tabs.link
+    # Announce
+    - announce.dismiss
+    # Header
+    - header.autohide
+    # Footer
+    - navigation.footer
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: light blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: light blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Get started:
+      - Installation: installation.md
+      - Quickstart: quickstart.md
+  - Tutorials:
+      - Python: tutorial-python.ipynb
+      - R: tutorial-r.md
+  - How Matilda works: overview.md
+  - API reference:
+      - Python: api-python.md
+      - R: api-r.md
+  - Citation: citation.md
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - mkdocs-jupyter:
+      execute: false
+      include_source: true
+      ignore_h1_titles: true
+      allow_errors: false
+      include_requirejs: true
+      theme: auto
+      remove_tag_config:
+        remove_input_tags:
+          - hide_input
+        remove_all_outputs_tags:
+          - hide_output
+        remove_cell_tags:
+          - hide_cell
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      permalink_title: Anchor link to this section
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      use_pygments: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.snippets:
+      check_paths: true
+      base_path:
+        - !relative $config_dir/docs
+      auto_append:
+        - includes/abbreviations.md
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js
+  - javascripts/animations.js
+  - javascripts/ui-tweaks.js
+  - javascripts/mermaid-init.js
+  # MathJax config MUST load before the MathJax CDN (it sets window.MathJax and the
+  # document$ re-typeset hook so equations render under navigation.instant).
+  - javascripts/mathjax.js
+  # NOTE: do NOT re-add polyfill.io; that domain was hijacked in 2024. MathJax 3
+  # needs no polyfill on modern browsers.
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/PYangLab
+      name: PYangLab on GitHub
+  status:
+    new: Recently added
+    deprecated: Deprecated
