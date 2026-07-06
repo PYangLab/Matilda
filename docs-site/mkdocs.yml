@@ -46,7 +46,7 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: black
+      primary: white
       accent: light blue
       toggle:
         icon: material/weather-night

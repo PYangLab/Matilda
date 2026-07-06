@@ -110,9 +110,10 @@
 /* ---------- 1.2 Material's tokens ---------- */
 
 :root {
-  --md-primary-fg-color:        var(--slate-900);
-  --md-primary-fg-color--light: var(--slate-700);
-  --md-primary-fg-color--dark:  #000000;
+  /* Day-mode header is white (dark text/icons); matches palette primary: white. */
+  --md-primary-fg-color:        #ffffff;
+  --md-primary-fg-color--light: #f1f5f9;
+  --md-primary-fg-color--dark:  #e2e8f0;
   --md-accent-fg-color:         var(--brand-600);
   --md-typeset-a-color:         var(--brand-600);
   --md-default-bg-color:        var(--bg);
