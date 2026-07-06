@@ -15,32 +15,63 @@ tags:
 
 ## End to end in five lines
 
-The example below runs the full workflow on TEA-seq (RNA + ADT + ATAC): **train → reduce →
-classify → markers → simulate**. In Python you pass in-memory `AnnData` (one per modality) to
-`matilda.train()` then the task verbs; in R you pass a `SingleCellExperiment` (SCE) and let the
-model ride along inside the object.
+The example below is **self-contained**: it downloads the TEA-seq (RNA + ADT + ATAC) demo
+(~75 MB, cached after the first run), then runs the full workflow — **train → reduce → classify →
+markers → simulate**. Copy-paste and run. In Python you pass in-memory `AnnData` (one per
+modality) to `matilda.train()` then the task verbs; in R you pass a `SingleCellExperiment` (SCE)
+and let the model ride along inside the object.
 
 === "Python"
 
     ```python
     import matilda
-    # rna/adt/atac (reference) and q_rna/q_adt/q_atac (held-out query): one AnnData per modality,
-    # with the reference labels in rna.obs["cell_type"] (load: see Installation). labels= also
-    # accepts a label vector or a path to a label .csv.
+    from matilda import io
+    import os, urllib.request, tarfile, pandas as pd
 
-    fit = matilda.train(rna, adt, atac, labels="cell_type")        # 1. train (one shared model)
-    red = matilda.reduce({"rna": rna, "adt": adt, "atac": atac}, model=fit)             # 2. latent space
-    res = matilda.classify({"rna": q_rna, "adt": q_adt, "atac": q_atac}, model=fit)     # 3. cell types
-    mk  = matilda.markers({"rna": rna, "adt": adt, "atac": atac}, model=fit, labels="cell_type")  # 4. markers
+    # demo data: download + cache the TEA-seq demo (~75 MB, first run only)
+    DATA = os.path.expanduser("~/.cache/matilda/matilda_teaseq_demo")
+    if not os.path.isdir(DATA):
+        url = "https://github.com/PYangLab/Matilda/releases/download/demo-data/matilda_teaseq_demo.tar.gz"
+        os.makedirs(os.path.dirname(DATA), exist_ok=True)
+        tgz, _ = urllib.request.urlretrieve(url)
+        tarfile.open(tgz).extractall(os.path.dirname(DATA))
+    rna, adt, atac       = (io.read_matilda_h5(f"{DATA}/train_{m}.h5") for m in ("rna", "adt", "atac"))  # reference
+    q_rna, q_adt, q_atac = (io.read_matilda_h5(f"{DATA}/test_{m}.h5")  for m in ("rna", "adt", "atac"))  # held-out query
+    labels = pd.read_csv(f"{DATA}/train_cty.csv", index_col=0).iloc[:, 0].values
+
+    fit = matilda.train(rna, adt, atac, labels=labels)                                # 1. train (one shared model)
+    red = matilda.reduce({"rna": rna, "adt": adt, "atac": atac}, model=fit)           # 2. latent space
+    res = matilda.classify({"rna": q_rna, "adt": q_adt, "atac": q_atac}, model=fit)   # 3. cell types
+    mk  = matilda.markers({"rna": rna, "adt": adt, "atac": atac}, model=fit, labels=labels)  # 4. markers
     sim = matilda.simulate({"rna": rna, "adt": adt, "atac": atac}, model=fit,
-                           celltype="B.Naive", n=200, labels="cell_type")               # 5. synthetic cells
+                           celltype="B.Naive", n=200, labels=labels)                  # 5. synthetic cells
     ```
 
 === "R"
 
     ```r
     library(matilda)
-    # sce, query: SingleCellExperiment objects (see Installation for loading your data)
+    library(SingleCellExperiment)
+
+    # demo data: download + cache the TEA-seq demo (~75 MB, first run only)
+    dir <- matilda_download_example()
+    read_h5 <- function(path) {                                 # native Matilda .h5 -> features x cells
+      m     <- rhdf5::h5read(path, "matrix/data")
+      feats <- as.character(rhdf5::h5read(path, "matrix/features"))
+      cells <- as.character(rhdf5::h5read(path, "matrix/barcodes"))
+      if (nrow(m) == length(cells) && ncol(m) == length(feats)) m <- t(m)
+      dimnames(m) <- list(feats, cells); m
+    }
+    make_sce <- function(split) {                               # build an SCE for "train" or "test"
+      h5  <- function(mod) file.path(dir, sprintf("%s_%s.h5", split, mod))
+      sce <- SingleCellExperiment(assays = list(counts = read_h5(h5("rna"))))
+      altExp(sce, "ADT")  <- SummarizedExperiment(list(counts = read_h5(h5("adt"))))
+      altExp(sce, "ATAC") <- SummarizedExperiment(list(counts = read_h5(h5("atac"))))
+      sce$cell_type <- as.character(read.csv(file.path(dir, sprintf("%s_cty.csv", split)), header = FALSE)[[2]])[-1]
+      sce
+    }
+    sce   <- make_sce("train")                                  # reference
+    query <- make_sce("test")                                   # held-out query
 
     sce   <- matilda_train(sce, label = "cell_type")    # 1. train (model stored in the object)
     sce   <- matilda_reduce(sce)                         # 2. reducedDim "MATILDA"
