@@ -71,5 +71,8 @@ happened. See the [Quickstart](https://pyanglab.github.io/Matilda/quickstart/) a
 
 ## Citation
 
-If you use Matilda, please cite the Matilda paper (see the
-[Citation](https://pyanglab.github.io/Matilda/citation/) page).
+If you use Matilda, please cite the Matilda paper 
+
+Liu C, Huang H, Yang P. Multi-task learning from multimodal single-cell omics with Matilda. Nucleic Acids Research, 51(8), e45 (2023). https://doi.org/10.1093/nar/gkad157
+
+(see the[Citation](https://pyanglab.github.io/Matilda/citation/) page).
