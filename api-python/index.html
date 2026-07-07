@@ -1,0 +1,1746 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Matilda, multi-task learning for single-cell multimodal omics (RNA + ADT + ATAC): classification, dimension reduction, feature selection, simulation. One model, in Python and R.">
+      
+      
+        <meta name="author" content="PYangLab">
+      
+      
+        <link rel="canonical" href="https://pyanglab.github.io/Matilda/api-python/">
+      
+      
+        <link rel="prev" href="../overview/">
+      
+      
+        <link rel="next" href="../api-r/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Python - Matilda</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+  <style>
+    /* Colab-button styling shipped INLINE with the page HTML (not via the separately-cached
+       extra.css), so a stale cached stylesheet can't revert it. Absolute (not float) so it
+       doesn't squeeze mkdocs-jupyter's .jp-Notebook narrower, and above the .jupyter-wrapper
+       (z-index:2) so it stays clickable. */
+    .md-typeset a.colab-button { position: absolute; top: 0.2rem; right: 0; z-index: 3; margin: 0; line-height: 0; }
+    .md-typeset a.colab-button img { height: 1.55rem; width: auto; display: block; }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#python-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Matilda" class="md-header__button md-logo" aria-label="Matilda" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Matilda
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Python
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PYangLab/Matilda" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PYangLab/Matilda
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../installation/" class="md-tabs__link">
+          
+  
+  
+  Get started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../tutorial-python/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  How Matilda works
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  API reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../citation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Citation
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Matilda" class="md-nav__button md-logo" aria-label="Matilda" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    Matilda
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PYangLab/Matilda" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PYangLab/Matilda
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Get started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial-python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial-r/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How Matilda works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Training">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matildatrain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        matilda.train()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        classify()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reduce()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#markers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        markers()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simulate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        simulate()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        task()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-io-helpers-matildaio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data / IO helpers (matilda.io)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lower-level-function-api-file-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lower-level function API (file paths)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#r-python-correspondence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        R ⇄ Python correspondence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="R ⇄ Python correspondence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reference-query-with-mismatched-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference → query with mismatched features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-r/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../citation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Citation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Training">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matildatrain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        matilda.train()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        classify()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reduce()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#markers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        markers()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simulate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        simulate()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        task()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-io-helpers-matildaio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data / IO helpers (matilda.io)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lower-level-function-api-file-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lower-level function API (file paths)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#r-python-correspondence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        R ⇄ Python correspondence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="R ⇄ Python correspondence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reference-query-with-mismatched-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference → query with mismatched features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href=".." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="./" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    API reference
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+  
+  
+  
+                  
+
+
+  
+  
+
+
+<h1 id="python-api">Python API<a class="headerlink" href="#python-api" title="Anchor link to this section">&para;</a></h1>
+<p>The Python interface is the <strong><code>matilda-sc</code></strong> package (import name <code>matilda</code>). The high-level
+<strong>object API</strong> is <code>matilda.train()</code> plus one verb per task (<code>matilda.classify()</code> /
+<code>matilda.reduce()</code> / <code>matilda.markers()</code> / <code>matilda.simulate()</code>), which take in-memory <code>AnnData</code>
+(or <code>{"rna","adt","atac"}</code> dicts) and return result objects. Each maps <strong>one-to-one</strong> to a verb in
+the <a href="../api-r/">R API</a>, and the two produce the same results.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>matilda-sc
+</span></code></pre></div>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matilda</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">matilda</span><span class="w"> </span><span class="kn">import</span> <span class="n">io</span>                  <span class="c1"># AnnData &lt;-&gt; Matilda format converters</span>
+</span></code></pre></div>
+<p>Modes are auto-detected from which modalities you pass: supplying <code>adt</code> and <code>atac</code> selects
+<strong>TEA-seq</strong> (<abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr>+<abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr>+<abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr>), <code>adt</code> only selects <strong><abbr title="Cellular Indexing of Transcriptomes and Epitopes by sequencing">CITE-seq</abbr></strong> (<abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr>+<abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr>), <code>atac</code> only selects
+<strong>SHARE-seq</strong> (<abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr>+<abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr>), and <abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> alone selects <strong>rna_only</strong>. Pass <code>None</code> (or just omit) for any
+modality you are not using.</p>
+<hr />
+<h2 id="training">Training<a class="headerlink" href="#training" title="Anchor link to this section">&para;</a></h2>
+<h3 id="matildatrain"><code>matilda.train()</code><a class="headerlink" href="#matildatrain" title="Anchor link to this section">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">matilda</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span> <span class="n">adt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">atac</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>              <span class="n">z_dim</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">hidden_rna</span><span class="o">=</span><span class="mi">185</span><span class="p">,</span> <span class="n">hidden_adt</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">hidden_atac</span><span class="o">=</span><span class="mi">185</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>              <span class="n">augmentation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Train a Matilda model from in-memory objects and return a <a href="#results"><code>TrainResult</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rna</code> <em>(required)</em></td>
+<td><abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> modality: <code>AnnData</code> | <code>ndarray</code> | <code>scipy.sparse</code> | path | <code>None</code></td>
+</tr>
+<tr>
+<td><code>adt</code>, <code>atac</code></td>
+<td>optional <abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr> / <abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr> modalities (same accepted types); which are present selects the mode</td>
+</tr>
+<tr>
+<td><code>labels</code> <em>(required)</em></td>
+<td>cell-type labels: a vector, an <code>.obs</code> column name (resolved against <code>rna</code>), or a <code>.csv</code> path (strings or numbers; no missing values)</td>
+</tr>
+<tr>
+<td><code>epochs</code>, <code>lr</code>, <code>batch_size</code>, <code>z_dim</code>, <code>hidden_rna</code>, <code>hidden_adt</code>, <code>hidden_atac</code>, <code>seed</code></td>
+<td>training hyperparameters (defaults match upstream Matilda)</td>
+</tr>
+<tr>
+<td><code>augmentation</code></td>
+<td>if <code>True</code>, run the class-balancing <abbr title="Variational Autoencoder">VAE</abbr>-augmentation stage before refitting</td>
+</tr>
+<tr>
+<td><code>out_dir</code></td>
+<td>persist the model here (relative paths resolve against the caller's CWD); else a temp dir kept for the session (<code>result.model_dir</code>)</td>
+</tr>
+<tr>
+<td><code>device</code></td>
+<td><code>"auto"</code> (<abbr title="Graphics Processing Unit">GPU</abbr> if available), <code>"cuda"</code>, or <code>"cpu"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns</strong> a <code>TrainResult</code> carrying <code>.model_path</code>, <code>.mode</code>, <code>.classes</code>, and <code>.features</code> (the
+per-modality ordered feature names, used by <code>classify</code> to reuse the model on a matching query).</p>
+<hr />
+<h2 id="tasks">Tasks<a class="headerlink" href="#tasks" title="Anchor link to this section">&para;</a></h2>
+<p>After <code>train</code>, run <strong>one verb per task</strong>. Each takes the data (an <code>AnnData</code> or a
+<code>{"rna","adt","atac"}</code> dict) plus the <code>TrainResult</code>, and returns a <a href="#results"><code>TaskResult</code></a> with only
+the relevant fields populated.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#classify"><code>classify()</code></a></td>
+<td>predict cell types (automatic feature reconciliation) → <code>.predictions</code>, <code>.celltype_accuracy</code></td>
+</tr>
+<tr>
+<td><a href="#reduce"><code>reduce()</code></a></td>
+<td>project into the integrated latent space → <code>.latent</code></td>
+</tr>
+<tr>
+<td><a href="#markers"><code>markers()</code></a></td>
+<td>per-cell-type feature importance → <code>.markers</code></td>
+</tr>
+<tr>
+<td><a href="#simulate"><code>simulate()</code></a></td>
+<td>synthetic cells from the <abbr title="Variational Autoencoder">VAE</abbr> → <code>.simulated</code></td>
+</tr>
+<tr>
+<td><a href="#task"><code>task()</code></a></td>
+<td>the combinable call the verbs wrap: run any mix of the four in one engine pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="classify"><code>classify()</code><a class="headerlink" href="#classify" title="Anchor link to this section">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">matilda</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>                 <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">z_dim</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">hidden_rna</span><span class="o">=</span><span class="mi">185</span><span class="p">,</span> <span class="n">hidden_adt</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>                 <span class="n">hidden_atac</span><span class="o">=</span><span class="mi">185</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">augmentation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Label <code>query</code> cells against a trained model. <strong>It reconciles features automatically</strong>, so the call
+is the same whether or not the panels match: if the query carries every feature the model was
+trained on (equal panel, or a superset) it slices the query to the model's features and <strong>reuses</strong>
+the model (no retrain); if the query is missing some (the common cross-dataset case) it takes the
+per-modality <strong>intersection</strong> of <code>reference</code> and <code>query</code> (reference order, real values, <strong>no
+zero-padding</strong>), <strong>retrains</strong> on it, and classifies.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>query</code></td>
+<td>cells to label: <code>AnnData</code> or <code>{"rna","adt","atac"}</code></td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>a <code>TrainResult</code>; enables the no-retrain reuse path (omit for pure cross-dataset transfer)</td>
+</tr>
+<tr>
+<td><code>reference</code>, <code>labels</code></td>
+<td>the labelled reference + its labels, required only when a retrain is needed</td>
+</tr>
+<tr>
+<td><code>query_labels</code></td>
+<td>optional ground-truth labels for the query (adds the per-cell-type accuracy report)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns</strong> a <code>TaskResult</code>: <code>.predictions</code> (DataFrame: <code>cell_id</code>, <code>real</code>, <code>predicted</code>,
+<code>probability</code>), <code>.celltype_accuracy</code>, <code>.retrained</code> (which path ran), and <code>.common_features</code>
+(per-modality feature counts used).</p>
+<h3 id="reduce"><code>reduce()</code><a class="headerlink" href="#reduce" title="Anchor link to this section">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">matilda</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Project <code>data</code> into the model's integrated latent space (the embedding that fuses all modalities).
+<code>labels</code> is optional (only to annotate the coordinates). <strong>Returns</strong> <code>.latent</code> (cells × <code>z_dim</code>).</p>
+<h3 id="markers"><code>markers()</code><a class="headerlink" href="#markers" title="Anchor link to this section">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">matilda</span><span class="o">.</span><span class="n">markers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;IntegratedGradient&quot;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Per-cell-type feature importance via Captum. <code>method</code> is <code>"IntegratedGradient"</code> (default) or
+<code>"Saliency"</code>. <code>labels</code> groups cells by type. <strong>Returns</strong> <code>.markers</code>, a tidy
+<code>DataFrame(celltype, feature, importance)</code>.</p>
+<h3 id="simulate"><code>simulate()</code><a class="headerlink" href="#simulate" title="Anchor link to this section">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">matilda</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">celltype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_real</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Generate <code>n</code> synthetic cells of <code>celltype</code> from the trained <abbr title="Variational Autoencoder">VAE</abbr> (<code>celltype=None</code> reconstructs all
+cells). <strong>Returns</strong> <code>.simulated</code>, the per-modality matrices + labels; add <code>include_real=True</code> to also
+get the matched real reference cells (same feature space) for real-vs-simulated comparison.</p>
+<h3 id="task"><code>task()</code><a class="headerlink" href="#task" title="Anchor link to this section">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">matilda</span><span class="o">.</span><span class="n">task</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span> <span class="n">adt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">atac</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classification</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>             <span class="n">dim_reduce</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fs_method</span><span class="o">=</span><span class="s2">&quot;IntegratedGradient&quot;</span><span class="p">,</span> <span class="n">simulation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>             <span class="n">simulation_ct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">simulation_num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_real</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The low-level <strong>combinable</strong> call the verbs wrap: enable any mix of <code>classification</code> / <code>dim_reduce</code> /
+<code>fs</code> / <code>simulation</code> and they run in a single engine pass (the model loads once). <code>query=True</code> marks
+the input as a held-out query. The verbs above are thin shortcuts over this.</p>
+<hr />
+<h2 id="results">Results<a class="headerlink" href="#results" title="Anchor link to this section">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Key attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TrainResult</code></td>
+<td><code>model_path</code>, <code>model_dir</code>, <code>mode</code>, <code>classes</code>, <code>features</code> (per-modality ordered feature names)</td>
+</tr>
+<tr>
+<td><code>TaskResult</code></td>
+<td><code>predictions</code>, <code>celltype_accuracy</code>, <code>latent</code>, <code>latent_labels</code>, <code>markers</code>, <code>simulated</code>, <code>retrained</code>, <code>common_features</code> (only the requested fields are populated)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="data-io-helpers-matildaio">Data / IO helpers (<code>matilda.io</code>)<a class="headerlink" href="#data-io-helpers-matildaio" title="Anchor link to this section">&para;</a></h2>
+<p>Convert between standard single-cell objects and Matilda's on-disk format:</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>io.read_matilda_h5(path)</code></td>
+<td>read a Matilda <code>.h5</code> matrix into an <code>AnnData</code> (cells × features)</td>
+</tr>
+<tr>
+<td><code>io.to_matilda_h5(obj, path)</code></td>
+<td>write an <code>AnnData</code> / array to Matilda's <code>.h5</code> layout</td>
+</tr>
+<tr>
+<td><code>io.to_matilda_cty(labels, path)</code></td>
+<td>write a label vector to Matilda's cty <code>.csv</code></td>
+</tr>
+<tr>
+<td><code>io.from_10x(dir)</code></td>
+<td>read a 10x mtx directory into an <code>AnnData</code> (keeps <abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr>/<abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr> features)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="lower-level-function-api-file-paths">Lower-level function API (file paths)<a class="headerlink" href="#lower-level-function-api-file-paths" title="Anchor link to this section">&para;</a></h2>
+<p>The original engine functions remain importable for power users / validation. They take Matilda's
+on-disk <code>.h5</code> + <code>.csv</code> <strong>paths</strong> and write outputs under <code>../trained_model/</code> and <code>../output/</code>; the
+object API above wraps them and returns results in memory.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">matilda</span><span class="w"> </span><span class="kn">import</span> <span class="n">main_train</span><span class="p">,</span> <span class="n">main_task</span><span class="p">,</span> <span class="n">rna_train</span><span class="p">,</span> <span class="n">rna_task</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">main_train</span><span class="p">(</span><span class="s2">&quot;rna.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;adt.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;atac.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;cty.csv&quot;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>             <span class="c1"># adt/atac: &quot;NULL&quot; to omit</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">main_task</span><span class="p">(</span><span class="s2">&quot;rna.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;adt.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;atac.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;cty.csv&quot;</span><span class="p">,</span> <span class="n">classification</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span></code></pre></div>
+<p><code>main_train</code> / <code>main_task</code> take the same hyperparameters as <code>train</code> / <code>task</code> (as keyword arguments)
+plus the modality paths positionally; <code>rna_train</code> / <code>rna_task</code> are the <abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr>-only counterparts.
+Each <code>main_matilda_*</code> module is also runnable directly as a script (e.g.
+<code>python -m matilda.main_matilda_train</code>), reading the same options from the command line. Pass the
+string <code>"NULL"</code> for any modality path you are not using.</p>
+<hr />
+<h2 id="r-python-correspondence">R ⇄ Python correspondence<a class="headerlink" href="#r-python-correspondence" title="Anchor link to this section">&para;</a></h2>
+<p>Both languages share the same shape: <strong><code>train()</code></strong> plus <strong>one verb per task</strong>
+(<code>classify</code> / <code>reduce</code> / <code>markers</code> / <code>simulate</code>), with a <strong>combinable <code>task()</code></strong> underneath that
+runs any mix of tasks in one call (the verbs wrap it). The engine code is identical.</p>
+<table>
+<thead>
+<tr>
+<th>R</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>matilda_train</code> / <code>matilda_train_files</code></td>
+<td><code>matilda.train(...)</code></td>
+</tr>
+<tr>
+<td><code>matilda_classify(query, reference, label, query_label)</code></td>
+<td><code>matilda.classify(query, model=, reference=, labels=, query_labels=)</code></td>
+</tr>
+<tr>
+<td><code>matilda_reduce</code></td>
+<td><code>matilda.reduce(data, model=)</code></td>
+</tr>
+<tr>
+<td><code>matilda_markers</code></td>
+<td><code>matilda.markers(data, model=, method=)</code></td>
+</tr>
+<tr>
+<td><code>matilda_simulate</code></td>
+<td><code>matilda.simulate(data, model=, celltype=, n=)</code></td>
+</tr>
+<tr>
+<td><code>matilda_task(..., classification=, dim_reduce=, fs=, simulation=)</code></td>
+<td><code>matilda.task(..., classification=, dim_reduce=, fs=, simulation=)</code></td>
+</tr>
+<tr>
+<td><code>matilda_task_files</code> / file-path inputs</td>
+<td>engine <code>main_task(...)</code> / <code>rna_task(...)</code> (raw file paths; pre-trained model)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>One idiomatic difference, kept on purpose:</strong> R writes results back into the object and
+returns it (<code>sce$matilda_pred</code>, <code>reducedDim(sce,"MATILDA")</code>, <code>metadata(sce)$matilda_markers</code>),
+the Bioconductor pattern, while Python returns a <code>TaskResult</code> / <code>TrainResult</code>. The <em>structure</em>
+(<code>train</code> + the task verbs over a combinable <code>task()</code>) is the same on both sides.</p>
+<h3 id="reference-query-with-mismatched-features">Reference → query with mismatched features<a class="headerlink" href="#reference-query-with-mismatched-features" title="Anchor link to this section">&para;</a></h3>
+<p>When the query and reference don't share the same features (the query is missing some and/or
+has extras, the usual case across datasets), <strong><code>classify</code> handles it automatically</strong> with the same
+call, no separate function. If the query carries every feature the model needs it reuses the
+model; if it is missing some, <code>classify</code> takes the per-modality <strong>feature intersection</strong> (in
+reference order), retrains on it, and applies it to the query (<strong>real values only, never
+zero-padding</strong>):</p>
+<p><div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">matilda</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span>                    <span class="c1"># query: AnnData or {&quot;rna&quot;,&quot;adt&quot;,&quot;atac&quot;}</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>                          <span class="n">reference</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rna&quot;</span><span class="p">:</span> <span class="n">rna</span><span class="p">,</span> <span class="s2">&quot;adt&quot;</span><span class="p">:</span> <span class="n">adt</span><span class="p">,</span> <span class="s2">&quot;atac&quot;</span><span class="p">:</span> <span class="n">atac</span><span class="p">},</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>                          <span class="n">labels</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">query_labels</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">)</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">result</span><span class="o">.</span><span class="n">predictions</span>         <span class="c1"># query cell-type predictions</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">result</span><span class="o">.</span><span class="n">retrained</span>           <span class="c1"># True if it reconciled features + retrained, False if it reused the model</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">result</span><span class="o">.</span><span class="n">common_features</span>     <span class="c1"># per-modality feature counts actually used</span>
+</span></code></pre></div>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">out</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_classify</span><span class="p">(</span><span class="n">query_sce</span><span class="p">,</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reference_sce</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;cell_type&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+You pass the reference alongside the query so a retrain is possible when needed (a different
+query → a different intersection → its own model). Only modalities present in both are used.</p>
+<hr />
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Anchor link to this section">&para;</a></h2>
+<ul>
+<li><a href="../tutorial-python/">Python tutorial</a></li>
+<li><a href="../api-r/">R API</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../overview/" class="md-footer__link md-footer__link--prev" aria-label="Previous: How Matilda works">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                How Matilda works
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../api-r/" class="md-footer__link md-footer__link--next" aria-label="Next: R">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                R
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/PYangLab" target="_blank" rel="noopener" title="PYangLab on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.path", "navigation.tracking", "navigation.instant", "navigation.instant.progress", "toc.follow", "search.highlight", "content.code.copy", "content.code.annotate", "content.code.select", "content.tabs.link", "announce.dismiss", "header.autohide", "navigation.footer"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+      
+        <script src="../javascripts/animations.js"></script>
+      
+        <script src="../javascripts/ui-tweaks.js"></script>
+      
+        <script src="../javascripts/mermaid-init.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

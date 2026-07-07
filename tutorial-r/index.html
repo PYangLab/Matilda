@@ -1,0 +1,1638 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Matilda, multi-task learning for single-cell multimodal omics (RNA + ADT + ATAC): classification, dimension reduction, feature selection, simulation. One model, in Python and R.">
+      
+      
+        <meta name="author" content="PYangLab">
+      
+      
+        <link rel="canonical" href="https://pyanglab.github.io/Matilda/tutorial-r/">
+      
+      
+        <link rel="prev" href="../tutorial-python/">
+      
+      
+        <link rel="next" href="../overview/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>R - Matilda</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+  <style>
+    /* Colab-button styling shipped INLINE with the page HTML (not via the separately-cached
+       extra.css), so a stale cached stylesheet can't revert it. Absolute (not float) so it
+       doesn't squeeze mkdocs-jupyter's .jp-Notebook narrower, and above the .jupyter-wrapper
+       (z-index:2) so it stays clickable. */
+    .md-typeset a.colab-button { position: absolute; top: 0.2rem; right: 0; z-index: 3; margin: 0; line-height: 0; }
+    .md-typeset a.colab-button img { height: 1.55rem; width: auto; display: block; }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#matilda-in-r" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Matilda" class="md-header__button md-logo" aria-label="Matilda" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Matilda
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              R
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PYangLab/Matilda" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PYangLab/Matilda
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../installation/" class="md-tabs__link">
+          
+  
+  
+  Get started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../tutorial-python/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  How Matilda works
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api-python/" class="md-tabs__link">
+          
+  
+  
+  API reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../citation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Citation
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Matilda" class="md-nav__button md-logo" aria-label="Matilda" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    Matilda
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PYangLab/Matilda" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PYangLab/Matilda
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Get started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial-python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-read-your-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Read your data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Read your data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#format-a-native-matilda-h5-rhdf5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format A: native Matilda .h5 (rhdf5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-b-h5ad-anndata-scanpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format B: .h5ad (AnnData / scanpy)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-c-10x-cellranger-seuratread10x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format C: 10x CellRanger (Seurat::Read10X)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-d-a-seurat-object-rds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format D: a Seurat object (.rds)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-train-the-matilda-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Train the Matilda model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-classification-held-out-query-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Classification (held-out query cells)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dimension-reduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Dimension reduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-feature-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Feature selection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Simulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-modality-combinations-matilda-supports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Modality combinations Matilda supports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-session-info" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Session info
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How Matilda works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-r/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../citation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Citation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-read-your-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Read your data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Read your data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#format-a-native-matilda-h5-rhdf5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format A: native Matilda .h5 (rhdf5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-b-h5ad-anndata-scanpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format B: .h5ad (AnnData / scanpy)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-c-10x-cellranger-seuratread10x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format C: 10x CellRanger (Seurat::Read10X)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#format-d-a-seurat-object-rds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Format D: a Seurat object (.rds)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-train-the-matilda-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Train the Matilda model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-classification-held-out-query-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Classification (held-out query cells)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dimension-reduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Dimension reduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-feature-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Feature selection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Simulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-modality-combinations-matilda-supports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Modality combinations Matilda supports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-session-info" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Session info
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href=".." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../tutorial-python/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+  
+  
+    <a class="colab-button"
+       href="https://colab.research.google.com/github/PYangLab/Matilda/blob/main/matilda-r/inst/colab/tutorial-r.ipynb"
+       target="_blank" rel="noopener"
+       title="Open this tutorial in Google Colab">
+      <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
+    </a>
+  
+  
+                  
+
+
+  
+  
+
+
+<h1 id="matilda-in-r">Matilda in R<a class="headerlink" href="#matilda-in-r" title="Anchor link to this section">&para;</a></h1>
+<p>Python users see <a href="../tutorial-python/">the Python tutorial</a>.</p>
+<p>The complete Matilda workflow in <strong>R</strong> on real <strong>TEA-seq</strong> (<abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> + <abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr> + <abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr>): read your data →
+train → classification → dimension reduction → feature selection → simulation, plus a look at the
+different data types Matilda supports. Python users: a parallel tutorial with the same structure
+is available as a Jupyter notebook.</p>
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Anchor link to this section">&para;</a></h2>
+<ul>
+<li><strong>R</strong>: <code>matilda</code>, <code>SingleCellExperiment</code>; <code>Seurat</code> for the <code>10x</code> and <code>.rds</code> loaders; <code>scater</code>
+  for the latent-space <abbr title="Uniform Manifold Approximation and Projection">UMAP</abbr>; <code>uwot</code> for the per-modality simulation <abbr title="Uniform Manifold Approximation and Projection">UMAP</abbr> (§6); <code>ggplot2</code> for plots.</li>
+<li><strong>Python</strong>: none. <code>matilda</code> provisions it via <code>basilisk</code> on the first <code>matilda_train()</code>.</li>
+<li><strong>Demo data</strong>: downloaded automatically by <code>matilda_download_example()</code> (~75 MB, cached locally).</li>
+</ul>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">library</span><span class="p">(</span><span class="n">matilda</span><span class="p">)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nf">library</span><span class="p">(</span><span class="n">SingleCellExperiment</span><span class="p">)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">                               </span><span class="c1"># plots below use ggplot()/aes() directly</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">data_dir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_download_example</span><span class="p">()</span><span class="w">         </span><span class="c1"># downloads + caches the TEA-seq demo, returns the path</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">demo_h5</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data_dir</span><span class="w">                            </span><span class="c1"># native .h5 + _cty.csv</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">demo_fmt</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">file.path</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;formats&quot;</span><span class="p">)</span><span class="w">      </span><span class="c1"># .h5ad / 10x / .rds</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># a fixed colour list, assigned to whichever cell types your data has (works for any labels)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">PALETTE</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;#1f77b4&quot;</span><span class="p">,</span><span class="s">&quot;#aec7e8&quot;</span><span class="p">,</span><span class="s">&quot;#ff7f0e&quot;</span><span class="p">,</span><span class="s">&quot;#ffbb78&quot;</span><span class="p">,</span><span class="s">&quot;#2ca02c&quot;</span><span class="p">,</span><span class="s">&quot;#98df8a&quot;</span><span class="p">,</span><span class="s">&quot;#d62728&quot;</span><span class="p">,</span><span class="s">&quot;#ff9896&quot;</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">             </span><span class="s">&quot;#9467bd&quot;</span><span class="p">,</span><span class="s">&quot;#c5b0d5&quot;</span><span class="p">,</span><span class="s">&quot;#8c564b&quot;</span><span class="p">,</span><span class="s">&quot;#c49c94&quot;</span><span class="p">,</span><span class="s">&quot;#e377c2&quot;</span><span class="p">,</span><span class="s">&quot;#f7b6d2&quot;</span><span class="p">,</span><span class="s">&quot;#7f7f7f&quot;</span><span class="p">,</span><span class="s">&quot;#bcbd22&quot;</span><span class="p">,</span><span class="s">&quot;#17becf&quot;</span><span class="p">,</span><span class="s">&quot;#9edae5&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="1-read-your-data">1. Read your data<a class="headerlink" href="#1-read-your-data" title="Anchor link to this section">&para;</a></h2>
+<p>Matilda's R interface takes a <code>SingleCellExperiment</code>: <strong><abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> raw counts</strong> in the main assay, <strong><abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr></strong>
+and <strong><abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr></strong> (gene activity) as <code>altExp</code>s, and a cell-type column in <code>colData</code>. Below the <em>same</em>
+TEA-seq training cells are loaded from <strong>four formats</strong>; pick whichever matches your data.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># assemble an SCE from three genes x cells matrices + a label vector</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">build_sce</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">rna</span><span class="p">,</span><span class="w"> </span><span class="n">adt</span><span class="p">,</span><span class="w"> </span><span class="n">atac</span><span class="p">,</span><span class="w"> </span><span class="n">cell_type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">sce</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">SingleCellExperiment</span><span class="p">(</span><span class="n">assays</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">rna</span><span class="p">)))</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nf">altExp</span><span class="p">(</span><span class="n">sce</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ADT&quot;</span><span class="p">)</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">SummarizedExperiment</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">adt</span><span class="p">)))</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nf">altExp</span><span class="p">(</span><span class="n">sce</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ATAC&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">SummarizedExperiment</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">atac</span><span class="p">)))</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">sce</span><span class="o">$</span><span class="n">cell_type</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cell_type</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="n">sce</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">labels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">utils</span><span class="o">::</span><span class="nf">read.csv</span><span class="p">(</span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_h5</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;train_cty.csv&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)[[</span><span class="m">2</span><span class="p">]])[</span><span class="m">-1</span><span class="p">]</span>
+</span></code></pre></div>
+<h3 id="format-a-native-matilda-h5-rhdf5">Format A: native Matilda <code>.h5</code> (<code>rhdf5</code>)<a class="headerlink" href="#format-a-native-matilda-h5-rhdf5" title="Anchor link to this section">&para;</a></h3>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">read_h5</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">m</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rhdf5</span><span class="o">::</span><span class="nf">h5read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;matrix/data&quot;</span><span class="p">)</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">feats</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">rhdf5</span><span class="o">::</span><span class="nf">h5read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;matrix/features&quot;</span><span class="p">))</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">cells</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">rhdf5</span><span class="o">::</span><span class="nf">h5read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;matrix/barcodes&quot;</span><span class="p">))</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">nrow</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nf">ncol</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">feats</span><span class="p">))</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">t</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w">   </span><span class="c1"># -&gt; genes x cells</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nf">dimnames</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span><span class="w"> </span><span class="n">cells</span><span class="p">);</span><span class="w"> </span><span class="n">m</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">g</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="w"> </span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_h5</span><span class="p">,</span><span class="w"> </span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;train_%s.h5&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">))</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">sce</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">build_sce</span><span class="p">(</span><span class="nf">read_h5</span><span class="p">(</span><span class="nf">g</span><span class="p">(</span><span class="s">&quot;rna&quot;</span><span class="p">)),</span><span class="w"> </span><span class="nf">read_h5</span><span class="p">(</span><span class="nf">g</span><span class="p">(</span><span class="s">&quot;adt&quot;</span><span class="p">)),</span><span class="w"> </span><span class="nf">read_h5</span><span class="p">(</span><span class="nf">g</span><span class="p">(</span><span class="s">&quot;atac&quot;</span><span class="p">)),</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">sce</span>
+</span></code></pre></div>
+<h3 id="format-b-h5ad-anndata-scanpy">Format B: <code>.h5ad</code> (AnnData / scanpy)<a class="headerlink" href="#format-b-h5ad-anndata-scanpy" title="Anchor link to this section">&para;</a></h3>
+<p>A <code>.h5ad</code> is just HDF5; read its CSR-sparse <code>X</code> with <code>rhdf5</code> (no extra Python needed). For a
+richer object you could use <code>zellkonverter::readH5AD()</code> instead.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">rd_h5ad</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">                                      </span><span class="c1"># -&gt; genes x cells</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="n">X</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rhdf5</span><span class="o">::</span><span class="nf">h5read</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;X&quot;</span><span class="p">)</span><span class="w">                              </span><span class="c1"># CSR: data / indices / indptr</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="n">shp</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.integer</span><span class="p">(</span><span class="n">rhdf5</span><span class="o">::</span><span class="nf">h5readAttributes</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;X&quot;</span><span class="p">)</span><span class="o">$</span><span class="n">shape</span><span class="p">)</span><span class="w">  </span><span class="c1"># c(cells, genes)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="n">genes</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">rhdf5</span><span class="o">::</span><span class="nf">h5read</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;var/_index&quot;</span><span class="p">))</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="n">cells</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">rhdf5</span><span class="o">::</span><span class="nf">h5read</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;obs/_index&quot;</span><span class="p">))</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Matrix</span><span class="o">::</span><span class="nf">sparseMatrix</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="nf">seq_len</span><span class="p">(</span><span class="n">shp</span><span class="p">[</span><span class="m">1</span><span class="p">]),</span><span class="w"> </span><span class="nf">diff</span><span class="p">(</span><span class="n">X</span><span class="o">$</span><span class="n">indptr</span><span class="p">)),</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">                            </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">X</span><span class="o">$</span><span class="n">indices</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1L</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">X</span><span class="o">$</span><span class="n">data</span><span class="p">),</span><span class="w"> </span><span class="n">dims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shp</span><span class="p">)</span><span class="w">  </span><span class="c1"># cells x genes</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Matrix</span><span class="o">::</span><span class="nf">t</span><span class="p">(</span><span class="n">m</span><span class="p">);</span><span class="w"> </span><span class="nf">dimnames</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span><span class="w"> </span><span class="n">cells</span><span class="p">);</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">}</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">h</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="w"> </span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_fmt</span><span class="p">,</span><span class="w"> </span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;train_%s.h5ad&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">))</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">sce_h5ad</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">build_sce</span><span class="p">(</span><span class="nf">rd_h5ad</span><span class="p">(</span><span class="nf">h</span><span class="p">(</span><span class="s">&quot;rna&quot;</span><span class="p">)),</span><span class="w"> </span><span class="nf">rd_h5ad</span><span class="p">(</span><span class="nf">h</span><span class="p">(</span><span class="s">&quot;adt&quot;</span><span class="p">)),</span><span class="w"> </span><span class="nf">rd_h5ad</span><span class="p">(</span><span class="nf">h</span><span class="p">(</span><span class="s">&quot;atac&quot;</span><span class="p">)),</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="format-c-10x-cellranger-seuratread10x">Format C: 10x CellRanger (<code>Seurat::Read10X</code>)<a class="headerlink" href="#format-c-10x-cellranger-seuratread10x" title="Anchor link to this section">&para;</a></h3>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">rd_10x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">Seurat</span><span class="o">::</span><span class="nf">Read10X</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="w"> </span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_fmt</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;10x&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;train_%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">))</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">sce_10x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">build_sce</span><span class="p">(</span><span class="nf">rd_10x</span><span class="p">(</span><span class="nf">x</span><span class="p">(</span><span class="s">&quot;rna&quot;</span><span class="p">)),</span><span class="w"> </span><span class="nf">rd_10x</span><span class="p">(</span><span class="nf">x</span><span class="p">(</span><span class="s">&quot;adt&quot;</span><span class="p">)),</span><span class="w"> </span><span class="nf">rd_10x</span><span class="p">(</span><span class="nf">x</span><span class="p">(</span><span class="s">&quot;atac&quot;</span><span class="p">)),</span><span class="w"> </span><span class="n">labels</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="format-d-a-seurat-object-rds">Format D: a <code>Seurat</code> object (<code>.rds</code>)<a class="headerlink" href="#format-d-a-seurat-object-rds" title="Anchor link to this section">&para;</a></h3>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">seu</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">readRDS</span><span class="p">(</span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_fmt</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;train_seurat.rds&quot;</span><span class="p">))</span><span class="w">            </span><span class="c1"># RNA/ADT/ATAC assays + cell_type</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">ga</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">SeuratObject</span><span class="o">::</span><span class="nf">LayerData</span><span class="p">(</span><span class="n">seu</span><span class="p">,</span><span class="w"> </span><span class="n">assay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">layer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;counts&quot;</span><span class="p">))</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">sce_rds</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">build_sce</span><span class="p">(</span><span class="nf">ga</span><span class="p">(</span><span class="s">&quot;RNA&quot;</span><span class="p">),</span><span class="w"> </span><span class="nf">ga</span><span class="p">(</span><span class="s">&quot;ADT&quot;</span><span class="p">),</span><span class="w"> </span><span class="nf">ga</span><span class="p">(</span><span class="s">&quot;ATAC&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">seu</span><span class="o">$</span><span class="n">cell_type</span><span class="p">)</span>
+</span></code></pre></div>
+<p>All four give the same object, so the rest of the tutorial doesn't depend on the format. We
+continue with <code>sce</code> from Format A.</p>
+<h2 id="2-train-the-matilda-model">2. Train the Matilda model<a class="headerlink" href="#2-train-the-matilda-model" title="Anchor link to this section">&para;</a></h2>
+<p>The model is stored inside the object, so the workflow pipes.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">sce</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_train</span><span class="p">(</span><span class="n">sce</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;cell_type&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1L</span><span class="p">)</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nf">matilda_model</span><span class="p">(</span><span class="n">sce</span><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="3-classification-held-out-query-cells">3. Classification (held-out query cells)<a class="headerlink" href="#3-classification-held-out-query-cells" title="Anchor link to this section">&para;</a></h2>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">query</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">build_sce</span><span class="p">(</span><span class="nf">read_h5</span><span class="p">(</span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_h5</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test_rna.h5&quot;</span><span class="p">)),</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">                   </span><span class="nf">read_h5</span><span class="p">(</span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_h5</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test_adt.h5&quot;</span><span class="p">)),</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">                   </span><span class="nf">read_h5</span><span class="p">(</span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_h5</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test_atac.h5&quot;</span><span class="p">)),</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">                   </span><span class="nf">as.character</span><span class="p">(</span><span class="n">utils</span><span class="o">::</span><span class="nf">read.csv</span><span class="p">(</span><span class="nf">file.path</span><span class="p">(</span><span class="n">demo_h5</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test_cty.csv&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)[[</span><span class="m">2</span><span class="p">]])[</span><span class="m">-1</span><span class="p">])</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">query</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_classify</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sce</span><span class="p">)</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;overall query accuracy = %.4f&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">query</span><span class="o">$</span><span class="n">matilda_pred</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">query</span><span class="o">$</span><span class="n">cell_type</span><span class="p">))</span>
+</span></code></pre></div>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># per-cell-type accuracy = fraction of each type&#39;s query cells labelled correctly</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">acc_by_type</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tapply</span><span class="p">(</span><span class="n">query</span><span class="o">$</span><span class="n">matilda_pred</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">query</span><span class="o">$</span><span class="n">cell_type</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="o">$</span><span class="n">cell_type</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="p">)</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nf">ggplot</span><span class="p">(</span><span class="nf">data.frame</span><span class="p">(</span><span class="n">cell_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">acc_by_type</span><span class="p">),</span><span class="w"> </span><span class="n">accuracy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">acc_by_type</span><span class="p">)),</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">       </span><span class="nf">aes</span><span class="p">(</span><span class="nf">reorder</span><span class="p">(</span><span class="n">cell_type</span><span class="p">,</span><span class="w"> </span><span class="n">accuracy</span><span class="p">),</span><span class="w"> </span><span class="n">accuracy</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="nf">geom_col</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;steelblue&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nf">coord_flip</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="nf">ylim</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">  </span><span class="nf">geom_text</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">accuracy</span><span class="p">)),</span><span class="w"> </span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-0.1</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Query accuracy by cell type&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;accuracy&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span><span class="nf">theme_classic</span><span class="p">()</span>
+</span></code></pre></div>
+<p><img alt="Query accuracy by cell type" src="../assets/R_query_accuracy.png" /></p>
+<h2 id="4-dimension-reduction">4. Dimension reduction<a class="headerlink" href="#4-dimension-reduction" title="Anchor link to this section">&para;</a></h2>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">sce</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_reduce</span><span class="p">(</span><span class="n">sce</span><span class="p">)</span><span class="w">                 </span><span class="c1"># adds reducedDim(sce, &quot;MATILDA&quot;)</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">dim</span><span class="p">(</span><span class="nf">reducedDim</span><span class="p">(</span><span class="n">sce</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;MATILDA&quot;</span><span class="p">))</span><span class="w">            </span><span class="c1"># cells x z_dim (100)</span>
+</span></code></pre></div>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nf">set.seed</span><span class="p">(</span><span class="m">42</span><span class="p">)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">sce</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">scater</span><span class="o">::</span><span class="nf">runUMAP</span><span class="p">(</span><span class="n">sce</span><span class="p">,</span><span class="w"> </span><span class="n">dimred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MATILDA&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n_neighbors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15L</span><span class="p">,</span><span class="w"> </span><span class="n">min_dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w">   </span><span class="c1"># 2-D UMAP of the latent space</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">cell_types</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sort</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="n">sce</span><span class="o">$</span><span class="n">cell_type</span><span class="p">)))</span><span class="w">          </span><span class="c1"># colour whatever cell types the data has</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">palette_map</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">setNames</span><span class="p">(</span><span class="n">PALETTE</span><span class="p">[(</span><span class="nf">seq_along</span><span class="p">(</span><span class="n">cell_types</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">%%</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">PALETTE</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">cell_types</span><span class="p">)</span><span class="w">  </span><span class="c1"># wrap if &gt;18 types</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">scater</span><span class="o">::</span><span class="nf">plotUMAP</span><span class="p">(</span><span class="n">sce</span><span class="p">,</span><span class="w"> </span><span class="n">colour_by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;cell_type&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="n">ggplot2</span><span class="o">::</span><span class="nf">scale_colour_manual</span><span class="p">(</span><span class="n">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">palette_map</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;Matilda integrated latent space (UMAP)&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><img alt="Matilda latent space (UMAP)" src="../assets/R_latent_umap.png" /></p>
+<h2 id="5-feature-selection">5. Feature selection<a class="headerlink" href="#5-feature-selection" title="Anchor link to this section">&para;</a></h2>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">markers</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_markers</span><span class="p">(</span><span class="n">sce</span><span class="p">)</span><span class="w">            </span><span class="c1"># data.frame: celltype / feature / importance</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nf">head</span><span class="p">(</span><span class="n">markers</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># take each cell type&#39;s top-3 markers, then build a feature x cell-type importance grid</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">cell_types</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sort</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">markers</span><span class="o">$</span><span class="n">celltype</span><span class="p">))</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">top3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">do.call</span><span class="p">(</span><span class="n">rbind</span><span class="p">,</span><span class="w"> </span><span class="nf">lapply</span><span class="p">(</span><span class="n">cell_types</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="n">rows</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">markers</span><span class="p">[</span><span class="n">markers</span><span class="o">$</span><span class="n">celltype</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ct</span><span class="p">,</span><span class="w"> </span><span class="p">]</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nf">head</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="o">-</span><span class="n">rows</span><span class="o">$</span><span class="n">importance</span><span class="p">),</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="m">3</span><span class="p">)</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}))</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="n">feature_order</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">top3</span><span class="o">$</span><span class="n">feature</span><span class="p">)</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="n">heat_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">markers</span><span class="p">[</span><span class="n">markers</span><span class="o">$</span><span class="n">feature</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">feature_order</span><span class="p">,</span><span class="w"> </span><span class="p">]</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="c1"># min-max scale each feature&#39;s importance across cell types to 0..1 (comparable within a row)</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="n">heat_df</span><span class="o">$</span><span class="n">imp_scaled</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ave</span><span class="p">(</span><span class="n">heat_df</span><span class="o">$</span><span class="n">importance</span><span class="p">,</span><span class="w"> </span><span class="n">heat_df</span><span class="o">$</span><span class="n">feature</span><span class="p">,</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">                          </span><span class="n">FUN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">z</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="n">z</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="nf">max</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1e-9</span><span class="p">))</span>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="n">heat_df</span><span class="o">$</span><span class="n">feature</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="n">heat_df</span><span class="o">$</span><span class="n">feature</span><span class="p">,</span><span class="w">  </span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rev</span><span class="p">(</span><span class="n">feature_order</span><span class="p">))</span>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="n">heat_df</span><span class="o">$</span><span class="n">celltype</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="n">heat_df</span><span class="o">$</span><span class="n">celltype</span><span class="p">,</span><span class="w"> </span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cell_types</span><span class="p">)</span>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>
+</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="nf">ggplot</span><span class="p">(</span><span class="n">heat_df</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">celltype</span><span class="p">,</span><span class="w"> </span><span class="n">feature</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">imp_scaled</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="w">  </span><span class="nf">geom_tile</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="w">  </span><span class="nf">scale_fill_viridis_c</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="w">  </span><span class="nf">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="w">  </span><span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">45</span><span class="p">,</span><span class="w"> </span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="w">  </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Top-3 markers per cell type&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;scaled\nimportance&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><img alt="Top markers per cell type" src="../assets/R_markers_heatmap.png" /></p>
+<h2 id="6-simulation">6. Simulation<a class="headerlink" href="#6-simulation" title="Anchor link to this section">&para;</a></h2>
+<p>Matilda <strong>augments</strong> a chosen <strong>anchor</strong> cell type: in the returned set that one type is replaced by
+<code>n</code> freshly generated synthetic cells, while <strong>every other cell type stays real</strong>. The returned
+object also carries the full <strong>real</strong> reference cells Matilda used (<code>metadata(sim)$real</code>), in the
+<strong>same feature space</strong>, so the two are directly comparable. The official check: per modality, <abbr title="Uniform Manifold Approximation and Projection">UMAP</abbr>
+the real and simulated sets together, then show the real cells
+(top row) and the augmented set (bottom row), highlighting the anchor. The bottom row is labelled
+"Simulated", but only the <strong>anchor</strong> group in it is synthetic — the other types are the real cells;
+if augmentation works, the synthetic anchor lands where the real anchor is in the top row.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">sim</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_simulate</span><span class="p">(</span><span class="n">sce</span><span class="p">,</span><span class="w"> </span><span class="n">celltype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;B.Naive&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span><span class="p">)</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">real</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">S4Vectors</span><span class="o">::</span><span class="nf">metadata</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span><span class="o">$</span><span class="n">real</span><span class="w">        </span><span class="c1"># the full real reference cells (same space as the simulation)</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nf">c</span><span class="p">(</span><span class="n">total_in_sim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">ncol</span><span class="p">(</span><span class="n">sim</span><span class="p">),</span><span class="w"> </span><span class="n">synthetic_anchor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">sim</span><span class="o">$</span><span class="n">label</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;B.Naive&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">real_reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">ncol</span><span class="p">(</span><span class="n">real</span><span class="o">$</span><span class="n">rna</span><span class="p">))</span>
+</span></code></pre></div>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">real_mat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">RNA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">real</span><span class="o">$</span><span class="n">rna</span><span class="p">,</span><span class="w"> </span><span class="n">ADT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">real</span><span class="o">$</span><span class="n">adt</span><span class="p">,</span><span class="w"> </span><span class="n">ATAC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">real</span><span class="o">$</span><span class="n">atac</span><span class="p">)</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">sim_mat</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">RNA</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">SummarizedExperiment</span><span class="o">::</span><span class="nf">assay</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;counts&quot;</span><span class="p">),</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">                 </span><span class="n">ADT</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">SummarizedExperiment</span><span class="o">::</span><span class="nf">assay</span><span class="p">(</span><span class="n">SingleCellExperiment</span><span class="o">::</span><span class="nf">altExp</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ADT&quot;</span><span class="p">),</span><span class="w">  </span><span class="s">&quot;counts&quot;</span><span class="p">),</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">                 </span><span class="n">ATAC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SummarizedExperiment</span><span class="o">::</span><span class="nf">assay</span><span class="p">(</span><span class="n">SingleCellExperiment</span><span class="o">::</span><span class="nf">altExp</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ATAC&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;counts&quot;</span><span class="p">))</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="c1"># tag each cell: the anchor type vs everything else</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">anchor_tag</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="nf">ifelse</span><span class="p">(</span><span class="n">lab</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;B.Naive&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;anchor cell type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;other cell types&quot;</span><span class="p">),</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">                                   </span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;anchor cell type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;other cell types&quot;</span><span class="p">))</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="c1"># per modality: top-1000 variable features -&gt; scale -&gt; PCA -&gt; UMAP, then split real vs simulated</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="n">one_modality</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">  </span><span class="n">stacked</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">t</span><span class="p">(</span><span class="nf">cbind</span><span class="p">(</span><span class="n">real_mat</span><span class="p">[[</span><span class="n">mod</span><span class="p">]],</span><span class="w"> </span><span class="n">sim_mat</span><span class="p">[[</span><span class="n">mod</span><span class="p">]]))</span><span class="w">           </span><span class="c1"># cells x features</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">  </span><span class="n">n_real</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncol</span><span class="p">(</span><span class="n">real_mat</span><span class="p">[[</span><span class="n">mod</span><span class="p">]])</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="w">  </span><span class="n">n_sim</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncol</span><span class="p">(</span><span class="n">sim_mat</span><span class="p">[[</span><span class="n">mod</span><span class="p">]])</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="w">  </span><span class="n">top_var</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">order</span><span class="p">(</span><span class="nf">apply</span><span class="p">(</span><span class="n">stacked</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">stats</span><span class="o">::</span><span class="n">var</span><span class="p">),</span><span class="w"> </span><span class="n">decreasing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)[</span><span class="nf">seq_len</span><span class="p">(</span><span class="nf">min</span><span class="p">(</span><span class="m">1000L</span><span class="p">,</span><span class="w"> </span><span class="nf">ncol</span><span class="p">(</span><span class="n">stacked</span><span class="p">)))]</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">  </span><span class="n">z_scaled</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="n">stacked</span><span class="p">[,</span><span class="w"> </span><span class="n">top_var</span><span class="p">])</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="w">  </span><span class="n">pcs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stats</span><span class="o">::</span><span class="nf">prcomp</span><span class="p">(</span><span class="n">z_scaled</span><span class="p">,</span><span class="w"> </span><span class="n">rank.</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="m">50L</span><span class="p">,</span><span class="w"> </span><span class="nf">ncol</span><span class="p">(</span><span class="n">z_scaled</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1L</span><span class="p">),</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="w">                       </span><span class="n">center</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">scale.</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="o">$</span><span class="n">x</span><span class="w">          </span><span class="c1"># denoise before UMAP</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="w">  </span><span class="nf">set.seed</span><span class="p">(</span><span class="m">42</span><span class="p">)</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">  </span><span class="n">umap_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">uwot</span><span class="o">::</span><span class="nf">umap</span><span class="p">(</span><span class="n">pcs</span><span class="p">,</span><span class="w"> </span><span class="n">n_neighbors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">,</span><span class="w"> </span><span class="n">min_dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">,</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;pca&quot;</span><span class="p">))</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="w">  </span><span class="nf">names</span><span class="p">(</span><span class="n">umap_df</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;UMAP1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;UMAP2&quot;</span><span class="p">)</span>
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="w">  </span><span class="nf">rbind</span><span class="p">(</span><span class="nf">data.frame</span><span class="p">(</span><span class="n">umap_df</span><span class="p">[</span><span class="nf">seq_len</span><span class="p">(</span><span class="n">n_real</span><span class="p">),</span><span class="w"> </span><span class="p">],</span><span class="w">         </span><span class="n">grp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">anchor_tag</span><span class="p">(</span><span class="n">real</span><span class="o">$</span><span class="n">label</span><span class="p">),</span><span class="w"> </span><span class="n">panel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">paste</span><span class="p">(</span><span class="s">&quot;Real&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">)),</span>
+</span><span id="__span-14-23"><a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="w">        </span><span class="nf">data.frame</span><span class="p">(</span><span class="n">umap_df</span><span class="p">[</span><span class="n">n_real</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">seq_len</span><span class="p">(</span><span class="n">n_sim</span><span class="p">),</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="n">grp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">anchor_tag</span><span class="p">(</span><span class="n">sim</span><span class="o">$</span><span class="n">label</span><span class="p">),</span><span class="w">  </span><span class="n">panel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">paste</span><span class="p">(</span><span class="s">&quot;Simulated&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="p">)))</span>
+</span><span id="__span-14-24"><a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a><span class="p">}</span>
+</span><span id="__span-14-25"><a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>
+</span><span id="__span-14-26"><a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a><span class="n">plot_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">do.call</span><span class="p">(</span><span class="n">rbind</span><span class="p">,</span><span class="w"> </span><span class="nf">lapply</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;RNA&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ADT&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ATAC&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">one_modality</span><span class="p">))</span>
+</span><span id="__span-14-27"><a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a><span class="n">plot_df</span><span class="o">$</span><span class="n">panel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="n">plot_df</span><span class="o">$</span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Real RNA&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Real ADT&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Real ATAC&quot;</span><span class="p">,</span>
+</span><span id="__span-14-28"><a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="w">                                                  </span><span class="s">&quot;Simulated RNA&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Simulated ADT&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Simulated ATAC&quot;</span><span class="p">))</span>
+</span><span id="__span-14-29"><a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a><span class="nf">ggplot</span><span class="p">(</span><span class="n">plot_df</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">UMAP1</span><span class="p">,</span><span class="w"> </span><span class="n">UMAP2</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grp</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-30"><a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a><span class="w">  </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.8</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-31"><a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a><span class="w">  </span><span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="n">nrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">scales</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;free&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-32"><a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a><span class="w">  </span><span class="n">ggplot2</span><span class="o">::</span><span class="nf">scale_colour_manual</span><span class="p">(</span><span class="n">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;anchor cell type&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#F8766D&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;other cell types&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#00BFC4&quot;</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-33"><a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a><span class="w">  </span><span class="nf">theme_classic</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-34"><a id="__codelineno-14-34" name="__codelineno-14-34" href="#__codelineno-14-34"></a><span class="w">  </span><span class="nf">theme</span><span class="p">(</span><span class="n">axis.text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_blank</span><span class="p">(),</span><span class="w"> </span><span class="n">axis.ticks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_blank</span><span class="p">(),</span>
+</span><span id="__span-14-35"><a id="__codelineno-14-35" name="__codelineno-14-35" href="#__codelineno-14-35"></a><span class="w">        </span><span class="n">legend.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_blank</span><span class="p">(),</span><span class="w"> </span><span class="n">aspect.ratio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-36"><a id="__codelineno-14-36" name="__codelineno-14-36" href="#__codelineno-14-36"></a><span class="w">  </span><span class="nf">labs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Real vs. simulated cells per modality (anchor: B.Naive)&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><img alt="Real vs simulated cells per modality" src="../assets/R_simulation_umap.png" /></p>
+<h2 id="7-modality-combinations-matilda-supports">7. Modality combinations Matilda supports<a class="headerlink" href="#7-modality-combinations-matilda-supports" title="Anchor link to this section">&para;</a></h2>
+<p>Matilda works with <strong>any combination of the three modalities</strong> (<abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> only, <abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> + <abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr>, <abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> + <abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr>,
+or <abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> + <abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr> + <abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr>) and picks the matching model automatically from what you provide. (Internally
+Matilda labels these <code>rna_only</code> / <code>CITEseq</code> / <code>SHAREseq</code> / <code>TEAseq</code>, after the assays they typically
+come from, but your data needn't be those specific protocols; only the modalities present matter.)
+Training each combination on the <em>same</em> cells shows what each added modality buys; to use your own
+data, just build the SCE with whatever modalities you have.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># drop the altExps not in `keep`, leaving only the requested modalities</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">keep_only</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">keep</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="p">(</span><span class="n">ae</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">altExpNames</span><span class="p">(</span><span class="n">s</span><span class="p">))</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">ae</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">keep</span><span class="p">))</span><span class="w"> </span><span class="nf">altExp</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">ae</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="n">s</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="p">}</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="n">combo_acc</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sapply</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="s">&quot;RNA only&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">character</span><span class="p">(</span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;RNA+ATAC&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ATAC&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RNA+ADT&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ADT&quot;</span><span class="p">),</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">  </span><span class="kr">function</span><span class="p">(</span><span class="n">keep</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_train</span><span class="p">(</span><span class="nf">keep_only</span><span class="p">(</span><span class="n">sce</span><span class="p">,</span><span class="w"> </span><span class="n">keep</span><span class="p">),</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;cell_type&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1L</span><span class="p">)</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="n">qy</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matilda_classify</span><span class="p">(</span><span class="nf">keep_only</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">keep</span><span class="p">),</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fit</span><span class="p">)</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="nf">mean</span><span class="p">(</span><span class="n">qy</span><span class="o">$</span><span class="n">matilda_pred</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">qy</span><span class="o">$</span><span class="n">cell_type</span><span class="p">)</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">  </span><span class="p">})</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="n">combo_acc</span><span class="p">[</span><span class="s">&quot;RNA+ADT+ATAC&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">query</span><span class="o">$</span><span class="n">matilda_pred</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">query</span><span class="o">$</span><span class="n">cell_type</span><span class="p">)</span><span class="w">   </span><span class="c1"># the TEA-seq model from §2/§3</span>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="nf">ggplot</span><span class="p">(</span><span class="nf">data.frame</span><span class="p">(</span><span class="n">modalities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="n">combo_acc</span><span class="p">),</span><span class="w"> </span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">combo_acc</span><span class="p">)),</span>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">                  </span><span class="n">accuracy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">combo_acc</span><span class="p">)),</span>
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="w">       </span><span class="nf">aes</span><span class="p">(</span><span class="n">modalities</span><span class="p">,</span><span class="w"> </span><span class="n">accuracy</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="w">  </span><span class="nf">geom_col</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;seagreen&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="w">  </span><span class="nf">ylim</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="w">  </span><span class="nf">geom_text</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;%.3f&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">accuracy</span><span class="p">)),</span><span class="w"> </span><span class="n">vjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-0.4</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-15-20"><a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="w">  </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Query accuracy by modality combination&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;accuracy&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-15-21"><a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="w">  </span><span class="nf">theme_classic</span><span class="p">()</span>
+</span></code></pre></div>
+<p><img alt="Query accuracy by modality combination" src="../assets/R_modality_accuracy.png" /></p>
+<p>Adding the <abbr title="Antibody-Derived Tags, CITE-seq surface protein readout">ADT</abbr> (protein) panel to <abbr title="Ribonucleic Acid, here, scRNA-seq counts">RNA</abbr> gives the biggest gain; <abbr title="Assay for Transposase-Accessible Chromatin (sequencing)">ATAC</abbr> contributes less for this task
+on this dataset.</p>
+<h2 id="8-session-info">8. Session info<a class="headerlink" href="#8-session-info" title="Anchor link to this section">&para;</a></h2>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nf">sessionInfo</span><span class="p">()</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../tutorial-python/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Python">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Python
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../overview/" class="md-footer__link md-footer__link--next" aria-label="Next: How Matilda works">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                How Matilda works
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/PYangLab" target="_blank" rel="noopener" title="PYangLab on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.path", "navigation.tracking", "navigation.instant", "navigation.instant.progress", "toc.follow", "search.highlight", "content.code.copy", "content.code.annotate", "content.code.select", "content.tabs.link", "announce.dismiss", "header.autohide", "navigation.footer"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+      
+        <script src="../javascripts/animations.js"></script>
+      
+        <script src="../javascripts/ui-tweaks.js"></script>
+      
+        <script src="../javascripts/mermaid-init.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
