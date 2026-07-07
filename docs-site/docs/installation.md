@@ -16,7 +16,7 @@ matches your workflow.
     === "Python"
 
         ```bash
-        pip install "git+https://github.com/PYangLab/Matilda.git"   # once on PyPI: pip install matilda-sc
+        pip install matilda-sc
         python -c "import matilda; print(matilda.__version__)"
         ```
 
@@ -38,13 +38,13 @@ matches your workflow.
     `scanpy` / `captum` dependencies don't pollute your base.
 
     ```bash title="terminal"
-    pip install "git+https://github.com/PYangLab/Matilda.git"   # once on PyPI: pip install matilda-sc
+    pip install matilda-sc
     ```
 
-    This installs the `matilda-sc` package (import name `matilda`) from GitHub. It pulls in
-    the runtime dependencies: `torch`, `h5py`, `numpy`, `pandas`, `captum`, `tqdm`, `scipy`,
-    `anndata`. `scanpy` is only needed for `io.from_10x` (reading 10x directories); install it
-    separately if you use that reader.
+    This installs the `matilda-sc` package (import name `matilda`) from GitHub with **all** its
+    dependencies — `torch`, `h5py`, `numpy`, `pandas`, `captum`, `tqdm`, `scipy`, `anndata`, and
+    `scanpy` (which in turn brings `umap-learn` / `matplotlib` / `scikit-learn`, so the tutorial
+    runs out of the box). One command — nothing to install separately.
 
     Verify the install:
 

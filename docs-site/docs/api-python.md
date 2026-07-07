@@ -13,7 +13,7 @@ The Python interface is the **`matilda-sc`** package (import name `matilda`). Th
 the [R API](api-r.md), and the two produce the same results.
 
 ```bash
-pip install "git+https://github.com/PYangLab/Matilda.git"   # once on PyPI: pip install matilda-sc
+pip install matilda-sc
 ```
 
 ```python

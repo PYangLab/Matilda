@@ -21,7 +21,7 @@ hide:
 </p>
 
 ```bash
-pip install "git+https://github.com/PYangLab/Matilda.git"   # Python (once on PyPI: pip install matilda-sc)
+pip install matilda-sc   # Python
 # or, in R:  remotes::install_github("PYangLab/Matilda", subdir = "matilda-r")
 ```
 

@@ -1,7 +1,6 @@
 # A tiny deterministic multimodal SCE for pure-R + fast integration tests.
 # Classes are intentionally IMBALANCED (~50/33/17%) so the upstream
-# median-balancing augmentation has a unique anchor (perfectly balanced
-# classes make `int(np.array(median_anchor))` fail upstream).
+# median-balancing augmentation has a single, deterministic anchor cell type.
 toy_sce <- function(n_rna = 40, n_adt = 6, n_atac = 30, n_cells = 24, seed = 1) {
   set.seed(seed)
   rna <- matrix(stats::rpois(n_rna * n_cells, 5), n_rna, n_cells,

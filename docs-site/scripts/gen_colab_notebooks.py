@@ -33,10 +33,9 @@ R_OUT = ROOT.parent / "matilda-r" / "inst" / "colab" / "tutorial-r.ipynb"
 
 PY_INSTALL = (
     "# Colab setup: run this first on a fresh machine such as Google Colab.\n"
-    "# (Skip if matilda-sc is already installed locally.)\n"
-    "# captum==0.7.0 matches the R package's bundled stack so the feature-selection / marker\n"
-    "# scores agree between the two interfaces (Colab ships a newer captum by default).\n"
-    '%pip install -q "git+https://github.com/PYangLab/Matilda.git" "captum==0.7.0" anndata scanpy'
+    "# (Skip if matilda-sc is already installed locally.) This pulls in every dependency\n"
+    "# (torch, captum==0.7.0 to match the R stack, anndata, scanpy, umap, matplotlib, ...).\n"
+    '%pip install -q matilda-sc'
 )
 
 R_INSTALL = """\

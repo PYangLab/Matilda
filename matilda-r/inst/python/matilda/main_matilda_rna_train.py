@@ -88,7 +88,7 @@ if args.augmentation == True:
     minor_anchor_cts = train_minor[0].to_numpy()
     major_anchor_cts = train_major[0].to_numpy()
 
-    index = (train_label == int(np.array(median_anchor))).nonzero(as_tuple=True)[0]
+    index = (train_label == int(median_anchor.iloc[0])).nonzero(as_tuple=True)[0]
     anchor_data = train_data[index.tolist(),:]
     anchor_label = train_label[index.tolist()]
     new_data = anchor_data 

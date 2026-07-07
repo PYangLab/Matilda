@@ -24,7 +24,7 @@ This repository packages Matilda as a **Python** package (`pip install matilda-s
 **Python** (import name `matilda`; PyPI distribution `matilda-sc`):
 
 ```bash
-pip install "git+https://github.com/PYangLab/Matilda.git"   # once on PyPI: pip install matilda-sc
+pip install matilda-sc
 ```
 
 **R** (Python is provisioned automatically by `basilisk`, so you never install or manage it):
