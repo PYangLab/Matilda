@@ -163,6 +163,9 @@ extra_javascript:
 
 extra:
   generator: false
+  # Where the header/drawer logo links to. Without this, Material points the logo at
+  # this site's own home page; we send it to the lab's MultiTaskOmics landing page.
+  homepage: https://pyanglab.github.io/MultiTaskOmics/
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/PYangLab
