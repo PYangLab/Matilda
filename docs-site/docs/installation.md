@@ -41,7 +41,7 @@ matches your workflow.
     pip install matilda-sc
     ```
 
-    This installs the `matilda-sc` package (import name `matilda`) from GitHub with **all** its
+    This installs the `matilda-sc` package (import name `matilda`) from PyPI with **all** its
     dependencies — `torch`, `h5py`, `numpy`, `pandas`, `captum`, `tqdm`, `scipy`, `anndata`, and
     `scanpy` (which in turn brings `umap-learn` / `matplotlib` / `scikit-learn`, so the tutorial
     runs out of the box). One command — nothing to install separately.
