@@ -55,7 +55,7 @@ pip install matilda-sc   # Python
 <a class="lp-card-cover" href="tutorial-python/">
 <span class="lp-card-kicker">Python</span>
 <span class="lp-card-title">Python tutorial</span>
-<span class="lp-card-desc">Train and run every task with the object API, <code>matilda.train()</code> and <code>matilda.task()</code>, from the <code>matilda-sc</code> package.</span>
+<span class="lp-card-desc">Train one model with <code>matilda.train()</code> and run each task with <code>matilda.classify()</code>, <code>reduce()</code>, <code>markers()</code> and <code>simulate()</code>, from the <code>matilda-sc</code> package.</span>
 </a>
 </div>
 

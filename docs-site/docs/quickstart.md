@@ -90,7 +90,7 @@ and let the model ride along inside the object.
 | Reduce | `matilda.reduce(data, model=)` | `matilda_reduce(sce)` | integrated latent space (`reducedDim "MATILDA"`) |
 | Classify | `matilda.classify(query, model=)` | `matilda_classify(query, reference=)` | predicted cell types (`colData$matilda_pred`) |
 | Markers | `matilda.markers(data, model=)` | `matilda_markers(sce)` | per-cell-type feature importance |
-| Simulate | `matilda.simulate(data, model=, celltype=, n=)` | `matilda_simulate(sce, celltype=, n=)` | synthetic cells |
+| Simulate | `matilda.simulate(data, model=, celltype=, n=, labels=)` | `matilda_simulate(sce, celltype=, n=)` | synthetic cells |
 
 The trained model is carried as `model=` in Python and `reference=` in R. **`classify` reconciles
 features automatically**: it reuses the model when the query shares the reference panel, and
