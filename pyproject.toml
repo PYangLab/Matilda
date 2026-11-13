@@ -36,6 +36,13 @@ dependencies = [
     "tqdm",
     "anndata",   # AnnData is the object-API I/O type; keeps plain `pip install matilda-sc` fully working
     "scanpy",    # used by io.from_10x; also pulls umap-learn / matplotlib / scikit-learn (the tutorial's plotting deps)
+    # scanpy's neighbour graph (sc.pp.neighbors, then sc.tl.umap) fails on 8,192
+    # cells or more with two releases a fresh install would otherwise get:
+    # umap-learn 0.6.0 with any scanpy, and pynndescent 0.7 with the scanpy that
+    # Python 3.11 and older are held to (scanpy 1.12 needs Python 3.12). Both come
+    # in through scanpy. The first line lets go by itself at umap-learn 0.6.1.
+    "umap-learn!=0.6.0",
+    'pynndescent<0.7; python_version < "3.12"',
 ]
 
 [project.urls]
