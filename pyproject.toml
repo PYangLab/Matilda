@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "matilda-sc"
-version = "0.2.1"
+version = "0.2.2"
 description = "Multi-task framework for single-cell multimodal data (classification, dimension reduction, feature selection, simulation, augmentation) across RNA / ADT / ATAC."
 readme = "README.md"
 license = "Apache-2.0"
