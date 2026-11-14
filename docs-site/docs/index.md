@@ -21,9 +21,11 @@ hide:
 </p>
 
 ```bash
-pip install matilda-sc   # Python
-# or, in R:  remotes::install_github("PYangLab/Matilda", subdir = "matilda-r")
+conda create -n matilda-sc python=3.12 -y
+conda activate matilda-sc
+pip install matilda-sc
 ```
+<p style="font-size:12.5px; line-height:1.5; color:var(--text-faint); margin:-8px 0 16px;">Python 3.9 or newer. Without conda, or for R, see <a href="installation/">Installation</a>.</p>
 
 <a href="quickstart/" class="md-button md-button--primary lp-cta">Get started</a>
 <a href="overview/" class="md-button lp-cta">How it works</a>
