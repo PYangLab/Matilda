@@ -1250,7 +1250,6 @@ body.has-section-numbers .md-typeset .lp {
 .md-typeset .choose-m3 {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--brand-600);
   border-radius: 0.5rem;
   padding: 1.1rem 1.4rem 1rem;
   margin: 1.2rem 0 2rem;
@@ -1612,9 +1611,8 @@ body.has-section-numbers .md-typeset .lp {
 .md-typeset details {
   border-radius: 0.5rem;
   /* Force grey on all four sides (!important beats Material's per-type colour,
-     e.g. the green `tip` box border); only the LEFT edge carries the accent. */
+     e.g. the green `tip` box border); only warning/danger boxes add a coloured left edge. */
   border: 1px solid var(--border) !important;
-  border-left-width: 3px !important;
   font-size: 14px;            /* was 0.88rem (~19px), bigger than body; tighten */
   box-shadow: var(--shadow-xs);
   background: var(--bg-card);
@@ -1629,17 +1627,9 @@ body.has-section-numbers .md-typeset .lp {
 /* Admonition icon: neutral grey, never Material's per-type colour (e.g. the green flame) */
 .md-typeset .admonition-title::before,
 .md-typeset summary::before { background-color: var(--text-muted) !important; }
-/* Left accent: blue for info types (b/w/grey + blue palette), amber/red kept only
-   for genuine warning/danger semantics. */
-.md-typeset .admonition.abstract,
-.md-typeset .admonition.tip,
-.md-typeset .admonition.note,
-.md-typeset .admonition.info,
-.md-typeset .admonition.question,
-.md-typeset details.question     { border-left-color: var(--brand-600) !important; }
-.md-typeset .admonition.warning  { border-left-color: var(--amber) !important; }
+.md-typeset .admonition.warning  { border-left-color: var(--amber) !important; border-left-width: 3px !important; }
 .md-typeset .admonition.danger,
-.md-typeset .admonition.failure  { border-left-color: var(--rose, #e11d48) !important; }
+.md-typeset .admonition.failure  { border-left-color: var(--rose, #e11d48) !important; border-left-width: 3px !important; }
 
 /* FAQ "question" admonitions: a light-blue icon (#00AEEF) instead of Material's
    default green. mkdocs-jupyter renders notebook admonitions OUTSIDE .md-typeset,
@@ -1651,8 +1641,6 @@ body.has-section-numbers .md-typeset .lp {
 .jupyter-wrapper details.question summary::before {
   background-color: #00AEEF !important;
 }
-.jupyter-wrapper .admonition.question,
-.jupyter-wrapper details.question { border-left-color: #00AEEF !important; }
 /* Collapsible fold arrow: neutral grey, never Material's per-type colour (the
    question/help fold arrow defaults to green #64dd17). */
 .md-typeset details > summary::after,
@@ -2457,7 +2445,6 @@ body.has-section-numbers .md-typeset .lp {
 .you-will-learn {
   background: var(--brand-50);
   border: 1px solid var(--brand-200);
-  border-left: 3px solid var(--brand-600);
   padding: 1rem 1.3rem;
   margin: 1.2rem 0 1.8rem;
   font-size: 14px;          /* was 0.92rem (~20px), bigger than body; match admonition body */
@@ -2466,7 +2453,6 @@ body.has-section-numbers .md-typeset .lp {
 [data-md-color-scheme="slate"] .you-will-learn {
   background: rgba(0, 174, 239, 0.08);
   border-color: var(--border-strong);
-  border-left-color: var(--brand-600);
 }
 .you-will-learn::before {
   content: "You will learn";
@@ -2505,11 +2491,11 @@ body.has-section-numbers .md-typeset .lp {
 /* ---------- 21. Blockquote ---------- */
 
 .md-typeset blockquote {
-  border-left: 3px solid var(--brand-600);
+  border-left: none;
   background: var(--bg-subtle);
   color: var(--text);
   padding: 0.7rem 1.1rem;
-  border-radius: 0 0.4rem 0.4rem 0;
+  border-radius: 0.4rem;
 }
 
 /* ---------- 22. Search ---------- */
