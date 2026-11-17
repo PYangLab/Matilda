@@ -11,13 +11,16 @@
       display: flex; flex-direction: column; align-items: stretch; gap: 0.3rem; }
     .md-typeset a.colab-button { line-height: 0; }
     .md-typeset a.colab-button img { height: 1.55rem; width: auto; display: block; }
-    /* the download button: as wide as the Colab badge (117 x 20 svg), quieter */
-    .md-typeset a.download-button { display: inline-flex; align-items: center; justify-content: center;
+    /* the download button: as wide as the Colab badge (117 x 20 svg), quieter. The
+       :not() list repeats extra.css's link rule so this outranks it (that rule gives
+       every link a transparent bottom border and the brand colour) */
+    .md-typeset a.download-button:not(.md-button):not(.md-tabs__link):not(.md-nav__link):not(.headerlink) { display: inline-flex; align-items: center; justify-content: center;
       gap: 0.3em; box-sizing: border-box; height: 1.55rem; width: calc(1.55rem * 117 / 20);
       padding: 0 0.4rem; border: 1px solid var(--md-default-fg-color--lighter); border-radius: 0.2rem;
       font-size: 0.62rem; font-weight: 600; line-height: 1; white-space: nowrap;
       color: var(--md-default-fg-color--light); background: var(--md-default-bg-color); }
-    .md-typeset a.download-button:hover, .md-typeset a.download-button:focus-visible {
+    .md-typeset a.download-button:not(.md-button):not(.md-tabs__link):not(.md-nav__link):not(.headerlink):hover,
+    .md-typeset a.download-button:not(.md-button):not(.md-tabs__link):not(.md-nav__link):not(.headerlink):focus-visible {
       color: var(--md-accent-fg-color); border-color: var(--md-accent-fg-color); }
     .md-typeset a.download-button svg { width: 0.85em; height: 0.85em; flex: none; fill: currentColor; }
   </style>
